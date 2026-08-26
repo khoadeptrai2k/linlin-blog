@@ -5,12 +5,12 @@ import {
   Noto_Serif_SC,
   Noto_Serif_Thai,
 } from "next/font/google";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { routing } from "@/i18n/routing";
+import { isLocale, routing } from "@/i18n/routing";
 import "../globals.css";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -46,6 +46,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) {
+    notFound();
+  }
   const t = await getTranslations({ locale, namespace: "Meta" });
 
   return {
@@ -65,7 +68,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
+  if (!isLocale(locale)) {
     notFound();
   }
 

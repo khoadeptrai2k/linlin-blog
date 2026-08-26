@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 import { About } from "@/components/landing/About";
 import { Classroom } from "@/components/landing/Classroom";
 import { Faq } from "@/components/landing/Faq";
@@ -11,6 +12,7 @@ import { Scenes } from "@/components/landing/Scenes";
 import { Studio } from "@/components/landing/Studio";
 import { Tracks } from "@/components/landing/Tracks";
 import { Wave } from "@/components/ui/Wave";
+import { isLocale } from "@/i18n/routing";
 
 export default async function HomePage({
   params,
@@ -18,6 +20,9 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!isLocale(locale)) {
+    notFound();
+  }
   setRequestLocale(locale);
 
   return (

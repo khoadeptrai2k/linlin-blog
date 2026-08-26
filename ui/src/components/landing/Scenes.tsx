@@ -9,11 +9,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { photos } from "@/lib/photos";
 
 const scenes = [
-  { id: "scene1", src: photos.feeling, tile: "pebble-a", tone: "portrait" as const },
-  { id: "scene2", src: photos.market, tile: "pebble-b", tone: "study" as const },
-  { id: "scene3", src: photos.trip, tile: "pebble-c", tone: "portrait" as const },
-  { id: "scene4", src: photos.chat, tile: "pebble-d", tone: "study" as const },
-];
+  { id: "scene1", src: photos.feeling, tile: "pebble-a", tone: "portrait" },
+  { id: "scene2", src: photos.market, tile: "pebble-b", tone: "study" },
+  { id: "scene3", src: photos.trip, tile: "pebble-c", tone: "portrait" },
+  { id: "scene4", src: photos.chat, tile: "pebble-d", tone: "study" },
+] as const;
 
 export function Scenes() {
   const t = useTranslations("Scenes");

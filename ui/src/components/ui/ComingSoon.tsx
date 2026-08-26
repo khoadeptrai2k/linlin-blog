@@ -1,12 +1,13 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 
 export async function ComingSoonPage({
   kind,
   locale,
 }: {
   kind: "blogs" | "learn";
-  locale: string;
+  locale: Locale;
 }) {
   setRequestLocale(locale);
   const t = await getTranslations("ComingSoon");

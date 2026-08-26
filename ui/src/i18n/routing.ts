@@ -8,6 +8,10 @@ export const routing = defineRouting({
 
 export type Locale = (typeof routing.locales)[number];
 
+export function isLocale(value: string): value is Locale {
+  return (routing.locales as readonly string[]).includes(value);
+}
+
 export const localeMeta: Record<
   Locale,
   { label: string; native: string; short: string; flag: string }
