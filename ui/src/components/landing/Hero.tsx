@@ -45,19 +45,19 @@ export async function Hero() {
               alt={profile("name")}
               className="is-zoom-out relative aspect-[4/5] w-full"
             />
-            <div className="glass pebble-a absolute -right-2 top-0 max-w-[12.8rem] -rotate-2 px-4 py-3 sm:-right-5">
+            <div className="glass-hud pebble-a absolute -right-2 top-0 max-w-[12.8rem] -rotate-2 px-4 py-3 sm:-right-5">
               <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-sky-500 uppercase">
                 {profile("speaks")}
               </p>
               <p className="mt-1 text-sm font-medium leading-5 text-ink">{profile("learning")}</p>
             </div>
-            <div className="glass pebble-b absolute -left-2 top-[46%] max-w-[10.8rem] -translate-y-1/2 rotate-2 px-4 py-3 sm:-left-14">
+            <div className="glass-hud pebble-b absolute -left-2 top-[46%] max-w-[10.8rem] -translate-y-1/2 rotate-2 px-4 py-3 sm:-left-14">
               <p className="font-display text-lg text-sky-700">{profile("name")}</p>
               <p className="mt-1 text-xs leading-5 text-ink-soft">{profile("role")}</p>
             </div>
             <dl className="absolute inset-x-6 bottom-0 flex gap-2 sm:inset-x-10">
               {stats.map((stat) => (
-                <div key={stat.label} className="glass pebble-c flex-1 px-3 py-2 text-center">
+                <div key={stat.label} className="glass-hud pebble-c flex-1 px-3 py-2 text-center">
                   <dt className="text-[0.65rem] text-ink-soft">{stat.label}</dt>
                   <dd className="font-display text-lg text-sky-700">{stat.value}</dd>
                 </div>

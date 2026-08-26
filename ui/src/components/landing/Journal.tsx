@@ -1,17 +1,25 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { OrganicImage } from "@/components/brand/OrganicImage";
+import { CardDrawer } from "@/components/ui/CardDrawer";
 import { Reveal } from "@/components/ui/Reveal";
 import { photos } from "@/lib/photos";
 
 const posts = [
-  { tag: "post1Tag", title: "post1Title", body: "post1Body", src: photos.notes, shape: "pebble-b" },
-  { tag: "post2Tag", title: "post2Title", body: "post2Body", src: photos.cafe, shape: "pebble-a" },
-  { tag: "post3Tag", title: "post3Title", body: "post3Body", src: photos.desk, shape: "pebble-d" },
+  { id: "post1", src: photos.notes, shape: "pebble-b" },
+  { id: "post2", src: photos.cafe, shape: "pebble-a" },
+  { id: "post3", src: photos.desk, shape: "pebble-d" },
 ] as const;
 
-export async function Journal() {
-  const t = await getTranslations("Journal");
+export function Journal() {
+  const t = useTranslations("Journal");
+  const common = useTranslations("Common");
+  const router = useRouter();
+  const [open, setOpen] = useState<(typeof posts)[number]["id"] | null>(null);
+  const active = posts.find((post) => post.id === open);
 
   return (
     <section id="journal" className="scroll-mt-28 px-4 py-16 sm:px-6 sm:py-20">
@@ -28,32 +36,58 @@ export async function Journal() {
         </Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {posts.map((post, index) => (
-            <Reveal key={post.title} delayMs={index * 80}>
-              <article
+            <Reveal key={post.id} delayMs={index * 80}>
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => setOpen(post.id)}
                 className={`glass-tile ${post.shape} overflow-hidden p-0 ${
                   index === 1 ? "md:-translate-y-5" : ""
                 }`}
               >
                 <OrganicImage
                   src={post.src}
-                  alt={t(post.title)}
+                  alt={t(`${post.id}Title`)}
                   frame="plain"
+                  hud={t(`${post.id}Tag`)}
                   className="aspect-[16/10] w-full"
                 />
-                <div className="p-7">
+                <div className="p-7 text-left">
                   <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
-                    {t(post.tag)}
+                    {t(`${post.id}Tag`)}
                   </p>
                   <h3 className="mt-3 text-lg font-semibold leading-snug text-ink">
-                    {t(post.title)}
+                    {t(`${post.id}Title`)}
                   </h3>
-                  <p className="mt-2 leading-7 text-ink-soft">{t(post.body)}</p>
+                  <p className="mt-2 leading-7 text-ink-soft">{t(`${post.id}Body`)}</p>
+                  <p className="mt-3 text-[0.68rem] font-semibold tracking-[0.12em] text-sky-700 uppercase">
+                    {common("openDetails")}
+                  </p>
                 </div>
-              </article>
+              </button>
             </Reveal>
           ))}
         </div>
       </div>
+
+      <CardDrawer
+        open={Boolean(active)}
+        onClose={() => setOpen(null)}
+        eyebrow={active ? t(`${active.id}Tag`) : t("eyebrow")}
+        title={active ? t(`${active.id}Title`) : ""}
+        body={active ? t(`${active.id}Lead`) : undefined}
+        image={active ? { src: active.src, alt: t(`${active.id}Title`) } : undefined}
+        tiles={
+          active
+            ? [{ label: common("keepLabel"), value: t(`${active.id}Keep`), wide: true }]
+            : undefined
+        }
+        ctaLabel={t("readPost")}
+        onCta={() => {
+          setOpen(null);
+          router.push("/blogs");
+        }}
+      />
     </section>
   );
 }

@@ -142,7 +142,7 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="ml-auto flex items-center">
-          <LanguageSwitcher compact={!expanded} onOpenChange={setLangOpen} />
+          <LanguageSwitcher onOpenChange={setLangOpen} />
         </div>
       </div>
     </header>

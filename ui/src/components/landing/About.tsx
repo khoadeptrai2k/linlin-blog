@@ -1,18 +1,25 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { SpeakerFrame } from "@/components/brand/SpeakerFrame";
+import { CardDrawer } from "@/components/ui/CardDrawer";
 import { Reveal } from "@/components/ui/Reveal";
 import { photos } from "@/lib/photos";
 
-export async function About() {
-  const t = await getTranslations("About");
-  const profile = await getTranslations("Profile");
+const facts = [
+  { id: "fact1", shape: "pebble-a" },
+  { id: "fact2", shape: "pebble-b" },
+  { id: "fact3", shape: "pebble-c" },
+  { id: "fact4", shape: "pebble-d" },
+] as const;
 
-  const facts = [
-    { label: t("fact1Label"), value: t("fact1Value"), shape: "pebble-a" },
-    { label: t("fact2Label"), value: t("fact2Value"), shape: "pebble-b" },
-    { label: t("fact3Label"), value: t("fact3Value"), shape: "pebble-c" },
-    { label: t("fact4Label"), value: t("fact4Value"), shape: "pebble-d" },
-  ];
+export function About() {
+  const t = useTranslations("About");
+  const profile = useTranslations("Profile");
+  const common = useTranslations("Common");
+  const [open, setOpen] = useState<(typeof facts)[number]["id"] | null>(null);
+  const active = facts.find((fact) => fact.id === open);
 
   return (
     <section id="about" className="scroll-mt-28 px-4 py-14 sm:px-6 sm:py-16">
@@ -39,18 +46,39 @@ export async function About() {
           </Reveal>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {facts.map((fact, index) => (
-              <Reveal key={fact.label} delayMs={index * 70}>
-                <article className={`glass-tile ${fact.shape} p-5`}>
+              <Reveal key={fact.id} delayMs={index * 70}>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={() => setOpen(fact.id)}
+                  className={`glass-tile ${fact.shape} p-5`}
+                >
                   <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-sky-500 uppercase">
-                    {fact.label}
+                    {t(`${fact.id}Label`)}
                   </p>
-                  <p className="mt-1 font-medium text-ink">{fact.value}</p>
-                </article>
+                  <p className="mt-1 font-medium text-ink">{t(`${fact.id}Value`)}</p>
+                  <p className="mt-3 text-[0.68rem] font-semibold tracking-[0.12em] text-sky-700 uppercase">
+                    {common("openDetails")}
+                  </p>
+                </button>
               </Reveal>
             ))}
           </div>
         </div>
       </div>
+
+      <CardDrawer
+        open={Boolean(active)}
+        onClose={() => setOpen(null)}
+        eyebrow={active ? t(`${active.id}Label`) : t("eyebrow")}
+        title={active ? t(`${active.id}Value`) : ""}
+        body={active ? t(`${active.id}Detail`) : undefined}
+        tiles={
+          active
+            ? [{ label: common("noteLabel"), value: t(`${active.id}Note`), wide: true }]
+            : undefined
+        }
+      />
     </section>
   );
 }

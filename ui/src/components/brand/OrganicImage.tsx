@@ -22,12 +22,14 @@ export function OrganicImage({
   className = "",
   frame = "wide",
   tone = "study",
+  hud,
 }: {
   src: string;
   alt: string;
   className?: string;
   frame?: OrganicFrame;
   tone?: "portrait" | "study";
+  hud?: string;
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -40,6 +42,7 @@ export function OrganicImage({
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} onError={() => setFailed(true)} />
       )}
+      {hud ? <span className="media-hud">{hud}</span> : null}
     </div>
   );
 }
