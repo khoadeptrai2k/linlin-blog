@@ -38,7 +38,7 @@ Nhánh `main` là production. Pull request sẽ thành bản Preview trên Verce
 5. Build Command: `npm run build` (mặc định).
 6. Install Command: `npm install` (mặc định).
 7. Output: để Vercel xử lý (không điền thư mục tĩnh).
-8. Environment Variables: chưa cần. Landing không dùng secret.
+8. Environment Variables: chưa bắt buộc. Khi có Mongo, thêm `MONGODB_URI` và `MONGODB_DB=linlin`.
 9. **Deploy**.
 
 Lần sau chỉ cần `git push origin main`. Vercel build `ui/` và publish bản mới.
