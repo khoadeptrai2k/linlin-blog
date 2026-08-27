@@ -404,7 +404,7 @@
     "pickChapter": "52 章都有名字。点一章看目标和五步。",
     "fiveSteps": "这一章的五步",
     "tapHistory": "问这一课",
-    "tapHistoryEmpty": "点课文里的词或句子，就算提问。Linlin 在这里回答；以后会换成 AI。",
+    "tapHistoryEmpty": "点课文任意处（包括标题）就算提问。右下角圆钮开关抽屉。以后会换成 AI。",
     "tapHistoryClose": "关闭",
     "tapHistoryClear": "清空",
     "tapHistoryCount": "{n}/50",

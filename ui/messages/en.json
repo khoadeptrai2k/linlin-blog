@@ -403,7 +403,7 @@
     "pickChapter": "52 named chapters. Tap one to see its goal and five steps.",
     "fiveSteps": "Five steps in this chapter",
     "tapHistory": "Ask the lesson",
-    "tapHistoryEmpty": "Tap a word or line — that is your question. Linlin answers here; later this will be AI.",
+    "tapHistoryEmpty": "Tap anywhere on the lesson — even the title — to ask. The round button opens and closes this drawer. Later this will be AI.",
     "tapHistoryClose": "Close",
     "tapHistoryClear": "Clear",
     "tapHistoryCount": "{n}/50",

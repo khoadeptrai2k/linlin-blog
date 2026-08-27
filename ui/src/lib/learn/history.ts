@@ -101,14 +101,101 @@ export function buildAskPrompt(lesson: Lesson, ask: string, locale: Locale) {
   ].join(" ");
 }
 
+export function clipAsk(value: string) {
+  const cleaned = value.replace(/\s+/g, " ").trim();
+  if (!cleaned || cleaned === "……" || cleaned === "…" || cleaned === "?") return "";
+  if (cleaned.length < 2) return "";
+  if (cleaned.length <= 220) return cleaned;
+  return `${cleaned.slice(0, 217).trim()}…`;
+}
+
+function firstAskLine(hit: Element) {
+  const data = hit.getAttribute("data-ask");
+  if (data?.trim()) return clipAsk(data);
+  const primary = hit.querySelector(
+    ":scope > .font-display, :scope > .font-semibold, :scope span.font-display, :scope span.font-semibold, :scope > span:first-child",
+  );
+  if (primary?.textContent) {
+    const line = clipAsk(primary.textContent);
+    if (line) return line;
+  }
+  return clipAsk(hit.textContent || "");
+}
+
+export function explainFromLessonClick(target: EventTarget | null) {
+  if (!(target instanceof Element)) return "";
+  const node = target.closest("[data-explain]");
+  return (node?.getAttribute("data-explain") || "").trim();
+}
+
+export function textFromLessonClick(target: EventTarget | null) {
+  if (!(target instanceof Element)) return "";
+  if (
+    target.closest(
+      "[data-ask-skip], .learn-actions, .learn-speak, .learn-speed, .learn-ask-fab, .learn-history, .learn-rail, .btn-primary, .btn-ghost, input, textarea, a",
+    )
+  ) {
+    return "";
+  }
+
+  const dataNode = target.closest("[data-ask]");
+  if (dataNode) {
+    const value = clipAsk(dataNode.getAttribute("data-ask") || "");
+    if (value) return value;
+  }
+
+  if (
+    target.classList.contains("learn-card") ||
+    target.classList.contains("learn-stage") ||
+    target.classList.contains("learn-card-head") ||
+    target.classList.contains("learn-board") ||
+    target.classList.contains("learn-chip-row") ||
+    target.classList.contains("learn-points") ||
+    target.classList.contains("learn-swap")
+  ) {
+    return "";
+  }
+
+  const pointNum = target.closest(".learn-point-n");
+  if (pointNum) {
+    const button = pointNum.closest(".learn-point")?.querySelector("button");
+    if (button) return firstAskLine(button);
+  }
+
+  const kicker = target.closest(".learn-kicker");
+  if (kicker?.parentElement) {
+    const body = kicker.parentElement.querySelector("p:not(.learn-kicker), h2, h1");
+    if (body) {
+      const line = firstAskLine(body);
+      if (line) return line;
+    }
+  }
+
+  const hit = target.closest("h1, h2, h3, button, p, label, li, .learn-chip, .learn-goal, .learn-board-title");
+  if (!(hit instanceof Element)) return "";
+  if (
+    hit.closest("[data-ask-skip], .learn-actions, .learn-speak, .learn-speed, .btn-primary, .btn-ghost")
+  ) {
+    return "";
+  }
+  return firstAskLine(hit);
+}
+
 export function isLessonSpeech(lesson: Lesson, text: string) {
   const needle = norm(text);
   if (!needle) return false;
+  if (norm(lesson.title[lesson.track]) === needle) return true;
+  if (norm(lesson.theory.levelTitle) === needle) return true;
   if (lesson.vocab.some((item) => norm(item.word) === needle)) return true;
   if (lesson.sentences.some((item) => norm(item.text) === needle)) return true;
   if ((lesson.quotes || []).some((item) => norm(item.text) === needle)) return true;
+  if (lesson.theory.points.some((item) => norm(item) === needle)) return true;
+  if (norm(lesson.theory.structure) === needle) return true;
+  if (norm(lesson.theory.tip) === needle) return true;
+  if (lesson.theory.examples.some((item) => norm(item) === needle)) return true;
   if (lesson.theory.patterns.some((item) => norm(item.example) === needle || norm(item.form) === needle)) return true;
   if (lesson.theory.apply.some((item) => norm(item.sample) === needle)) return true;
+  if (lesson.theory.table.rows.some((row) => row.split(" → ").some((cell) => cell && norm(cell) === needle))) return true;
   if (lesson.listening.lines.some((item) => norm(item) === needle)) return true;
   if (norm(lesson.listening.text) === needle) return true;
   return false;
@@ -120,6 +207,37 @@ function pickMeaning(meaning: Record<Locale, string> | undefined, locale: Locale
   return meaning[locale] || undefined;
 }
 
+function meaningHit(meaning: Record<Locale, string> | undefined, needle: string) {
+  return Boolean(meaning && Object.values(meaning).some((value) => value && norm(value) === needle));
+}
+
+function vocabFromAsk(lesson: Lesson, needle: string) {
+  const exact = lesson.vocab.find((item) => norm(item.word) === needle);
+  if (exact) return exact;
+  const byMeaning = lesson.vocab.find((item) => meaningHit(item.meaning, needle));
+  if (byMeaning) return byMeaning;
+  return lesson.vocab.find((item) => {
+    const word = norm(item.word);
+    if (!word) return false;
+    const cjkOrThai = /[\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF]/.test(word);
+    if (cjkOrThai) return needle.includes(word);
+    if (word.length < 3) return false;
+    return needle.includes(word);
+  });
+}
+
+function lineFromAsk(lesson: Lesson, needle: string) {
+  const rows = [...lesson.sentences, ...(lesson.quotes || [])];
+  const exact = rows.find((item) => norm(item.text) === needle);
+  if (exact) return exact;
+  const byMeaning = rows.find((item) => meaningHit(item.meaning, needle));
+  if (byMeaning) return byMeaning;
+  return rows.find((item) => {
+    const line = norm(item.text);
+    return line.length >= 4 && (needle.includes(line) || line.includes(needle));
+  });
+}
+
 export function lookupTap(
   lesson: Lesson,
   text: string,
@@ -127,52 +245,98 @@ export function lookupTap(
 ): Pick<TapRecord, "reading" | "sayVi" | "translation" | "explain" | "answer"> {
   const needle = norm(text);
   const goal = lesson.goal[locale] || lesson.goal[lesson.track];
+  const trackTitle = lesson.title[lesson.track];
+  const { theory } = lesson;
+  const note = theory.levelNote || goal;
 
-  const word = lesson.vocab.find((item) => norm(item.word) === needle);
+  if (norm(trackTitle) === needle) {
+    return {
+      translation: locale === lesson.track ? undefined : lesson.title[locale] || undefined,
+      explain: note,
+    };
+  }
+  if (Object.values(lesson.title).some((value) => value && norm(value) === needle)) {
+    return { translation: trackTitle, explain: note };
+  }
+  if (Object.values(lesson.goal).some((value) => value && norm(value) === needle) || norm(theory.levelTitle) === needle) {
+    return { explain: note };
+  }
+  if (norm(theory.levelNote) === needle) {
+    return { explain: goal };
+  }
+
+  const word = vocabFromAsk(lesson, needle);
   if (word) {
+    const askedWord = norm(word.word) === needle || needle.includes(norm(word.word));
     return {
       reading: word.reading || undefined,
       sayVi: word.sayVi || undefined,
-      translation: pickMeaning(word.meaning, locale, lesson.track),
-      explain: word.usage || goal,
+      translation: askedWord ? pickMeaning(word.meaning, locale, lesson.track) : word.word,
+      explain: word.usage || note,
     };
   }
 
-  const line = [...lesson.sentences, ...(lesson.quotes || [])].find((item) => norm(item.text) === needle);
+  const line = lineFromAsk(lesson, needle);
   if (line) {
     return {
       reading: line.reading || undefined,
       sayVi: line.sayVi || undefined,
-      translation: pickMeaning(line.meaning, locale, lesson.track),
-      explain: goal,
+      translation: norm(line.text) === needle ? pickMeaning(line.meaning, locale, lesson.track) : line.text,
+      explain: note,
     };
   }
 
-  const pattern = lesson.theory.patterns.find(
-    (item) => norm(item.example) === needle || norm(item.form) === needle,
+  const pattern = theory.patterns.find(
+    (item) =>
+      norm(item.example) === needle ||
+      norm(item.form) === needle ||
+      norm(item.use) === needle ||
+      norm(item.note) === needle,
   );
   if (pattern) {
     return {
       translation: locale === lesson.track ? undefined : pattern.use,
-      explain: pattern.note || pattern.use || goal,
+      explain: [pattern.form, pattern.note || pattern.use].filter(Boolean).join(" · ") || note,
     };
   }
 
-  const apply = lesson.theory.apply.find((item) => norm(item.sample) === needle || norm(item.frame) === needle);
+  const apply = theory.apply.find(
+    (item) => norm(item.sample) === needle || norm(item.frame) === needle || norm(item.prompt) === needle,
+  );
   if (apply) {
     return {
-      translation: locale === lesson.track ? undefined : apply.prompt,
-      explain: apply.prompt || goal,
+      translation: locale === lesson.track ? undefined : apply.sample,
+      explain: `${apply.prompt} ${apply.frame} → ${apply.sample}`.trim(),
     };
   }
 
-  for (const row of lesson.theory.table?.rows || []) {
+  const point =
+    theory.points.find((item) => norm(item) === needle) ||
+    theory.usage.find((item) => norm(item) === needle) ||
+    theory.contrasts.find((item) => norm(item) === needle) ||
+    theory.mistakes.find((item) => norm(item) === needle) ||
+    theory.examples.find((item) => norm(item) === needle);
+  if (point) {
+    return { explain: note };
+  }
+
+  if (norm(theory.structure) === needle) {
+    return { explain: note };
+  }
+  if (norm(theory.tip) === needle) {
+    return { explain: note };
+  }
+  if (norm(theory.table.title) === needle) {
+    return { explain: theory.table.rows.slice(0, 3).join(" · ") || note };
+  }
+
+  for (const row of theory.table?.rows || []) {
     const [left, right] = row.split(" → ");
     if (left && norm(left) === needle) {
       const hit = lesson.vocab.find((item) => norm(item.word) === needle);
       return {
         translation: pickMeaning(hit?.meaning, locale, lesson.track),
-        explain: right || hit?.usage || goal,
+        explain: right || hit?.usage || note,
         reading: hit?.reading,
         sayVi: hit?.sayVi,
       };
@@ -181,7 +345,7 @@ export function lookupTap(
       const hit = lesson.sentences.find((item) => norm(item.text) === needle);
       return {
         translation: pickMeaning(hit?.meaning, locale, lesson.track),
-        explain: goal,
+        explain: note,
         reading: hit?.reading,
         sayVi: hit?.sayVi,
       };
@@ -189,10 +353,10 @@ export function lookupTap(
   }
 
   const listenHit = lesson.sentences.find((item) => needle.includes(norm(item.text)) || norm(item.text).includes(needle));
-  if (listenHit && (norm(lesson.listening.text) === needle || lesson.listening.lines.some((line) => norm(line) === needle))) {
+  if (listenHit && (norm(lesson.listening.text) === needle || lesson.listening.lines.some((row) => norm(row) === needle))) {
     return {
       translation: pickMeaning(listenHit.meaning, locale, lesson.track),
-      explain: goal,
+      explain: note,
       reading: listenHit.reading,
       sayVi: listenHit.sayVi,
     };

@@ -1,13 +1,13 @@
 "use client";
 
-import { Phonetic, SpeakButton } from "@/components/learn/LearnAudio";
+import { SpeakButton } from "@/components/learn/LearnAudio";
+import { CardDrawer, type CardDrawerTile } from "@/components/ui/CardDrawer";
 import type { Locale } from "@/i18n/routing";
 import type { TapRecord } from "@/lib/learn/history";
 
 export function TapHistory({
   open,
   items,
-  locale,
   slow,
   labels,
   onClose,
@@ -35,61 +35,62 @@ export function TapHistory({
   onClose: () => void;
   onClear: () => void;
 }) {
-  return (
-    <aside className={`learn-history ${open ? "is-open" : ""}`} aria-hidden={!open}>
-      <div className="learn-history-panel">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="learn-kicker">{labels.title}</p>
-            <p className="mt-1 text-xs text-ink-soft">{labels.count}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {items.length ? (
-              <button type="button" className="learn-speed" onClick={onClear}>
-                {labels.clear}
-              </button>
-            ) : null}
-            <button type="button" className="learn-speed lg:hidden" onClick={onClose}>
-              {labels.close}
-            </button>
-          </div>
-        </div>
+  const latest = items[0];
+  const older = items.slice(1);
+  const body = latest
+    ? latest.translation || latest.explain || latest.answer || labels.replyStub
+    : labels.empty;
 
-        {items.length === 0 ? (
-          <p className="mt-6 text-sm leading-6 text-ink-soft">{labels.empty}</p>
-        ) : (
-          <ol className="mt-4 grid gap-3">
-            {items.map((item) => {
-              const ask = item.ask || item.text || "";
-              return (
-                <li key={`${item.id}-${item.at}`} className="learn-history-item">
-                  <p className="learn-kicker">{labels.youAsked}</p>
-                  <div className="mt-1 flex items-start justify-between gap-2">
-                    <p className="font-display text-lg leading-6 text-sky-700">{ask}</p>
-                    <SpeakButton text={ask} lang={item.lang} slow={slow} label={labels.hear} />
-                  </div>
-                  <Phonetic
-                    reading={item.reading}
-                    sayVi={item.sayVi}
-                    locale={locale}
-                    phoneticLabel={labels.phonetic}
-                    sayViLabel={labels.sayVi}
-                  />
-                  <div className="learn-ask-reply">
-                    <p className="learn-kicker">{labels.reply}</p>
-                    {item.translation ? <p className="mt-1 leading-6">{item.translation}</p> : null}
-                    {item.explain ? <p className="mt-1 text-sm leading-6 text-ink-soft">{item.explain}</p> : null}
-                    {!item.translation && !item.explain && item.answer ? (
-                      <p className="mt-1 leading-6 text-ink-soft">{item.answer}</p>
-                    ) : null}
-                    <p className="mt-2 text-xs text-ink-soft">{labels.replyStub}</p>
-                  </div>
-                </li>
-              );
-            })}
+  const tiles: CardDrawerTile[] = [];
+  if (latest?.translation && latest.explain) {
+    tiles.push({ label: labels.explain, value: latest.explain, wide: true });
+  }
+  if (latest?.reading) tiles.push({ label: labels.phonetic, value: latest.reading });
+  if (latest?.sayVi) tiles.push({ label: labels.sayVi, value: latest.sayVi });
+
+  return (
+    <CardDrawer
+      open={open}
+      onClose={onClose}
+      eyebrow={labels.title}
+      title={latest?.ask || labels.title}
+      body={body}
+      tiles={tiles}
+    >
+      {latest ? (
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <p className="text-xs text-ink-soft">{labels.count}</p>
+          <SpeakButton text={latest.ask} lang={latest.lang} slow={slow} label={labels.hear} />
+        </div>
+      ) : (
+        <p className="mt-4 text-xs text-ink-soft">{labels.count}</p>
+      )}
+      {latest ? <p className="mt-2 text-xs text-ink-soft">{labels.replyStub}</p> : null}
+
+      {older.length ? (
+        <>
+          <p className="mt-5 px-1 text-[0.65rem] font-semibold tracking-[0.16em] text-ink-soft uppercase">
+            {labels.youAsked}
+          </p>
+          <ol className="mt-2 space-y-2">
+            {older.map((item) => (
+              <li key={`${item.id}-${item.at}`} className="control-tile min-h-0">
+                <span className="font-display text-lg leading-6 text-sky-700">{item.ask}</span>
+                {item.translation ? <span className="text-sm leading-6 text-ink-soft">{item.translation}</span> : null}
+                {!item.translation && item.explain ? (
+                  <span className="text-sm leading-6 text-ink-soft">{item.explain}</span>
+                ) : null}
+              </li>
+            ))}
           </ol>
-        )}
-      </div>
-    </aside>
+        </>
+      ) : null}
+
+      {items.length ? (
+        <button type="button" className="btn-ghost mt-4 w-full" onClick={onClear}>
+          {labels.clear}
+        </button>
+      ) : null}
+    </CardDrawer>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { Phonetic, SpeakButton, speakText } from "@/components/learn/LearnAudio";
 import { MatchGame } from "@/components/learn/LearnGame";
 import { TapHistory } from "@/components/learn/TapHistory";
-import { buildAskPrompt, getTapHistory, getTapHistoryServer, isLessonSpeech, lookupTap, pushTapRecord, saveTapHistory, subscribeTapHistory } from "@/lib/learn/history";
+import { buildAskPrompt, explainFromLessonClick, getTapHistory, getTapHistoryServer, isLessonSpeech, lookupTap, pushTapRecord, saveTapHistory, subscribeTapHistory, textFromLessonClick } from "@/lib/learn/history";
 import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory, VocabItem } from "@/lib/learn/types";
 
 function loadDone(track: string) {
@@ -163,6 +163,30 @@ function hasAnswer(exercise: Exercise, given: string | string[] | undefined) {
   return typeof given === "string" && given.trim().length > 0;
 }
 
+function drillPromptHint(exercise: Exercise, lesson: Lesson, locale: Locale) {
+  const goal = lesson.goal[locale] || lesson.goal[lesson.track];
+  const pattern = lesson.theory.patterns[0];
+  if (exercise.type === "mcq" && exercise.promptKey === "whichPattern") {
+    return pattern ? `${pattern.form}. ${pattern.use} ${pattern.note}`.trim() : lesson.theory.structure || goal;
+  }
+  if (exercise.type === "mcq" && exercise.promptKey === "whichLine") {
+    return lesson.listening.text || lesson.listening.lines[0] || goal;
+  }
+  if (exercise.type === "mcq" && exercise.promptKey === "whichSentence") {
+    return (exercise.promptI18n && (exercise.promptI18n[locale] || exercise.promptI18n[lesson.track])) || goal;
+  }
+  if (exercise.type === "mcq" && exercise.promptKey === "whichFits") {
+    return exercise.prompt || pattern?.use || goal;
+  }
+  const prompt = isI18nText(exercise.prompt) ? exercise.prompt[locale] || exercise.prompt[lesson.track] : exercise.prompt;
+  const apply = lesson.theory.apply.find((item) => item.prompt === prompt || item.frame === prompt);
+  if (apply) return `${apply.prompt} ${apply.frame} → ${apply.sample}`;
+  const word = lesson.vocab.find((item) => prompt.includes(item.word));
+  if (word) return word.usage || word.meaning[locale] || goal;
+  const extra = lookupTap(lesson, prompt, locale);
+  return extra.explain || goal;
+}
+
 function drillFor(
   current: string,
   lesson: Lesson,
@@ -255,6 +279,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const [showScript, setShowScript] = useState(false);
   const [slow, setSlow] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const lastAsk = useRef({ text: "", at: 0 });
   const history = useSyncExternalStore(subscribeTapHistory, getTapHistory, getTapHistoryServer);
 
   const support = supportLocale(lesson.track, locale);
@@ -338,10 +363,14 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     return `${steps[stepIndex]}:${i}`;
   }
 
-  function recordTap(text: string) {
+  function recordTap(text: string, hint?: string) {
     const cleaned = text.trim();
     if (!cleaned || cleaned === "……") return;
+    if (lastAsk.current.text === cleaned && Date.now() - lastAsk.current.at < 350) return;
+    lastAsk.current = { text: cleaned, at: Date.now() };
     const extra = lookupTap(lesson, cleaned, locale);
+    const goal = lesson.goal[locale] || lesson.goal[lesson.track];
+    if (hint && (!extra.explain || extra.explain === goal)) extra.explain = hint;
     const answer = [extra.translation, extra.explain].filter(Boolean).join("\n") || extra.answer;
     saveTapHistory(
       pushTapRecord(getTapHistory(), {
@@ -367,6 +396,14 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     if (!cleaned || cleaned === "……") return;
     speakText(cleaned, lesson.speechLang, slow);
     recordTap(cleaned);
+  }
+
+  function askFromPointer(event: MouseEvent<HTMLElement>) {
+    const text = textFromLessonClick(event.target);
+    if (!text) return;
+    const hint = explainFromLessonClick(event.target);
+    if (isLessonSpeech(lesson, text)) speakText(text, lesson.speechLang, slow);
+    recordTap(text, hint);
   }
 
   function finish() {
@@ -427,7 +464,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }, [answers, quiz]);
 
   return (
-    <div className={`learn-desk mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] ${historyOpen ? "xl:grid-cols-[15rem_minmax(0,1fr)_19rem]" : ""}`}>
+    <div className="learn-desk mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
       <aside className="learn-rail">
         <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("lessonMap")}</p>
         <ol className="mt-3 grid gap-4">
@@ -458,23 +495,34 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         </ol>
       </aside>
 
-      <article className="learn-card glass-tile min-w-0 p-0">
+      <article className="learn-card glass-tile min-w-0 p-0" onClickCapture={askFromPointer}>
         <div className="learn-card-head">
           <div className="flex items-start justify-between gap-3">
-            <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
+            <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase" data-ask-skip>
               {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
             </p>
-            <div className="flex items-center gap-2">
-              <button type="button" className={historyOpen ? "learn-speed is-on" : "learn-speed"} onClick={() => setHistoryOpen((value) => !value)}>
-                {t("tapHistory")} · {history.length}
-              </button>
+            <div className="flex items-center gap-2" data-ask-skip>
               <button type="button" className={slow ? "learn-speed is-on" : "learn-speed"} onClick={() => setSlow((value) => !value)}>
                 {slow ? t("slow") : t("normal")}
               </button>
             </div>
           </div>
-          <h1 className="font-display mt-2 text-xl leading-tight text-sky-700 sm:text-2xl">{lesson.title[lesson.track]}</h1>
-          {support ? <p className="mt-1 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
+          <h1
+            className="learn-ask-target font-display mt-2 text-xl leading-tight text-sky-700 sm:text-2xl"
+            data-ask={lesson.title[lesson.track]}
+            data-explain={lesson.theory.levelNote || lesson.goal[locale] || lesson.goal[lesson.track]}
+          >
+            {lesson.title[lesson.track]}
+          </h1>
+          {support ? (
+            <p
+              className="learn-ask-target mt-1 text-sm text-ink-soft"
+              data-ask={lesson.title[support]}
+              data-explain={lesson.theory.levelNote || lesson.goal[locale] || lesson.goal[lesson.track]}
+            >
+              {lesson.title[support]}
+            </p>
+          ) : null}
         </div>
 
         <div className="learn-stage min-h-0 flex-1 overflow-auto px-5 pb-4 sm:px-7">
@@ -528,12 +576,16 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           ) : null}
 
           {current === "apply" && apply ? (
-            <div className="learn-board">
+            <div className="learn-board" data-explain={`${apply.prompt} ${apply.frame} → ${apply.sample}`}>
               <p className="learn-kicker">{t("apply")}</p>
-              <h2 className="learn-board-title">{apply.prompt}</h2>
+              <h2 className="learn-board-title learn-ask-target" data-ask={apply.prompt} data-explain={`${apply.frame} → ${apply.sample}`}>
+                {apply.prompt}
+              </h2>
               <p className="mt-1 text-sm leading-6 text-ink-soft">{t("applyLead")}</p>
               <p
-                className="font-display mt-4 cursor-pointer text-2xl leading-8 text-sky-700"
+                className="learn-ask-target font-display mt-4 cursor-pointer text-2xl leading-8 text-sky-700"
+                data-ask={apply.frame}
+                data-explain={`${apply.prompt} → ${apply.sample}`}
                 onClick={() => say(apply.sample)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") say(apply.sample);
@@ -556,9 +608,11 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           ) : null}
 
           {current === "listen" ? (
-            <div className="learn-board">
+            <div className="learn-board" data-explain={lesson.listening.text || lesson.goal[locale] || lesson.goal[lesson.track]}>
               <p className="learn-kicker">{t("listen")}</p>
-              <h2 className="learn-board-title">{t("listenClip")}</h2>
+              <h2 className="learn-board-title learn-ask-target" data-ask={t("listenClip")} data-explain={lesson.listening.text}>
+                {t("listenClip")}
+              </h2>
               <p className="mt-1 text-sm leading-6 text-ink-soft">{t("listenFirst")}</p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <button type="button" className="btn-primary" onClick={() => say(lesson.listening.text)}>
@@ -606,8 +660,10 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           ) : null}
 
           {current === "game" ? (
-            <div>
-              <p className="mb-4 text-sm leading-6 text-ink-soft">{t("matchLead")}</p>
+            <div data-explain={lesson.goal[locale] || lesson.goal[lesson.track]}>
+              <p className="mb-4 text-sm leading-6 text-ink-soft" data-ask={t("matchLead")}>
+                {t("matchLead")}
+              </p>
               <MatchGame
                 vocab={lesson.vocab.slice(0, 6)}
                 locale={locale}
@@ -622,7 +678,13 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
           {drill ? (
             <div className="mt-5">
-              <p className="font-semibold leading-7">{promptOf(drill)}</p>
+              <p
+                className="learn-ask-target font-semibold leading-7"
+                data-ask={promptOf(drill)}
+                data-explain={drillPromptHint(drill, lesson, locale)}
+              >
+                {promptOf(drill)}
+              </p>
               <ExerciseField
                 exercise={drill}
                 value={given}
@@ -639,6 +701,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 className={`learn-feedback mt-3 text-sm font-semibold ${
                   checked ? (correct ? "text-sky-700" : "text-ink-soft") : "text-ink-soft"
                 }`}
+                data-ask-skip
               >
                 {checked
                   ? correct
@@ -651,7 +714,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         </div>
 
         {quizDone ? (
-            <div className="learn-actions">
+            <div className="learn-actions" data-ask-skip>
               <p className="text-sm font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
               <div className="learn-actions-right is-end">
                 <Link href={`/learn/${lesson.track}`} className="btn-ghost">
@@ -669,7 +732,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               </div>
             </div>
           ) : (
-            <div className="learn-actions">
+            <div className="learn-actions" data-ask-skip>
               <button type="button" className="btn-ghost" disabled={step === 0 && index === 0} onClick={goBack}>
                 {t("back")}
               </button>
@@ -723,6 +786,25 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         onClose={() => setHistoryOpen(false)}
         onClear={() => saveTapHistory([])}
       />
+      <button
+        type="button"
+        className={`learn-ask-fab ${historyOpen ? "is-open" : ""}`}
+        data-ask-skip
+        aria-expanded={historyOpen}
+        aria-label={historyOpen ? t("tapHistoryClose") : t("tapHistory")}
+        onClick={() => setHistoryOpen((value) => !value)}
+      >
+        {historyOpen ? (
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+            <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+            <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 11H7v-2h10zm0-3H7V8h10z" />
+          </svg>
+        )}
+        {!historyOpen && history.length > 0 ? <span className="learn-ask-badge">{history.length > 9 ? "9+" : history.length}</span> : null}
+      </button>
     </div>
   );
 }
@@ -761,9 +843,13 @@ function FocusCard({
   const hidden = hideText || title === "……";
   return (
     <div className="learn-board">
-      {lead ? <p className="mb-3 text-sm leading-6 text-ink-soft">{lead}</p> : null}
+      {lead ? (
+        <p className="mb-3 text-sm leading-6 text-ink-soft" data-ask={speak}>
+          {lead}
+        </p>
+      ) : null}
       <div className="flex items-start justify-between gap-3">
-        <button type="button" className="min-w-0 text-left" onClick={() => (onTap ? onTap(speak) : speakText(speak, lang, slow))}>
+        <button type="button" className="learn-ask-target min-w-0 text-left" data-ask={speak} onClick={() => (onTap ? onTap(speak) : speakText(speak, lang, slow))}>
           <span className="font-display text-3xl font-semibold leading-snug text-sky-700">
             {hidden ? "……" : title}
           </span>
@@ -781,8 +867,16 @@ function FocusCard({
           sayViLabel={t("sayViLabel")}
         />
       )}
-      {meaning ? <p className="learn-goal mt-4 text-base leading-7">{meaning}</p> : null}
-      {note ? <p className="mt-3 text-sm leading-6 text-sky-700">{note}</p> : null}
+      {meaning ? (
+        <p className="learn-goal mt-4 text-base leading-7" data-ask={speak}>
+          {meaning}
+        </p>
+      ) : null}
+      {note ? (
+        <p className="mt-3 text-sm leading-6 text-sky-700" data-ask={speak}>
+          {note}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -790,16 +884,20 @@ function FocusCard({
 function SlideShell({
   kicker,
   title,
+  explain,
   children,
 }: {
   kicker: string;
   title: string;
+  explain?: string;
   children: ReactNode;
 }) {
   return (
-    <div className="learn-board">
+    <div className="learn-board" data-explain={explain}>
       <p className="learn-kicker">{kicker}</p>
-      <h2 className="learn-board-title">{title}</h2>
+      <h2 className="learn-board-title learn-ask-target" data-ask={title} data-explain={explain}>
+        {title}
+      </h2>
       {children}
     </div>
   );
@@ -860,22 +958,30 @@ function TheorySlideView({
 }) {
   if (slide.type === "intro") {
     return (
-      <SlideShell kicker={t("theory")} title={theory.levelTitle || t("overview")}>
+      <SlideShell kicker={t("theory")} title={theory.levelTitle || t("overview")} explain={theory.levelNote || goal}>
         {goal ? (
           <div className="learn-goal">
             <p className="learn-kicker">{t("goalLabel")}</p>
-            <p className="mt-1 leading-6">{goal}</p>
-            {goalSupport ? <p className="mt-1 text-sm text-ink-soft">{goalSupport}</p> : null}
+            <p className="mt-1 leading-6" data-ask={goal} data-explain={theory.levelNote || goal}>
+              {goal}
+            </p>
+            {goalSupport ? (
+              <p className="mt-1 text-sm text-ink-soft" data-ask={goalSupport} data-explain={goal}>
+                {goalSupport}
+              </p>
+            ) : null}
           </div>
         ) : null}
-        <p className="mt-4 leading-7">{theory.levelNote}</p>
+        <p className="mt-4 leading-7" data-ask={theory.levelNote} data-explain={goal}>
+          {theory.levelNote}
+        </p>
         {vocab.length ? (
           <div className="mt-5">
             <p className="learn-kicker">{t("todayHear")}</p>
             <ul className="learn-chip-row">
               {vocab.map((item) => (
                 <li key={item.word} className="learn-chip">
-                  <button type="button" className="min-w-0 text-left" onClick={() => onSay(item.word)}>
+                  <button type="button" className="min-w-0 text-left" data-ask={item.word} onClick={() => onSay(item.word)}>
                     <span className="block font-semibold text-sky-700">{item.word}</span>
                     {support ? <span className="block truncate text-xs text-ink-soft">{item.meaning[support]}</span> : null}
                   </button>
@@ -890,7 +996,7 @@ function TheorySlideView({
   }
   if (slide.type === "points") {
     return (
-      <SlideShell kicker={t("keyPoints")} title={t("rememberThese")}>
+      <SlideShell kicker={t("keyPoints")} title={t("rememberThese")} explain={slide.items.slice(0, 3).join(" ")}>
         <ol className="learn-points">
           {slide.items.map((point, i) => (
             <li key={`${i}-${point}`} className="learn-point">
@@ -906,7 +1012,7 @@ function TheorySlideView({
   }
   if (slide.type === "structure") {
     return (
-      <SlideShell kicker={t("structure")} title={t("howSentence")}>
+      <SlideShell kicker={t("structure")} title={t("howSentence")} explain={theory.structure}>
         <p className="leading-7">
           <button type="button" className="text-left" onClick={() => onSay(theory.structure)}>
             {theory.structure}
@@ -918,7 +1024,7 @@ function TheorySlideView({
   if (slide.type === "pattern") {
     const pattern = slide.pattern;
     return (
-      <SlideShell kicker={t("pattern")} title={pattern.form}>
+      <SlideShell kicker={t("pattern")} title={pattern.form} explain={`${pattern.use} ${pattern.note}`.trim()}>
         <button type="button" className="text-left text-sm leading-6 text-ink-soft" onClick={() => onSay(pattern.form)}>
           {pattern.use}
         </button>
@@ -930,7 +1036,7 @@ function TheorySlideView({
   }
   if (slide.type === "list") {
     return (
-      <SlideShell kicker={t(slide.titleKey)} title={t(slide.titleKey)}>
+      <SlideShell kicker={t(slide.titleKey)} title={t(slide.titleKey)} explain={slide.items.slice(0, 3).join(" ")}>
         <ul className="mt-1 grid gap-2">
           {slide.items.map((row, i) =>
             slide.titleKey === "examples" ? (
@@ -950,7 +1056,7 @@ function TheorySlideView({
   }
   if (slide.type === "table") {
     return (
-      <SlideShell kicker={t("swapTable")} title={theory.table.title}>
+      <SlideShell kicker={t("swapTable")} title={theory.table.title} explain={theory.table.rows.slice(0, 3).join(" · ")}>
         <ul className="learn-swap">
           {theory.table.rows.slice(0, 8).map((row) => {
             const [left, right] = row.split(" → ");
@@ -972,7 +1078,7 @@ function TheorySlideView({
     );
   }
   return (
-    <SlideShell kicker={t("tip")} title={t("keepThis")}>
+    <SlideShell kicker={t("tip")} title={t("keepThis")} explain={theory.tip}>
       <p className="leading-7">
         <button type="button" className="text-left" onClick={() => onSay(theory.tip)}>
           {theory.tip}

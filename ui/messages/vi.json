@@ -403,7 +403,7 @@
     "pickChapter": "52 chương theo tên. Bấm một chương để xem mục tiêu và năm bước.",
     "fiveSteps": "Năm bước của chương này",
     "tapHistory": "Hỏi bài",
-    "tapHistoryEmpty": "Bấm một từ hoặc câu trong bài — coi như đang hỏi. Linlin sẽ trả lời ở đây; sau này là AI.",
+    "tapHistoryEmpty": "Bấm bất cứ chỗ nào trên bài — kể cả tiêu đề — coi như đang hỏi. Nút tròn góc phải để mở/đóng. Sau này là AI.",
     "tapHistoryClose": "Đóng",
     "tapHistoryClear": "Xóa",
     "tapHistoryCount": "{n}/50",

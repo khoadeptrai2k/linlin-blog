@@ -404,7 +404,7 @@
     "pickChapter": "52 บทมีชื่อ กดบทเพื่อดูเป้าหมายและห้าขั้น",
     "fiveSteps": "ห้าขั้นของบทนี้",
     "tapHistory": "ถามบทนี้",
-    "tapHistoryEmpty": "กดคำหรือประโยคในบท ถือว่าเป็นการถาม Linlin ตอบตรงนี้ ภายหลังจะเป็น AI",
+    "tapHistoryEmpty": "แตะที่ไหนก็ได้ในบท รวมถึงชื่อบท ถือว่าถาม ปุ่มกลมมุมขวาเปิดปิด ภายหลังจะเป็น AI",
     "tapHistoryClose": "ปิด",
     "tapHistoryClear": "ลบ",
     "tapHistoryCount": "{n}/50",
