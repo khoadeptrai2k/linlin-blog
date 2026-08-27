@@ -12,7 +12,9 @@
     "learn": "Learn",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "switchLanguage": "Choose language"
+    "switchLanguage": "Choose language",
+    "aiOn": "Turn AI assistant on",
+    "aiOff": "Turn AI assistant off"
   },
   "Common": {
     "openDetails": "Open details",
@@ -403,7 +405,8 @@
     "pickChapter": "52 named chapters. Tap one to see its goal and five steps.",
     "fiveSteps": "Five steps in this chapter",
     "tapHistory": "Ask the lesson",
-    "tapHistoryEmpty": "Tap anywhere on the lesson — even the title — to ask. The round button opens and closes this drawer. Later this will be AI.",
+    "tapHistoryEmpty": "Turn on AI in the menu, then tap the lesson. The drawer stays so you can keep asking; the wave button opens and closes it.",
+    "linlinThinking": "Linlin is thinking…",
     "tapHistoryClose": "Close",
     "tapHistoryClear": "Clear",
     "tapHistoryCount": "{n}/50",

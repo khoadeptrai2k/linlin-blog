@@ -8,16 +8,18 @@ export function GlassSheet({
   onClose,
   title,
   variant = "sheet",
+  persistent = false,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title?: string;
   variant?: "sheet" | "drawer";
+  persistent?: boolean;
   children: ReactNode;
 }) {
   useEffect(() => {
-    if (!open) return;
+    if (!open || persistent) return;
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
     }
@@ -28,19 +30,21 @@ export function GlassSheet({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose]);
+  }, [open, onClose, persistent]);
 
   if (!open || typeof document === "undefined") return null;
 
   const isDrawer = variant === "drawer";
 
   return createPortal(
-    <div className={`sheet-root${isDrawer ? " drawer-root" : ""}`}>
-      <button type="button" className="sheet-scrim" aria-label="Close" onClick={onClose} />
+    <div className={`sheet-root${isDrawer ? " drawer-root" : ""}${persistent ? " is-docked" : ""}`}>
+      {persistent ? null : (
+        <button type="button" className="sheet-scrim" aria-label="Close" onClick={onClose} />
+      )}
       <div
         className={`glass-popup ${isDrawer ? "drawer-panel drawer-in" : "sheet-panel popup-in"}`}
         role="dialog"
-        aria-modal="true"
+        aria-modal={persistent ? "false" : "true"}
         aria-label={title}
       >
         {isDrawer ? <div className="drawer-handle" aria-hidden /> : <div className="sheet-handle" />}

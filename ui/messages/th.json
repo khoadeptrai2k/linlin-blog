@@ -12,7 +12,9 @@
     "learn": "บทเรียน",
     "openMenu": "เปิดเมนู",
     "closeMenu": "ปิดเมนู",
-    "switchLanguage": "เลือกภาษา"
+    "switchLanguage": "เลือกภาษา",
+    "aiOn": "เปิดผู้ช่วย AI",
+    "aiOff": "ปิดผู้ช่วย AI"
   },
   "Common": {
     "openDetails": "เปิดรายละเอียด",
@@ -404,7 +406,8 @@
     "pickChapter": "52 บทมีชื่อ กดบทเพื่อดูเป้าหมายและห้าขั้น",
     "fiveSteps": "ห้าขั้นของบทนี้",
     "tapHistory": "ถามบทนี้",
-    "tapHistoryEmpty": "แตะที่ไหนก็ได้ในบท รวมถึงชื่อบท ถือว่าถาม ปุ่มกลมมุมขวาเปิดปิด ภายหลังจะเป็น AI",
+    "tapHistoryEmpty": "เปิด AI ที่เมนูก่อน แล้วแตะบทเรียน ลิ้นชักจะค้างไว้ให้ถามต่อ ปุ่มคลื่นมุมขวาเปิดปิด",
+    "linlinThinking": "หลินหลินกำลังคิด…",
     "tapHistoryClose": "ปิด",
     "tapHistoryClear": "ลบ",
     "tapHistoryCount": "{n}/50",

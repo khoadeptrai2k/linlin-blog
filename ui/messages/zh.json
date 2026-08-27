@@ -12,7 +12,9 @@
     "learn": "学习",
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
-    "switchLanguage": "选择语言"
+    "switchLanguage": "选择语言",
+    "aiOn": "打开 AI 助手",
+    "aiOff": "关闭 AI 助手"
   },
   "Common": {
     "openDetails": "打开详情",
@@ -404,7 +406,8 @@
     "pickChapter": "52 章都有名字。点一章看目标和五步。",
     "fiveSteps": "这一章的五步",
     "tapHistory": "问这一课",
-    "tapHistoryEmpty": "点课文任意处（包括标题）就算提问。右下角圆钮开关抽屉。以后会换成 AI。",
+    "tapHistoryEmpty": "先在菜单打开 AI，再点课文。抽屉会留着，方便继续问；右下角声波按钮开关。",
+    "linlinThinking": "Linlin 正在想…",
     "tapHistoryClose": "关闭",
     "tapHistoryClear": "清空",
     "tapHistoryCount": "{n}/50",

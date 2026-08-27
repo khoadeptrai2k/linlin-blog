@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { Phonetic, SpeakButton, speakText } from "@/components/learn/LearnAudio";
 import { MatchGame } from "@/components/learn/LearnGame";
+import { AskFab } from "@/components/learn/AskFab";
 import { TapHistory } from "@/components/learn/TapHistory";
+import { getAiAssist, getAiAssistServer, subscribeAiAssist } from "@/lib/learn/aiAssist";
 import { buildAskPrompt, explainFromLessonClick, getTapHistory, getTapHistoryServer, isLessonSpeech, lookupTap, pushTapRecord, saveTapHistory, subscribeTapHistory, textFromLessonClick } from "@/lib/learn/history";
 import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory, VocabItem } from "@/lib/learn/types";
 
@@ -279,8 +281,14 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const [showScript, setShowScript] = useState(false);
   const [slow, setSlow] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [thinking, setThinking] = useState(false);
   const lastAsk = useRef({ text: "", at: 0 });
+  const thinkTimer = useRef<number>(0);
   const history = useSyncExternalStore(subscribeTapHistory, getTapHistory, getTapHistoryServer);
+  const aiOn = useSyncExternalStore(subscribeAiAssist, getAiAssist, getAiAssistServer);
+  const drawerOpen = aiOn && historyOpen;
+
+  useEffect(() => () => window.clearTimeout(thinkTimer.current), []);
 
   const support = supportLocale(lesson.track, locale);
   const current = steps[step];
@@ -364,6 +372,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }
 
   function recordTap(text: string, hint?: string) {
+    if (!aiOn) return;
     const cleaned = text.trim();
     if (!cleaned || cleaned === "……") return;
     if (lastAsk.current.text === cleaned && Date.now() - lastAsk.current.at < 350) return;
@@ -389,6 +398,9 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
       }),
     );
     setHistoryOpen(true);
+    setThinking(true);
+    window.clearTimeout(thinkTimer.current);
+    thinkTimer.current = window.setTimeout(() => setThinking(false), 900);
   }
 
   function say(text: string) {
@@ -764,7 +776,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           )}
       </article>
       <TapHistory
-        open={historyOpen}
+        open={drawerOpen}
+        thinking={aiOn && thinking}
         items={history}
         locale={locale}
         slow={slow}
@@ -777,6 +790,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           youAsked: t("youAsked"),
           reply: t("linlinReply"),
           replyStub: t("linlinReplyStub"),
+          thinking: t("linlinThinking"),
           translation: t("tapTranslate"),
           explain: t("tapExplain"),
           phonetic: t("phonetic"),
@@ -786,25 +800,16 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         onClose={() => setHistoryOpen(false)}
         onClear={() => saveTapHistory([])}
       />
-      <button
-        type="button"
-        className={`learn-ask-fab ${historyOpen ? "is-open" : ""}`}
-        data-ask-skip
-        aria-expanded={historyOpen}
-        aria-label={historyOpen ? t("tapHistoryClose") : t("tapHistory")}
-        onClick={() => setHistoryOpen((value) => !value)}
-      >
-        {historyOpen ? (
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
-            <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
-            <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 11H7v-2h10zm0-3H7V8h10z" />
-          </svg>
-        )}
-        {!historyOpen && history.length > 0 ? <span className="learn-ask-badge">{history.length > 9 ? "9+" : history.length}</span> : null}
-      </button>
+      {aiOn ? (
+        <AskFab
+          open={drawerOpen}
+          thinking={aiOn && thinking}
+          count={history.length}
+          openLabel={t("tapHistory")}
+          closeLabel={t("tapHistoryClose")}
+          onToggle={() => setHistoryOpen((value) => !value)}
+        />
+      ) : null}
     </div>
   );
 }

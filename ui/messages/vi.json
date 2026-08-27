@@ -12,7 +12,9 @@
     "learn": "Học tập",
     "openMenu": "Mở menu",
     "closeMenu": "Đóng menu",
-    "switchLanguage": "Chọn ngôn ngữ"
+    "switchLanguage": "Chọn ngôn ngữ",
+    "aiOn": "Bật trợ lý AI",
+    "aiOff": "Tắt trợ lý AI"
   },
   "Common": {
     "openDetails": "Mở chi tiết",
@@ -403,7 +405,8 @@
     "pickChapter": "52 chương theo tên. Bấm một chương để xem mục tiêu và năm bước.",
     "fiveSteps": "Năm bước của chương này",
     "tapHistory": "Hỏi bài",
-    "tapHistoryEmpty": "Bấm bất cứ chỗ nào trên bài — kể cả tiêu đề — coi như đang hỏi. Nút tròn góc phải để mở/đóng. Sau này là AI.",
+    "tapHistoryEmpty": "Bật AI trên menu rồi bấm bài học. Drawer ở lại để hỏi tiếp; nút sóng góc phải để mở/đóng.",
+    "linlinThinking": "Linlin đang nghĩ…",
     "tapHistoryClose": "Đóng",
     "tapHistoryClear": "Xóa",
     "tapHistoryCount": "{n}/50",

@@ -18,6 +18,7 @@ export function CardDrawer({
   stepsLabel,
   ctaLabel,
   onCta,
+  persistent,
   children,
 }: {
   open: boolean;
@@ -36,10 +37,11 @@ export function CardDrawer({
   stepsLabel?: string;
   ctaLabel?: string;
   onCta?: () => void;
+  persistent?: boolean;
   children?: ReactNode;
 }) {
   return (
-    <GlassSheet open={open} onClose={onClose} title={eyebrow ?? title} variant="drawer">
+    <GlassSheet open={open} onClose={onClose} title={eyebrow ?? title} variant="drawer" persistent={persistent}>
       {open ? (
         <div>
           {image ? (

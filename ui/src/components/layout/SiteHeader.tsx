@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { AiAssistSwitch } from "@/components/layout/AiAssistSwitch";
 
 function iconProps(className?: string) {
   return {
@@ -141,7 +142,8 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <div className="ml-auto flex items-center">
+        <div className="ml-auto flex items-center gap-1.5">
+          <AiAssistSwitch />
           <LanguageSwitcher onOpenChange={setLangOpen} />
         </div>
       </div>
