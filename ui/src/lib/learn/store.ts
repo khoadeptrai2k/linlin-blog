@@ -1,8 +1,4 @@
 import catalogJson from "@/content/learn/catalog.json";
-import viLessons from "@/content/learn/vi.json";
-import enLessons from "@/content/learn/en.json";
-import zhLessons from "@/content/learn/zh.json";
-import thLessons from "@/content/learn/th.json";
 import { getMongo, isMongoEnabled } from "@/lib/mongo";
 import type { Catalog, LearnTrack, Lesson } from "@/lib/learn/types";
 
@@ -11,12 +7,21 @@ export { isLearnTrack } from "@/lib/learn/types";
 
 export type LessonCard = Pick<Lesson, "id" | "title" | "goal" | "minutes" | "order" | "kind">;
 
-const localLessons: Record<LearnTrack, Lesson[]> = {
-  vi: viLessons as Lesson[],
-  en: enLessons as Lesson[],
-  zh: zhLessons as Lesson[],
-  th: thLessons as Lesson[],
-};
+const localCache: Partial<Record<LearnTrack, Lesson[]>> = {};
+
+async function loadLocalLessons(track: LearnTrack): Promise<Lesson[]> {
+  if (localCache[track]) return localCache[track]!;
+  const loaders = {
+    vi: () => import("@/content/learn/vi.json"),
+    en: () => import("@/content/learn/en.json"),
+    zh: () => import("@/content/learn/zh.json"),
+    th: () => import("@/content/learn/th.json"),
+  };
+  const mod = await loaders[track]();
+  const rows = mod.default as Lesson[];
+  localCache[track] = rows;
+  return rows;
+}
 
 export async function getCatalog(): Promise<Catalog> {
   if (isMongoEnabled()) {
@@ -42,7 +47,7 @@ export async function getLessonCards(track: LearnTrack): Promise<LessonCard[]> {
       .toArray();
     if (rows?.length) return rows as LessonCard[];
   }
-  return (localLessons[track] ?? []).map(({ id, title, goal, minutes, order, kind }) => ({
+  return (await loadLocalLessons(track)).map(({ id, title, goal, minutes, order, kind }) => ({
     id,
     title,
     goal,
@@ -62,7 +67,7 @@ export async function getLesson(track: LearnTrack, id: string): Promise<Lesson |
       return lesson as Lesson;
     }
   }
-  return localLessons[track]?.find((lesson) => lesson.id === id) ?? null;
+  return (await loadLocalLessons(track)).find((lesson) => lesson.id === id) ?? null;
 }
 
 export async function getNextLessonId(track: LearnTrack, id: string): Promise<string | undefined> {

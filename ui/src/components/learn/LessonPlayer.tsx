@@ -1,5 +1,3 @@
-/** @format */
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -7,10 +5,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { Phonetic, SpeakButton, speakText } from "@/components/learn/LearnAudio";
-import { MatchGame, QuoteBoard } from "@/components/learn/LearnGame";
-import type { Exercise, I18nText, Lesson } from "@/lib/learn/types";
-
-const shapes = ["pebble-a", "pebble-b", "pebble-c", "pebble-d"] as const;
+import { MatchGame } from "@/components/learn/LearnGame";
+import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory } from "@/lib/learn/types";
 
 function loadDone(track: string) {
   try {
@@ -66,14 +62,12 @@ function extraExercises(
   lesson: Lesson,
   support: Locale | null,
   whatMeans: (word: string) => string,
-  whichWord: (gloss: string) => string,
 ): Exercise[] {
   if (!support || lesson.vocab.length < 4 || lesson.kind === "play") return [];
   const extras: Exercise[] = [];
   const glosses = lesson.vocab.map((item) => item.meaning[support]);
-  const words = lesson.vocab.map((item) => item.word);
 
-  lesson.vocab.forEach((item, index) => {
+  lesson.vocab.slice(0, 3).forEach((item, index) => {
     const answer = item.meaning[support];
     const distractors = pick(glosses, 3, answer, `${lesson.id}-mean-${index}`);
     if (distractors.length < 2) return;
@@ -86,20 +80,7 @@ function extraExercises(
     });
   });
 
-  lesson.vocab.forEach((item, index) => {
-    const answer = item.word;
-    const distractors = pick(words, 3, answer, `${lesson.id}-pick-${index}`);
-    if (distractors.length < 2) return;
-    extras.push({
-      id: `${lesson.id}-rt-pick-${index}`,
-      type: "mcq",
-      prompt: whichWord(item.meaning[support]),
-      options: seededShuffle([answer, ...distractors].slice(0, 4), `${lesson.id}-pick-opt-${index}`),
-      answer,
-    });
-  });
-
-  return extras.slice(0, 6);
+  return extras;
 }
 
 function stepsFor(kind: Lesson["kind"]) {
@@ -113,10 +94,48 @@ function stepsFor(kind: Lesson["kind"]) {
   return ["theory", "words", "lines", "apply", "quiz"] as const;
 }
 
+type TheorySlide =
+  | { type: "intro" }
+  | { type: "points"; items: string[] }
+  | { type: "structure" }
+  | { type: "pattern"; pattern: GrammarPattern }
+  | { type: "list"; titleKey: "contrasts" | "mistakes" | "usage" | "examples"; items: string[] }
+  | { type: "table" }
+  | { type: "tip" };
+
+function theorySlides(theory: LessonTheory): TheorySlide[] {
+  const slides: TheorySlide[] = [{ type: "intro" }];
+  for (let i = 0; i < theory.points.length; i += 3) {
+    slides.push({ type: "points", items: theory.points.slice(i, i + 3) });
+  }
+  if (theory.structure) slides.push({ type: "structure" });
+  theory.patterns.forEach((pattern) => slides.push({ type: "pattern", pattern }));
+  if (theory.contrasts?.length) slides.push({ type: "list", titleKey: "contrasts", items: theory.contrasts });
+  if (theory.mistakes?.length) slides.push({ type: "list", titleKey: "mistakes", items: theory.mistakes });
+  for (let i = 0; i < (theory.examples?.length ?? 0); i += 2) {
+    slides.push({ type: "list", titleKey: "examples", items: theory.examples.slice(i, i + 2) });
+  }
+  if (theory.usage?.length) slides.push({ type: "list", titleKey: "usage", items: theory.usage });
+  if (theory.table?.rows?.length) slides.push({ type: "table" });
+  if (theory.tip) slides.push({ type: "tip" });
+  return slides;
+}
+
+function chunkCount(current: string, lesson: Lesson, slides: TheorySlide[], quizLen: number) {
+  if (current === "theory") return Math.max(1, slides.length);
+  if (current === "words") return Math.max(1, lesson.vocab.length);
+  if (current === "lines") return Math.max(1, lesson.sentences.length);
+  if (current === "apply") return Math.max(1, lesson.theory.apply.length);
+  if (current === "quotes") return Math.max(1, (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6).length);
+  if (current === "quiz") return Math.max(1, quizLen);
+  return 1;
+}
+
 export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; locale: Locale; nextId?: string }) {
   const t = useTranslations("Learn");
   const steps = stepsFor(lesson.kind);
   const [step, setStep] = useState(0);
+  const [item, setItem] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [checked, setChecked] = useState(false);
   const [done, setDone] = useState(false);
@@ -126,19 +145,31 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const support = supportLocale(lesson.track, locale);
   const current = steps[step];
   const targetName = localeMeta[lesson.track].native;
+  const slides = useMemo(() => theorySlides(lesson.theory), [lesson.theory]);
+  const quotes = (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6);
 
   const quiz = useMemo(
-    () => [
-      ...lesson.exercises,
-      ...extraExercises(
-        lesson,
-        support,
-        (word) => t("whatMeans", { word }),
-        (gloss) => t("whichWord", { gloss }),
-      ),
-    ],
+    () =>
+      [
+        ...lesson.exercises,
+        ...extraExercises(lesson, support, (word) => t("whatMeans", { word })),
+      ].slice(0, 8),
     [lesson, support, t],
   );
+
+  const totalItems = chunkCount(current, lesson, slides, quiz.length);
+  const index = Math.min(item, totalItems - 1);
+
+  function resetInner() {
+    setItem(0);
+    setChecked(false);
+    setShowScript(false);
+  }
+
+  function changeStep(next: number) {
+    setStep(next);
+    resetInner();
+  }
 
   const score = useMemo(() => {
     let ok = 0;
@@ -162,6 +193,39 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     setDone(true);
   }
 
+  function goBack() {
+    if (index > 0) {
+      setItem(index - 1);
+      setChecked(false);
+      return;
+    }
+    if (step > 0) changeStep(step - 1);
+  }
+
+  function goNext() {
+    if (current === "quiz") {
+      if (!checked) {
+        setChecked(true);
+        return;
+      }
+      if (index < totalItems - 1) {
+        setItem(index + 1);
+        setChecked(false);
+        return;
+      }
+      if (!done) {
+        finish();
+        return;
+      }
+      return;
+    }
+    if (index < totalItems - 1) {
+      setItem(index + 1);
+      return;
+    }
+    if (step < steps.length - 1) changeStep(step + 1);
+  }
+
   function promptOf(exercise: Exercise) {
     if (exercise.type === "mcq" && exercise.promptKey === "whichPattern") return t("whichPattern");
     if (exercise.type === "mcq" && exercise.promptKey === "whichLine") return t("whichLine");
@@ -181,359 +245,358 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     return exercise.prompt;
   }
 
+  const quizDone = current === "quiz" && checked && index === totalItems - 1 && done;
+  const nextLabel =
+    current === "quiz" && !checked
+      ? t("check")
+      : current === "quiz" && index < totalItems - 1
+        ? t("nextItem")
+        : current === "quiz" && !done
+          ? t("finish")
+          : index < totalItems - 1
+            ? t("nextItem")
+            : t("continue");
+
+  const slide = slides[index];
+  const word = lesson.vocab[index];
+  const line = lesson.sentences[index];
+  const apply = lesson.theory.apply[index];
+  const quote = quotes[index];
+  const exercise = quiz[index];
+
   return (
-    <div className="relative mx-auto grid max-w-6xl gap-8 lg:grid-cols-[12.5rem_minmax(0,1fr)]">
-      <ol className="learn-steps relative z-[1]">
-        {steps.map((item, index) => (
-          <li key={item}>
-            <button
-              type="button"
-              className={`learn-step w-full ${index === step ? "is-active" : ""}`}
-              onClick={() => setStep(index)}
-            >
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/50 text-[0.68rem] font-semibold">
-                {index + 1}
-              </span>
-              <span className="text-[0.68rem] font-semibold tracking-[0.12em] uppercase">{t(item)}</span>
-            </button>
-          </li>
+    <div className="learn-desk mx-auto max-w-xl">
+      <div className="mb-4 flex gap-1.5">
+        {steps.map((itemStep, i) => (
+          <button
+            key={itemStep}
+            type="button"
+            className={`learn-dot ${i === step ? "is-active" : i < step ? "is-done" : ""}`}
+            onClick={() => changeStep(i)}
+            aria-label={t(itemStep)}
+          />
         ))}
-      </ol>
+      </div>
 
-      <article className="glass-tile pebble-a relative overflow-hidden p-0">
-        <div className="learn-blob -right-10 -top-8 h-28 w-28 rounded-[60%_40%_55%_45%] bg-sky-200/40" />
-        <div className="learn-blob bottom-10 left-[-2rem] h-20 w-24 rounded-[45%_55%_40%_60%] bg-cream-200/60" />
-
-        <div className="relative px-6 py-7 sm:px-9">
+      <article className="glass-tile p-0">
+        <div className="px-5 py-5 sm:px-7">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
-            {targetName} · {lesson.level} · {lesson.minutes} {t("minutes")}
+            {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
           </p>
-          <h1 className="font-display mt-3 max-w-xl text-3xl leading-tight text-sky-700 sm:text-4xl">
+          <h1 className="font-display mt-2 text-2xl leading-tight text-sky-700 sm:text-3xl">
             {lesson.title[lesson.track]}
           </h1>
-          {support ? <p className="mt-2 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
-          <p className="mt-4 max-w-2xl leading-7 text-ink-soft">
-            {support ? lesson.goal[support] : lesson.goal[lesson.track]}
-          </p>
-          <p className="mt-3 text-sm font-medium text-sky-700">{t("oneTrack", { name: targetName })}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={slow ? "btn-primary py-2" : "btn-ghost py-2"}
-              onClick={() => setSlow((value) => !value)}
-            >
+          {support ? <p className="mt-1 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="button" className={slow ? "btn-primary py-2" : "btn-ghost py-2"} onClick={() => setSlow((v) => !v)}>
               {slow ? t("slow") : t("normal")}
             </button>
           </div>
         </div>
 
-        {current === "theory" ? (
-          <div className="relative grid gap-4 px-6 pb-6 sm:px-9">
-            <div className="glass-hud pebble-b p-5 sm:p-6">
-              <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">
-                {lesson.theory.levelTitle}
-              </p>
-              <p className="mt-3 leading-7 text-ink">{lesson.theory.levelNote}</p>
-            </div>
-            <ul className="learn-chips grid gap-2 sm:grid-cols-2">
-              {lesson.theory.points.map((point) => (
-                <li key={point} className="control-tile min-h-0 text-sm leading-6">
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <div className="control-tile pebble-c min-h-0 sm:max-w-[92%]">
-              <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("structure")}</p>
-              <p className="mt-2 leading-7">{lesson.theory.structure}</p>
-            </div>
-            <div className="learn-chips grid gap-3 sm:grid-cols-2">
-              {lesson.theory.patterns.map((pattern) => (
-                <div key={`${pattern.form}-${pattern.example}`} className="control-tile pebble-a min-h-0">
-                  <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("pattern")}</p>
-                  <div className="mt-2 flex items-start justify-between gap-3">
-                    <button type="button" className="text-left" onClick={() => say(pattern.example)}>
-                      <span className="block font-display text-lg font-semibold text-sky-700">{pattern.form}</span>
-                      <span className="mt-1 block text-sm text-ink-soft">{pattern.use}</span>
-                      <span className="mt-2 block leading-7">{pattern.example}</span>
-                      {pattern.note ? <span className="mt-1 block text-sm text-sky-700">{pattern.note}</span> : null}
-                    </button>
-                    <SpeakButton text={pattern.example} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            {lesson.theory.contrasts?.length ? (
-              <div className="control-tile pebble-b min-h-0 sm:ml-6">
-                <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("contrasts")}</p>
-                <ul className="mt-2 grid gap-2 text-sm leading-6">
-                  {lesson.theory.contrasts.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {lesson.theory.mistakes?.length ? (
-              <div className="control-tile pebble-d min-h-0 sm:mr-8">
-                <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("mistakes")}</p>
-                <ul className="mt-2 grid gap-2 text-sm leading-6">
-                  {lesson.theory.mistakes.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {lesson.theory.examples?.length ? (
-              <div className="control-tile pebble-c min-h-0">
-                <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("examples")}</p>
-                <ul className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {lesson.theory.examples.map((item) => (
-                    <li key={item} className="flex items-start justify-between gap-3">
-                      <button type="button" className="text-left leading-7" onClick={() => say(item)}>
-                        {item}
-                      </button>
-                      <SpeakButton text={item} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {lesson.theory.table?.rows?.length ? (
-              <div className="control-tile pebble-a min-h-0 sm:max-w-[94%]">
-                <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">
-                  {lesson.theory.table.title}
-                </p>
-                <ul className="mt-2 grid gap-2 text-sm leading-6 sm:grid-cols-2">
-                  {lesson.theory.table.rows.map((row) => (
-                    <li key={row}>{row}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {lesson.theory.usage?.length ? (
-              <div className="control-tile pebble-b min-h-0">
-                <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("usage")}</p>
-                <ul className="mt-2 grid gap-2 text-sm leading-6">
-                  {lesson.theory.usage.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {lesson.theory.tip ? (
-              <div className="control-tile pebble-c min-h-0 text-sm leading-6 text-sky-700">
-                {t("tip")}: {lesson.theory.tip}
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
-        {current === "words" ? (
-          <ul className="relative grid gap-3 px-6 pb-6 sm:grid-cols-2 sm:px-9">
-            {lesson.vocab.map((item, index) => (
-              <li key={`${item.word}-${index}`} className={`control-tile min-h-0 ${shapes[index % 4]}`}>
-                <div className="flex items-start justify-between gap-2">
-                  <button type="button" className="text-left" onClick={() => say(item.word)}>
-                    <span className="font-display text-xl font-semibold text-sky-700">{item.word}</span>
-                    <Phonetic
-                      reading={item.reading}
-                      sayVi={item.sayVi}
-                      locale={locale}
-                      phoneticLabel={t("phonetic")}
-                      sayViLabel={t("sayViLabel")}
-                    />
-                    {support ? <span className="mt-1 block text-sm text-ink-soft">{item.meaning[support]}</span> : null}
-                    {item.usage ? (
-                      <span className="mt-2 block text-sm leading-6 text-sky-700">
-                        {t("howUsed")}: {item.usage}
-                      </span>
-                    ) : null}
-                  </button>
-                  <SpeakButton text={item.word} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-
-        {current === "lines" ? (
-          <ul className="learn-stack relative grid gap-3 px-6 pb-6 sm:px-9">
-            {lesson.sentences.map((item, index) => (
-              <li key={`${item.text}-${index}`} className={`control-tile min-h-0 ${shapes[index % 4]}`}>
-                <div className="flex items-start justify-between gap-2">
-                  <button type="button" className="text-left" onClick={() => say(item.text)}>
-                    <span className="font-display text-lg font-semibold leading-7 text-sky-700">{item.text}</span>
-                    <Phonetic
-                      reading={item.reading}
-                      sayVi={item.sayVi}
-                      locale={locale}
-                      phoneticLabel={t("phonetic")}
-                      sayViLabel={t("sayViLabel")}
-                    />
-                    {support ? <span className="mt-2 block text-sm text-ink-soft">{item.meaning[support]}</span> : null}
-                  </button>
-                  <SpeakButton text={item.text} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-
-        {current === "apply" ? (
-          <div className="learn-stack relative grid gap-3 px-6 pb-6 sm:px-9">
-            <p className="leading-7 text-ink-soft">{t("applyLead")}</p>
-            {lesson.theory.apply.map((item) => (
-              <div key={item.frame} className="control-tile pebble-a min-h-0">
-                <p className="font-semibold">{item.prompt}</p>
-                <p className="mt-2 font-display text-lg leading-7 text-sky-700">{item.frame}</p>
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <button type="button" className="text-left text-sm text-sky-700" onClick={() => say(item.sample)}>
-                    {t("sample")}: {item.sample}
-                  </button>
-                  <SpeakButton text={item.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        {current === "listen" ? (
-          <div className="relative px-6 pb-6 sm:px-9">
-            <div className="glass-hud pebble-c flex flex-wrap items-center gap-3 p-5">
-              <button type="button" className="btn-primary" onClick={() => say(lesson.listening.text)}>
-                {t("playAudio")}
-              </button>
-              <SpeakButton text={lesson.listening.text} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-              <button type="button" className="btn-ghost" onClick={() => setShowScript((value) => !value)}>
-                {showScript ? t("hideTranscript") : t("showTranscript")}
-              </button>
-            </div>
-            {showScript ? (
-              <ul className="learn-stack mt-4 grid gap-2">
-                {lesson.listening.lines.map((line, index) => {
-                  const item = lesson.sentences.find((row) => row.text === line);
-                  return (
-                    <li key={`${line}-${index}`} className="control-tile min-h-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <button
-                          type="button"
-                          className="text-left text-sm font-semibold leading-6"
-                          onClick={() => say(line)}
-                        >
-                          {line}
-                        </button>
-                        <SpeakButton text={line} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                      </div>
-                      {item ? (
-                        <Phonetic
-                          reading={item.reading}
-                          sayVi={item.sayVi}
-                          locale={locale}
-                          phoneticLabel={t("phonetic")}
-                          sayViLabel={t("sayViLabel")}
-                        />
-                      ) : null}
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="mt-4 text-sm leading-6 text-ink-soft">{t("listenFirst")}</p>
-            )}
-          </div>
-        ) : null}
-
-        {current === "quotes" ? (
-          <div className="relative px-6 pb-6 sm:px-9">
-            <p className="mb-4 text-sm leading-6 text-ink-soft">{t("quotesLead")}</p>
-            <QuoteBoard
-              quotes={lesson.quotes?.length ? lesson.quotes : lesson.sentences.slice(0, 6)}
-              lang={lesson.speechLang}
-              locale={locale}
+        <div className="px-5 pb-5 sm:px-7">
+          {current === "theory" && slide ? (
+            <TheorySlideView
+              slide={slide}
+              theory={lesson.theory}
+              t={t}
               slow={slow}
-              hearLabel={t("hear")}
-              phoneticLabel={t("phonetic")}
-              sayViLabel={t("sayViLabel")}
+              lang={lesson.speechLang}
+              onSay={say}
             />
-          </div>
-        ) : null}
+          ) : null}
 
-        {current === "game" ? (
-          <div className="relative px-6 pb-6 sm:px-9">
-            <p className="mb-4 text-sm leading-6 text-ink-soft">{t("matchLead")}</p>
-            <MatchGame
-              vocab={lesson.vocab.slice(0, 6)}
+          {current === "words" && word ? (
+            <FocusCard
+              title={word.word}
+              reading={word.reading}
+              sayVi={word.sayVi}
+              meaning={support ? word.meaning[support] : undefined}
+              note={word.usage ? `${t("howUsed")}: ${word.usage}` : undefined}
               locale={locale}
-              support={support}
-              matchedLabel={t("matched")}
-              doneLabel={t("matchDone")}
+              t={t}
+              onSay={() => say(word.word)}
+              lang={lesson.speechLang}
+              slow={slow}
             />
-          </div>
-        ) : null}
+          ) : null}
 
-        {current === "quiz" ? (
-          <div className="relative px-6 pb-6 sm:px-9">
-            <ol className="learn-stack grid gap-4">
-              {quiz.map((exercise, index) => (
-                <li key={exercise.id} className={`control-tile min-h-0 ${shapes[index % 4]}`}>
-                  <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">
-                    {index + 1}. {promptOf(exercise)}
-                  </p>
-                  <ExerciseField
-                    exercise={exercise}
-                    value={answers[exercise.id]}
-                    disabled={checked}
-                    onChange={(value) => setAnswers((prev) => ({ ...prev, [exercise.id]: value }))}
-                  />
-                </li>
-              ))}
-            </ol>
-            {checked ? (
-              <p className="mt-4 font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
-            ) : null}
-            {!checked ? (
-              <button type="button" className="btn-primary mt-5" onClick={() => setChecked(true)}>
-                {t("check")}
-              </button>
-            ) : !done ? (
-              <button type="button" className="btn-primary mt-5" onClick={finish}>
-                {t("finish")}
-              </button>
-            ) : (
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href={`/learn/${lesson.track}`} className="btn-ghost">
-                  {t("backTrack")}
-                </Link>
-                {nextId ? (
-                  <Link href={`/learn/${lesson.track}/${nextId}`} className="btn-primary">
-                    {t("next")}
-                  </Link>
-                ) : (
-                  <Link href="/learn" className="btn-primary">
-                    {t("allTracks")}
-                  </Link>
-                )}
+          {current === "lines" && line ? (
+            <FocusCard
+              title={line.text}
+              reading={line.reading}
+              sayVi={line.sayVi}
+              meaning={support ? line.meaning[support] : undefined}
+              locale={locale}
+              t={t}
+              onSay={() => say(line.text)}
+              lang={lesson.speechLang}
+              slow={slow}
+            />
+          ) : null}
+
+          {current === "apply" && apply ? (
+            <div className="control-tile min-h-0">
+              <p className="text-sm text-ink-soft">{t("applyLead")}</p>
+              <p className="mt-3 font-semibold">{apply.prompt}</p>
+              <p className="font-display mt-2 text-xl leading-7 text-sky-700">{apply.frame}</p>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <button type="button" className="text-left text-sm text-sky-700" onClick={() => say(apply.sample)}>
+                  {t("sample")}: {apply.sample}
+                </button>
+                <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
               </div>
-            )}
-          </div>
-        ) : null}
+            </div>
+          ) : null}
 
-        {current !== "quiz" ? (
-          <div className="relative flex justify-between gap-3 px-6 pb-7 sm:px-9">
-            <button
-              type="button"
-              className="btn-ghost"
-              disabled={step === 0}
-              onClick={() => setStep((value) => Math.max(0, value - 1))}
-            >
-              {t("back")}
-            </button>
-            <button type="button" className="btn-primary" onClick={() => setStep((value) => value + 1)}>
-              {t("continue")}
-            </button>
-          </div>
-        ) : null}
+          {current === "listen" ? (
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" className="btn-primary" onClick={() => say(lesson.listening.text)}>
+                  {t("playAudio")}
+                </button>
+                <SpeakButton text={lesson.listening.text} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                <button type="button" className="btn-ghost" onClick={() => setShowScript((v) => !v)}>
+                  {showScript ? t("hideTranscript") : t("showTranscript")}
+                </button>
+              </div>
+              {showScript ? (
+                <ul className="mt-4 grid gap-2">
+                  {lesson.listening.lines.slice(0, 4).map((textLine) => (
+                    <li key={textLine} className="flex items-start justify-between gap-2 text-sm leading-6">
+                      <button type="button" className="text-left font-semibold" onClick={() => say(textLine)}>
+                        {textLine}
+                      </button>
+                      <SpeakButton text={textLine} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 text-sm leading-6 text-ink-soft">{t("listenFirst")}</p>
+              )}
+            </div>
+          ) : null}
+
+          {current === "quotes" && quote ? (
+            <FocusCard
+              title={quote.text}
+              reading={quote.reading}
+              sayVi={quote.sayVi}
+              meaning={support ? quote.meaning[support] : undefined}
+              locale={locale}
+              t={t}
+              onSay={() => say(quote.text)}
+              lang={lesson.speechLang}
+              slow={slow}
+              lead={t("quotesLead")}
+            />
+          ) : null}
+
+          {current === "game" ? (
+            <div>
+              <p className="mb-4 text-sm leading-6 text-ink-soft">{t("matchLead")}</p>
+              <MatchGame
+                vocab={lesson.vocab.slice(0, 6)}
+                locale={locale}
+                support={support}
+                matchedLabel={t("matched")}
+                doneLabel={t("matchDone")}
+              />
+            </div>
+          ) : null}
+
+          {current === "quiz" && exercise ? (
+            <div>
+              <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">
+                {t("questionOf", { n: index + 1, total: quiz.length })}
+              </p>
+              <p className="mt-2 font-semibold leading-7">{promptOf(exercise)}</p>
+              <ExerciseField
+                exercise={exercise}
+                value={answers[exercise.id]}
+                disabled={checked}
+                onChange={(value) => setAnswers((prev) => ({ ...prev, [exercise.id]: value }))}
+              />
+              {checked && index === totalItems - 1 ? (
+                <p className="mt-3 text-sm font-semibold text-sky-700">
+                  {t("score", { ok: score.ok, total: score.total })}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {quizDone ? (
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href={`/learn/${lesson.track}`} className="btn-ghost">
+                {t("backTrack")}
+              </Link>
+              {nextId ? (
+                <Link href={`/learn/${lesson.track}/${nextId}`} className="btn-primary">
+                  {t("next")}
+                </Link>
+              ) : (
+                <Link href="/learn" className="btn-primary">
+                  {t("allTracks")}
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="mt-6 flex justify-between gap-3">
+              <button type="button" className="btn-ghost" disabled={step === 0 && index === 0} onClick={goBack}>
+                {t("back")}
+              </button>
+              <button type="button" className="btn-primary" onClick={goNext}>
+                {nextLabel}
+              </button>
+            </div>
+          )}
+        </div>
       </article>
     </div>
+  );
+}
+
+function FocusCard({
+  title,
+  reading,
+  sayVi,
+  meaning,
+  note,
+  lead,
+  locale,
+  t,
+  onSay,
+  lang,
+  slow,
+}: {
+  title: string;
+  reading?: string;
+  sayVi?: string;
+  meaning?: string;
+  note?: string;
+  lead?: string;
+  locale: Locale;
+  t: ReturnType<typeof useTranslations<"Learn">>;
+  onSay: () => void;
+  lang: string;
+  slow: boolean;
+}) {
+  return (
+    <div>
+      {lead ? <p className="mb-3 text-sm leading-6 text-ink-soft">{lead}</p> : null}
+      <div className="control-tile min-h-0">
+        <div className="flex items-start justify-between gap-3">
+          <button type="button" className="text-left" onClick={onSay}>
+            <span className="font-display text-2xl font-semibold leading-snug text-sky-700">{title}</span>
+          </button>
+          <SpeakButton text={title} lang={lang} slow={slow} label={t("hear")} />
+        </div>
+        <Phonetic
+          reading={reading}
+          sayVi={sayVi}
+          locale={locale}
+          phoneticLabel={t("phonetic")}
+          sayViLabel={t("sayViLabel")}
+        />
+        {meaning ? <p className="mt-2 text-sm text-ink-soft">{meaning}</p> : null}
+        {note ? <p className="mt-2 text-sm text-sky-700">{note}</p> : null}
+      </div>
+    </div>
+  );
+}
+
+function TheorySlideView({
+  slide,
+  theory,
+  t,
+  slow,
+  lang,
+  onSay,
+}: {
+  slide: TheorySlide;
+  theory: LessonTheory;
+  t: ReturnType<typeof useTranslations<"Learn">>;
+  slow: boolean;
+  lang: string;
+  onSay: (text: string) => void;
+}) {
+  if (slide.type === "intro") {
+    return (
+      <div>
+        <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{theory.levelTitle}</p>
+        <p className="mt-3 leading-7">{theory.levelNote}</p>
+      </div>
+    );
+  }
+  if (slide.type === "points") {
+    return (
+      <ul className="grid gap-2">
+        {slide.items.map((point) => (
+          <li key={point} className="control-tile min-h-0 text-sm leading-6">
+            {point}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  if (slide.type === "structure") {
+    return (
+      <div>
+        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("structure")}</p>
+        <p className="mt-2 leading-7">{theory.structure}</p>
+      </div>
+    );
+  }
+  if (slide.type === "pattern") {
+    const pattern = slide.pattern;
+    return (
+      <div className="control-tile min-h-0">
+        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("pattern")}</p>
+        <div className="mt-2 flex items-start justify-between gap-3">
+          <button type="button" className="text-left" onClick={() => onSay(pattern.example)}>
+            <span className="block font-display text-lg font-semibold text-sky-700">{pattern.form}</span>
+            <span className="mt-1 block text-sm text-ink-soft">{pattern.use}</span>
+            <span className="mt-2 block leading-7">{pattern.example}</span>
+            {pattern.note ? <span className="mt-1 block text-sm text-sky-700">{pattern.note}</span> : null}
+          </button>
+          <SpeakButton text={pattern.example} lang={lang} slow={slow} label={t("hear")} />
+        </div>
+      </div>
+    );
+  }
+  if (slide.type === "list") {
+    return (
+      <div>
+        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t(slide.titleKey)}</p>
+        <ul className="mt-2 grid gap-2">
+          {slide.items.map((row) => (
+            <li key={row} className="flex items-start justify-between gap-3 leading-7">
+              <button type="button" className="text-left" onClick={() => onSay(row)}>
+                {row}
+              </button>
+              <SpeakButton text={row} lang={lang} slow={slow} label={t("hear")} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  if (slide.type === "table") {
+    return (
+      <div>
+        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{theory.table.title}</p>
+        <ul className="mt-2 grid gap-2 text-sm leading-6">
+          {theory.table.rows.slice(0, 6).map((row) => (
+            <li key={row}>{row}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  return (
+    <p className="leading-7 text-sky-700">
+      {t("tip")}: {theory.tip}
+    </p>
   );
 }
 
@@ -561,7 +624,7 @@ function ExerciseField({
               type="button"
               disabled={disabled}
               onClick={() => onChange(option)}
-              className={`pebble-a px-4 py-3 text-left text-sm font-semibold ${
+              className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold ${
                 right ? "bg-sky-700 text-white" : wrong ? "bg-cream-200" : selected ? "bg-white" : "bg-white/40"
               }`}
             >
@@ -585,23 +648,9 @@ function ExerciseField({
   }
 
   const chosen = Array.isArray(value) ? value : [];
-  return <OrderField tokens={exercise.tokens} chosen={chosen} disabled={disabled} onChange={onChange} />;
-}
-
-function OrderField({
-  tokens,
-  chosen,
-  disabled,
-  onChange,
-}: {
-  tokens: string[];
-  chosen: string[];
-  disabled: boolean;
-  onChange: (value: string[]) => void;
-}) {
-  const leftover = [...tokens];
-  for (const item of chosen) {
-    const idx = leftover.indexOf(item);
+  const leftover = [...exercise.tokens];
+  for (const token of chosen) {
+    const idx = leftover.indexOf(token);
     if (idx >= 0) leftover.splice(idx, 1);
   }
 
@@ -609,13 +658,13 @@ function OrderField({
     <div className="mt-3">
       <div className="flex min-h-12 flex-wrap gap-2 rounded-2xl bg-white/50 p-3">
         {chosen.length ? (
-          chosen.map((token, index) => (
+          chosen.map((token, i) => (
             <button
-              key={`${token}-${index}`}
+              key={`${token}-${i}`}
               type="button"
               disabled={disabled}
               className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700"
-              onClick={() => onChange(chosen.filter((_, i) => i !== index))}
+              onClick={() => onChange(chosen.filter((_, j) => j !== i))}
             >
               {token}
             </button>
@@ -625,9 +674,9 @@ function OrderField({
         )}
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
-        {leftover.map((token, index) => (
+        {leftover.map((token, i) => (
           <button
-            key={`${token}-left-${index}`}
+            key={`${token}-left-${i}`}
             type="button"
             disabled={disabled}
             className="rounded-full bg-white px-3 py-1 text-sm font-semibold"

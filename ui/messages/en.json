@@ -362,7 +362,22 @@
     "back": "Back",
     "backTrack": "Back to path",
     "next": "Next lesson",
-    "allTracks": "All languages"
+    "allTracks": "All languages",
+    "classTitle": "Enter class",
+    "classLead": "One chapter, five steps. Finish the open step before the next.",
+    "enterClass": "Enter class",
+    "resume": "Continue",
+    "reviewClass": "Start again",
+    "continueFrom": "Up next: {chapter}",
+    "youAreHere": "Here",
+    "doneCount": "{done}/{total} done",
+    "allDone": "You have finished this classroom path.",
+    "levelHint": "Pick a level, then open one chapter. You do not need to scroll the whole path.",
+    "loadingClass": "Opening class…",
+    "loadingLesson": "Preparing the lesson…",
+    "ofItems": "{n}/{total}",
+    "nextItem": "Next",
+    "questionOf": "Question {n}/{total}"
   },
   "Footer": {
     "tagline": "Learn gently. Remember longer.",

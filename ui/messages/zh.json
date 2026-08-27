@@ -363,7 +363,22 @@
     "back": "上一步",
     "backTrack": "回到路径",
     "next": "下一课",
-    "allTracks": "所有语言"
+    "allTracks": "所有语言",
+    "classTitle": "进课堂",
+    "classLead": "一章五步。先完成眼前这一步，再往下。",
+    "enterClass": "进课堂",
+    "resume": "继续学",
+    "reviewClass": "从头再学",
+    "continueFrom": "下一章：{chapter}",
+    "youAreHere": "正在学",
+    "doneCount": "已完成 {done}/{total}",
+    "allDone": "这条课堂路径已经走完。",
+    "levelHint": "先选级别，再打开一章。不必把整条路滚完。",
+    "loadingClass": "正在打开课堂…",
+    "loadingLesson": "正在准备这一课…",
+    "ofItems": "{n}/{total}",
+    "nextItem": "下一项",
+    "questionOf": "第 {n}/{total} 题"
   },
   "Footer": {
     "tagline": "温柔地学，长久地记。",

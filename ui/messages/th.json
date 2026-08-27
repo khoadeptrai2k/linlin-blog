@@ -363,7 +363,22 @@
     "back": "ก่อนหน้า",
     "backTrack": "กลับเส้นทาง",
     "next": "บทถัดไป",
-    "allTracks": "ทุกภาษา"
+    "allTracks": "ทุกภาษา",
+    "classTitle": "เข้าห้องเรียน",
+    "classLead": "หนึ่งบทห้าขั้น ทำขั้นที่เปิดอยู่ให้จบก่อนไปต่อ",
+    "enterClass": "เข้าห้อง",
+    "resume": "เรียนต่อ",
+    "reviewClass": "เริ่มใหม่",
+    "continueFrom": "ต่อไป: {chapter}",
+    "youAreHere": "กำลังเรียน",
+    "doneCount": "ทำแล้ว {done}/{total}",
+    "allDone": "เดินครบเส้นทางห้องนี้แล้ว",
+    "levelHint": "เลือกระดับ แล้วเปิดหนึ่งบท ไม่ต้องเลื่อนทั้งเส้นทาง",
+    "loadingClass": "กำลังเปิดห้อง…",
+    "loadingLesson": "กำลังเตรียมบท…",
+    "ofItems": "{n}/{total}",
+    "nextItem": "ข้อถัดไป",
+    "questionOf": "ข้อ {n}/{total}"
   },
   "Footer": {
     "tagline": "เรียนอย่างอ่อนโยน จำได้ยาวนาน",

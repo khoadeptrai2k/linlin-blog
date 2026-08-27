@@ -362,7 +362,22 @@
     "back": "Trước",
     "backTrack": "Về lộ trình",
     "next": "Bài tiếp",
-    "allTracks": "Mọi ngôn ngữ"
+    "allTracks": "Mọi ngôn ngữ",
+    "classTitle": "Vào lớp",
+    "classLead": "Một chương, năm bước. Làm xong bước đang mở rồi mới sang bước sau.",
+    "enterClass": "Vào lớp",
+    "resume": "Học tiếp",
+    "reviewClass": "Học lại từ đầu",
+    "continueFrom": "Đang tới: {chapter}",
+    "youAreHere": "Đang học",
+    "doneCount": "Đã xong {done}/{total}",
+    "allDone": "Bạn đã đi hết lộ trình lớp này.",
+    "levelHint": "Chọn cấp, rồi mở một chương. Không cần cuộn cả đường.",
+    "loadingClass": "Đang mở lớp…",
+    "loadingLesson": "Đang soạn bài…",
+    "ofItems": "{n}/{total}",
+    "nextItem": "Mục tiếp",
+    "questionOf": "Câu {n}/{total}"
   },
   "Footer": {
     "tagline": "Học dịu dàng, nhớ thật lâu.",
