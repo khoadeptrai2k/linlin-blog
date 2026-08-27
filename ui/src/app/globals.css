@@ -326,14 +326,15 @@ body {
 
 .sheet-root.is-docked {
   z-index: 40;
-  padding: 5.4rem 0.85rem 1rem 0.85rem;
-  align-items: flex-start;
+  padding: 5.4rem 0.85rem 0.85rem 0.85rem;
+  align-items: stretch;
   justify-content: flex-end;
 }
 
 .sheet-root.is-docked .drawer-panel {
   width: min(22rem, calc(100vw - 1.7rem));
-  height: min(40rem, calc(100dvh - 6.5rem));
+  height: 100%;
+  max-height: none;
 }
 
 .sheet-scrim {
