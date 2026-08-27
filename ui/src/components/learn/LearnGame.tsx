@@ -67,12 +67,16 @@ export function MatchGame({
   locale,
   matchedLabel,
   doneLabel,
+  lang,
+  onTap,
 }: {
   vocab: VocabItem[];
   support: Locale | null;
   locale: Locale;
   matchedLabel: string;
   doneLabel?: string;
+  lang?: string;
+  onTap?: (text: string) => void;
 }) {
   const cards = useMemo(() => {
     const picked = vocab.filter((item) => item.word).slice(0, 6);
@@ -91,6 +95,7 @@ export function MatchGame({
 
   function tap(card: Card) {
     if (matched.includes(card.pair) || open.includes(card.id) || open.length === 2) return;
+    if (lang) onTap?.(card.pair);
     const next = [...open, card.id];
     setOpen(next);
     if (next.length < 2) return;

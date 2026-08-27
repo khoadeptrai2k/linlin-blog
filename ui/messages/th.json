@@ -402,7 +402,17 @@
     "chapterN": "บท {n}/{total}",
     "chapterRange": "บท {from}–{to}",
     "pickChapter": "52 บทมีชื่อ กดบทเพื่อดูเป้าหมายและห้าขั้น",
-    "fiveSteps": "ห้าขั้นของบทนี้"
+    "fiveSteps": "ห้าขั้นของบทนี้",
+    "tapHistory": "ถามบทนี้",
+    "tapHistoryEmpty": "กดคำหรือประโยคในบท ถือว่าเป็นการถาม Linlin ตอบตรงนี้ ภายหลังจะเป็น AI",
+    "tapHistoryClose": "ปิด",
+    "tapHistoryClear": "ลบ",
+    "tapHistoryCount": "{n}/50",
+    "tapTranslate": "คำแปล",
+    "tapExplain": "ใช้เมื่อไหร่",
+    "youAsked": "คุณถาม",
+    "linlinReply": "หลินหลินตอบ",
+    "linlinReplyStub": "คำตอบสั้นจากบทนี้ ภายหลัง AI จะตอบช่องเดียวกัน"
   },
   "Footer": {
     "tagline": "เรียนอย่างอ่อนโยน จำได้ยาวนาน",

@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { Phonetic, SpeakButton, speakText } from "@/components/learn/LearnAudio";
 import { MatchGame } from "@/components/learn/LearnGame";
+import { TapHistory } from "@/components/learn/TapHistory";
+import { buildAskPrompt, getTapHistory, getTapHistoryServer, isLessonSpeech, lookupTap, pushTapRecord, saveTapHistory, subscribeTapHistory } from "@/lib/learn/history";
 import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory, VocabItem } from "@/lib/learn/types";
 
 function loadDone(track: string) {
@@ -252,6 +254,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const [done, setDone] = useState(false);
   const [showScript, setShowScript] = useState(false);
   const [slow, setSlow] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const history = useSyncExternalStore(subscribeTapHistory, getTapHistory, getTapHistoryServer);
 
   const support = supportLocale(lesson.track, locale);
   const current = steps[step];
@@ -334,8 +338,35 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     return `${steps[stepIndex]}:${i}`;
   }
 
+  function recordTap(text: string) {
+    const cleaned = text.trim();
+    if (!cleaned || cleaned === "……") return;
+    const extra = lookupTap(lesson, cleaned, locale);
+    const answer = [extra.translation, extra.explain].filter(Boolean).join("\n") || extra.answer;
+    saveTapHistory(
+      pushTapRecord(getTapHistory(), {
+        ask: cleaned,
+        text: cleaned,
+        prompt: buildAskPrompt(lesson, cleaned, locale),
+        answer,
+        lang: lesson.speechLang,
+        track: lesson.track,
+        locale,
+        lessonId: lesson.id,
+        unitId: lesson.unitId,
+        kind: lesson.kind,
+        source: "lookup",
+        ...extra,
+      }),
+    );
+    setHistoryOpen(true);
+  }
+
   function say(text: string) {
-    speakText(text, lesson.speechLang, slow);
+    const cleaned = text.trim();
+    if (!cleaned || cleaned === "……") return;
+    speakText(cleaned, lesson.speechLang, slow);
+    recordTap(cleaned);
   }
 
   function finish() {
@@ -396,7 +427,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }, [answers, quiz]);
 
   return (
-    <div className="learn-desk mx-auto grid max-w-5xl gap-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
+    <div className={`learn-desk mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] ${historyOpen ? "xl:grid-cols-[15rem_minmax(0,1fr)_19rem]" : ""}`}>
       <aside className="learn-rail">
         <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("lessonMap")}</p>
         <ol className="mt-3 grid gap-4">
@@ -433,9 +464,14 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
               {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
             </p>
-            <button type="button" className={slow ? "learn-speed is-on" : "learn-speed"} onClick={() => setSlow((value) => !value)}>
-              {slow ? t("slow") : t("normal")}
-            </button>
+            <div className="flex items-center gap-2">
+              <button type="button" className={historyOpen ? "learn-speed is-on" : "learn-speed"} onClick={() => setHistoryOpen((value) => !value)}>
+                {t("tapHistory")} · {history.length}
+              </button>
+              <button type="button" className={slow ? "learn-speed is-on" : "learn-speed"} onClick={() => setSlow((value) => !value)}>
+                {slow ? t("slow") : t("normal")}
+              </button>
+            </div>
           </div>
           <h1 className="font-display mt-2 text-xl leading-tight text-sky-700 sm:text-2xl">{lesson.title[lesson.track]}</h1>
           {support ? <p className="mt-1 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
@@ -454,6 +490,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               slow={slow}
               lang={lesson.speechLang}
               onSay={say}
+              onHeard={recordTap}
             />
           ) : null}
 
@@ -470,6 +507,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               t={t}
               lang={lesson.speechLang}
               slow={slow}
+              onTap={say}
+              onHeard={recordTap}
             />
           ) : null}
 
@@ -483,6 +522,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               t={t}
               lang={lesson.speechLang}
               slow={slow}
+              onTap={say}
+              onHeard={recordTap}
             />
           ) : null}
 
@@ -491,14 +532,24 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               <p className="learn-kicker">{t("apply")}</p>
               <h2 className="learn-board-title">{apply.prompt}</h2>
               <p className="mt-1 text-sm leading-6 text-ink-soft">{t("applyLead")}</p>
-              <p className="font-display mt-4 text-2xl leading-8 text-sky-700">{apply.frame}</p>
+              <p
+                className="font-display mt-4 cursor-pointer text-2xl leading-8 text-sky-700"
+                onClick={() => say(apply.sample)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") say(apply.sample);
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                {apply.frame}
+              </p>
               {reveal ? (
                 <ul className="mt-4 grid gap-2">
-                  <SpeakRow text={apply.sample} note={t("sample")} lang={lesson.speechLang} slow={slow} label={t("hear")} onSay={say} />
+                  <SpeakRow text={apply.sample} note={t("sample")} lang={lesson.speechLang} slow={slow} label={t("hear")} onSay={say} onHeard={recordTap} />
                 </ul>
               ) : (
                 <div className="mt-4">
-                  <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                  <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} onHeard={recordTap} />
                 </div>
               )}
             </div>
@@ -513,7 +564,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 <button type="button" className="btn-primary" onClick={() => say(lesson.listening.text)}>
                   {t("playAudio")}
                 </button>
-                <SpeakButton text={lesson.listening.text} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                <SpeakButton text={lesson.listening.text} lang={lesson.speechLang} slow={slow} label={t("hear")} onHeard={recordTap} />
                 {checked ? (
                   <button type="button" className="btn-ghost" onClick={() => setShowScript((value) => !value)}>
                     {showScript ? t("hideTranscript") : t("showTranscript")}
@@ -530,6 +581,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                       slow={slow}
                       label={t("hear")}
                       onSay={say}
+                      onHeard={recordTap}
                     />
                   ))}
                 </ul>
@@ -548,6 +600,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               lang={lesson.speechLang}
               slow={slow}
               lead={t("quotesLead")}
+              onTap={say}
+              onHeard={recordTap}
             />
           ) : null}
 
@@ -560,6 +614,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 support={support}
                 matchedLabel={t("matched")}
                 doneLabel={t("matchDone")}
+                lang={lesson.speechLang}
+                onTap={say}
               />
             </div>
           ) : null}
@@ -571,7 +627,13 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 exercise={drill}
                 value={given}
                 disabled={checked}
-                onChange={(value) => setAnswers((prev) => ({ ...prev, [drill.id]: value }))}
+                onAsk={recordTap}
+                onChange={(value) => {
+                  setAnswers((prev) => ({ ...prev, [drill.id]: value }));
+                  if (typeof value !== "string") return;
+                  if (isLessonSpeech(lesson, value)) say(value);
+                  else recordTap(value);
+                }}
               />
               <p
                 className={`learn-feedback mt-3 text-sm font-semibold ${
@@ -638,6 +700,29 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             </div>
           )}
       </article>
+      <TapHistory
+        open={historyOpen}
+        items={history}
+        locale={locale}
+        slow={slow}
+        labels={{
+          title: t("tapHistory"),
+          empty: t("tapHistoryEmpty"),
+          close: t("tapHistoryClose"),
+          clear: t("tapHistoryClear"),
+          hear: t("hear"),
+          youAsked: t("youAsked"),
+          reply: t("linlinReply"),
+          replyStub: t("linlinReplyStub"),
+          translation: t("tapTranslate"),
+          explain: t("tapExplain"),
+          phonetic: t("phonetic"),
+          sayVi: t("sayViLabel"),
+          count: t("tapHistoryCount", { n: history.length }),
+        }}
+        onClose={() => setHistoryOpen(false)}
+        onClear={() => saveTapHistory([])}
+      />
     </div>
   );
 }
@@ -655,6 +740,8 @@ function FocusCard({
   t,
   lang,
   slow,
+  onTap,
+  onHeard,
 }: {
   title: string;
   speak: string;
@@ -668,18 +755,20 @@ function FocusCard({
   t: ReturnType<typeof useTranslations<"Learn">>;
   lang: string;
   slow: boolean;
+  onTap?: (text: string) => void;
+  onHeard?: (text: string) => void;
 }) {
   const hidden = hideText || title === "……";
   return (
     <div className="learn-board">
       {lead ? <p className="mb-3 text-sm leading-6 text-ink-soft">{lead}</p> : null}
       <div className="flex items-start justify-between gap-3">
-        <button type="button" className="min-w-0 text-left" onClick={() => speakText(speak, lang, slow)}>
+        <button type="button" className="min-w-0 text-left" onClick={() => (onTap ? onTap(speak) : speakText(speak, lang, slow))}>
           <span className="font-display text-3xl font-semibold leading-snug text-sky-700">
             {hidden ? "……" : title}
           </span>
         </button>
-        <SpeakButton text={speak} lang={lang} slow={slow} label={t("hear")} />
+        <SpeakButton text={speak} lang={lang} slow={slow} label={t("hear")} onHeard={onHeard} />
       </div>
       {hidden ? (
         <p className="mt-3 text-sm text-ink-soft">{t("hearFirst")}</p>
@@ -723,6 +812,7 @@ function SpeakRow({
   slow,
   label,
   onSay,
+  onHeard,
 }: {
   text: string;
   note?: string;
@@ -730,6 +820,7 @@ function SpeakRow({
   slow: boolean;
   label: string;
   onSay: (text: string) => void;
+  onHeard?: (text: string) => void;
 }) {
   return (
     <li className="learn-speak-row">
@@ -737,7 +828,7 @@ function SpeakRow({
         <span className="block font-semibold leading-6 text-sky-700">{text}</span>
         {note ? <span className="mt-0.5 block text-sm text-ink-soft">{note}</span> : null}
       </button>
-      <SpeakButton text={text} lang={lang} slow={slow} label={label} />
+      <SpeakButton text={text} lang={lang} slow={slow} label={label} onHeard={onHeard} />
     </li>
   );
 }
@@ -753,6 +844,7 @@ function TheorySlideView({
   slow,
   lang,
   onSay,
+  onHeard,
 }: {
   slide: TheorySlide;
   theory: LessonTheory;
@@ -764,6 +856,7 @@ function TheorySlideView({
   slow: boolean;
   lang: string;
   onSay: (text: string) => void;
+  onHeard?: (text: string) => void;
 }) {
   if (slide.type === "intro") {
     return (
@@ -786,7 +879,7 @@ function TheorySlideView({
                     <span className="block font-semibold text-sky-700">{item.word}</span>
                     {support ? <span className="block truncate text-xs text-ink-soft">{item.meaning[support]}</span> : null}
                   </button>
-                  <SpeakButton text={item.word} lang={lang} slow={slow} label={t("hear")} />
+                  <SpeakButton text={item.word} lang={lang} slow={slow} label={t("hear")} onHeard={onHeard} />
                 </li>
               ))}
             </ul>
@@ -802,7 +895,9 @@ function TheorySlideView({
           {slide.items.map((point, i) => (
             <li key={`${i}-${point}`} className="learn-point">
               <span className="learn-point-n">{i + 1}</span>
-              <span className="leading-6">{point}</span>
+              <button type="button" className="min-w-0 flex-1 text-left leading-6" onClick={() => onSay(point)}>
+                {point}
+              </button>
             </li>
           ))}
         </ol>
@@ -812,7 +907,11 @@ function TheorySlideView({
   if (slide.type === "structure") {
     return (
       <SlideShell kicker={t("structure")} title={t("howSentence")}>
-        <p className="leading-7">{theory.structure}</p>
+        <p className="leading-7">
+          <button type="button" className="text-left" onClick={() => onSay(theory.structure)}>
+            {theory.structure}
+          </button>
+        </p>
       </SlideShell>
     );
   }
@@ -820,9 +919,11 @@ function TheorySlideView({
     const pattern = slide.pattern;
     return (
       <SlideShell kicker={t("pattern")} title={pattern.form}>
-        <p className="text-sm leading-6 text-ink-soft">{pattern.use}</p>
+        <button type="button" className="text-left text-sm leading-6 text-ink-soft" onClick={() => onSay(pattern.form)}>
+          {pattern.use}
+        </button>
         <ul className="mt-4 grid gap-2">
-          <SpeakRow text={pattern.example} note={pattern.note} lang={lang} slow={slow} label={t("hear")} onSay={onSay} />
+          <SpeakRow text={pattern.example} note={pattern.note} lang={lang} slow={slow} label={t("hear")} onSay={onSay} onHeard={onHeard} />
         </ul>
       </SlideShell>
     );
@@ -833,11 +934,13 @@ function TheorySlideView({
         <ul className="mt-1 grid gap-2">
           {slide.items.map((row, i) =>
             slide.titleKey === "examples" ? (
-              <SpeakRow key={`${i}-${row}`} text={row} lang={lang} slow={slow} label={t("hear")} onSay={onSay} />
+              <SpeakRow key={`${i}-${row}`} text={row} lang={lang} slow={slow} label={t("hear")} onSay={onSay} onHeard={onHeard} />
             ) : (
               <li key={`${i}-${row}`} className="learn-point">
                 <span className="learn-point-n">{i + 1}</span>
-                <span className="leading-6">{row}</span>
+                <button type="button" className="min-w-0 flex-1 text-left leading-6" onClick={() => onSay(row)}>
+                  {row}
+                </button>
               </li>
             ),
           )}
@@ -870,7 +973,11 @@ function TheorySlideView({
   }
   return (
     <SlideShell kicker={t("tip")} title={t("keepThis")}>
-      <p className="leading-7">{theory.tip}</p>
+      <p className="leading-7">
+        <button type="button" className="text-left" onClick={() => onSay(theory.tip)}>
+          {theory.tip}
+        </button>
+      </p>
     </SlideShell>
   );
 }
@@ -880,11 +987,13 @@ function ExerciseField({
   value,
   disabled,
   onChange,
+  onAsk,
 }: {
   exercise: Exercise;
   value: string | string[] | undefined;
   disabled: boolean;
   onChange: (value: string | string[]) => void;
+  onAsk?: (text: string) => void;
 }) {
   if (exercise.type === "mcq") {
     return (
@@ -956,7 +1065,10 @@ function ExerciseField({
             type="button"
             disabled={disabled}
             className="rounded-full bg-white px-3 py-1 text-sm font-semibold"
-            onClick={() => onChange([...chosen, token])}
+            onClick={() => {
+              onChange([...chosen, token]);
+              onAsk?.(token);
+            }}
           >
             {token}
           </button>

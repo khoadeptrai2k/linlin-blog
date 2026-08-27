@@ -14,11 +14,13 @@ export function SpeakButton({
   lang,
   slow,
   label,
+  onHeard,
 }: {
   text: string;
   lang: string;
   slow?: boolean;
   label: string;
+  onHeard?: (text: string) => void;
 }) {
   return (
     <button
@@ -28,6 +30,7 @@ export function SpeakButton({
       onClick={(event) => {
         event.stopPropagation();
         speakText(text, lang, slow);
+        onHeard?.(text);
       }}
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">

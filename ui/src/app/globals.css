@@ -991,6 +991,60 @@ details[open] .faq-body {
   gap: 0.75rem;
 }
 
+.learn-history {
+  display: none;
+}
+
+.learn-history.is-open {
+  display: block;
+}
+
+.learn-history-panel {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 7rem);
+  overflow: auto;
+  border-radius: 1.6rem 1.2rem 1.7rem 1.3rem;
+  background: rgb(255 255 255 / 0.78);
+  border: 1px solid rgb(255 255 255 / 0.86);
+  padding: 1rem 1.05rem 1.2rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.95),
+    0 18px 36px rgb(26 74 99 / 0.1);
+}
+
+.learn-history-item {
+  border-radius: 1.1rem;
+  background: rgb(255 255 255 / 0.78);
+  padding: 0.8rem 0.85rem;
+}
+
+.learn-ask-reply {
+  margin-top: 0.75rem;
+  border-radius: 0.9rem;
+  background: rgb(255 255 255 / 0.55);
+  padding: 0.7rem 0.75rem;
+}
+
+@media (max-width: 1279px) {
+  .learn-history.is-open {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 40;
+    display: flex;
+    width: min(22rem, 92vw);
+    padding: 1rem 0.85rem 1rem 0;
+    background: rgb(246 239 226 / 0.55);
+    backdrop-filter: blur(12px);
+  }
+
+  .learn-history-panel {
+    position: static;
+    max-height: calc(100vh - 2rem);
+    width: 100%;
+  }
+}
+
 .learn-stage {
   min-height: 0;
 }

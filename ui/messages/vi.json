@@ -401,7 +401,17 @@
     "chapterN": "Chương {n}/{total}",
     "chapterRange": "chương {from}–{to}",
     "pickChapter": "52 chương theo tên. Bấm một chương để xem mục tiêu và năm bước.",
-    "fiveSteps": "Năm bước của chương này"
+    "fiveSteps": "Năm bước của chương này",
+    "tapHistory": "Hỏi bài",
+    "tapHistoryEmpty": "Bấm một từ hoặc câu trong bài — coi như đang hỏi. Linlin sẽ trả lời ở đây; sau này là AI.",
+    "tapHistoryClose": "Đóng",
+    "tapHistoryClear": "Xóa",
+    "tapHistoryCount": "{n}/50",
+    "tapTranslate": "Dịch",
+    "tapExplain": "Dùng khi nào",
+    "youAsked": "Bạn hỏi",
+    "linlinReply": "Linlin trả lời",
+    "linlinReplyStub": "Bản tạm từ bài học. Sau này AI sẽ trả lời đúng chỗ này."
   },
   "Footer": {
     "tagline": "Học dịu dàng, nhớ thật lâu.",

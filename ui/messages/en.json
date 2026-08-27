@@ -401,7 +401,17 @@
     "chapterN": "Chapter {n}/{total}",
     "chapterRange": "chapters {from}–{to}",
     "pickChapter": "52 named chapters. Tap one to see its goal and five steps.",
-    "fiveSteps": "Five steps in this chapter"
+    "fiveSteps": "Five steps in this chapter",
+    "tapHistory": "Ask the lesson",
+    "tapHistoryEmpty": "Tap a word or line — that is your question. Linlin answers here; later this will be AI.",
+    "tapHistoryClose": "Close",
+    "tapHistoryClear": "Clear",
+    "tapHistoryCount": "{n}/50",
+    "tapTranslate": "Translation",
+    "tapExplain": "How it is used",
+    "youAsked": "You asked",
+    "linlinReply": "Linlin replies",
+    "linlinReplyStub": "A short note from the lesson. AI will answer in this same slot later."
   },
   "Footer": {
     "tagline": "Learn gently. Remember longer.",
