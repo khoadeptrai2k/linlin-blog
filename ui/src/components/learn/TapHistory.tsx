@@ -33,6 +33,7 @@ export function TapHistory({
     explain: string;
     phonetic: string;
     sayVi: string;
+    example: string;
     count: string;
   };
   onClose: () => void;
@@ -41,15 +42,16 @@ export function TapHistory({
   const latest = items[0];
   const older = items.slice(1);
   const body = latest
-    ? latest.translation || latest.explain || latest.answer || labels.replyStub
+    ? latest.explain || latest.translation || latest.answer || labels.replyStub
     : labels.empty;
 
   const tiles: CardDrawerTile[] = [];
   if (!thinking && latest?.translation && latest.explain) {
-    tiles.push({ label: labels.explain, value: latest.explain, wide: true });
+    tiles.push({ label: labels.translation, value: latest.translation });
   }
   if (!thinking && latest?.reading) tiles.push({ label: labels.phonetic, value: latest.reading });
   if (!thinking && latest?.sayVi) tiles.push({ label: labels.sayVi, value: latest.sayVi });
+  const examples = !thinking && latest?.examples ? latest.examples.filter((row) => row && row !== latest.ask) : [];
 
   return (
     <CardDrawer
@@ -82,6 +84,24 @@ export function TapHistory({
       ) : null}
       {!thinking && !latest ? <p className="mt-4 text-xs text-ink-soft">{labels.count}</p> : null}
       {!thinking && latest ? <p className="mt-2 text-xs text-ink-soft">{labels.replyStub}</p> : null}
+
+      {examples.length ? (
+        <>
+          <p className="mt-5 px-1 text-[0.65rem] font-semibold tracking-[0.16em] text-ink-soft uppercase">
+            {labels.example}
+          </p>
+          <ol className="mt-2 space-y-2">
+            {examples.map((row) => (
+              <li key={row} className="control-tile min-h-0">
+                <span className="flex items-start justify-between gap-2">
+                  <span className="font-display text-lg leading-6 text-sky-700">{row}</span>
+                  <SpeakButton text={row} lang={latest!.lang} slow={slow} label={labels.hear} />
+                </span>
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : null}
 
       {!thinking && older.length ? (
         <>

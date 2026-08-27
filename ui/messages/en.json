@@ -412,6 +412,7 @@
     "tapHistoryCount": "{n}/50",
     "tapTranslate": "Translation",
     "tapExplain": "How it is used",
+    "tapExample": "Examples in this lesson",
     "youAsked": "You asked",
     "linlinReply": "Linlin replies",
     "linlinReplyStub": "A short note from the lesson. AI will answer in this same slot later."

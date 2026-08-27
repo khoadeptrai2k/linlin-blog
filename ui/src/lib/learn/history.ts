@@ -19,6 +19,7 @@ export type TapRecord = {
   sayVi?: string;
   translation?: string;
   explain?: string;
+  examples?: string[];
   source: "lookup" | "pending";
   at: number;
   /** @deprecated use ask — kept so old localStorage rows still load */
@@ -211,19 +212,262 @@ function meaningHit(meaning: Record<Locale, string> | undefined, needle: string)
   return Boolean(meaning && Object.values(meaning).some((value) => value && norm(value) === needle));
 }
 
-function vocabFromAsk(lesson: Lesson, needle: string) {
-  const exact = lesson.vocab.find((item) => norm(item.word) === needle);
-  if (exact) return exact;
-  const byMeaning = lesson.vocab.find((item) => meaningHit(item.meaning, needle));
-  if (byMeaning) return byMeaning;
-  return lesson.vocab.find((item) => {
-    const word = norm(item.word);
+function escapeReg(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function containsWord(haystack: string, word: string) {
+  const hay = haystack.trim();
+  const needle = word.trim();
+  if (!hay || !needle) return false;
+  if (/[\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF]/.test(needle)) return hay.includes(needle);
+  return new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeReg(needle)}(?:$|[^\\p{L}\\p{N}])`, "iu").test(hay);
+}
+
+function uniqueLines(rows: (string | undefined)[], limit = 5) {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const line = (row || "").replace(/\s+/g, " ").trim();
+    const key = norm(line);
+    if (!line || seen.has(key)) continue;
+    seen.add(key);
+    out.push(line);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+function joinExplain(parts: (string | undefined)[]) {
+  return uniqueLines(parts, 8).join(" ");
+}
+
+function examplesAround(lesson: Lesson, word: string, skip?: string) {
+  const skipKey = skip ? norm(skip) : "";
+  const rows: string[] = [];
+  const take = (value?: string) => {
+    if (!value || (skipKey && norm(value) === skipKey) || !containsWord(value, word)) return;
+    rows.push(value);
+  };
+  const hit = lesson.vocab.find((item) => norm(item.word) === norm(word));
+  take(hit?.usage);
+  for (const line of lesson.sentences) take(line.text);
+  for (const line of lesson.quotes || []) take(line.text);
+  for (const pattern of lesson.theory.patterns) {
+    take(pattern.example);
+    take(pattern.form);
+  }
+  for (const row of lesson.theory.table?.rows || []) take(row);
+  for (const row of lesson.theory.examples) take(row);
+  for (const item of lesson.theory.apply) take(item.sample);
+  for (const line of lesson.listening.lines) take(line);
+  return uniqueLines(rows, 5);
+}
+
+function notesAround(lesson: Lesson, word: string) {
+  const parts: string[] = [];
+  for (const pattern of lesson.theory.patterns) {
+    if (containsWord(pattern.form, word) || containsWord(pattern.example, word) || containsWord(pattern.use, word)) {
+      parts.push(pattern.use, pattern.note);
+    }
+  }
+  for (const row of [...lesson.theory.points, ...lesson.theory.usage, ...lesson.theory.contrasts, ...lesson.theory.mistakes]) {
+    if (containsWord(row, word)) parts.push(row);
+  }
+  return uniqueLines(parts, 4);
+}
+
+function glossInside(lesson: Lesson, text: string, locale: Locale) {
+  const hits = lesson.vocab.filter((item) => containsWord(text, item.word)).slice(0, 6);
+  if (!hits.length) return "";
+  return hits
+    .map((item) => {
+      const meaning = item.meaning[locale] || item.meaning[lesson.track];
+      return meaning && meaning !== item.word ? `${item.word} · ${meaning}` : item.word;
+    })
+    .join("  ·  ");
+}
+
+function packWord(lesson: Lesson, word: Lesson["vocab"][number], locale: Locale, askedWord: boolean) {
+  const note = lesson.theory.levelNote || lesson.goal[locale] || lesson.goal[lesson.track];
+  const usageIsExample = Boolean(word.usage && containsWord(word.usage, word.word));
+  const examples = examplesAround(lesson, word.word, word.word);
+  const explain = joinExplain([
+    ...notesAround(lesson, word.word),
+    usageIsExample ? undefined : word.usage,
+    glossInside(lesson, examples[0] || word.usage || word.word, locale),
+    examples.length ? undefined : note,
+  ]);
+  return {
+    reading: word.reading || undefined,
+    sayVi: word.sayVi || undefined,
+    translation: askedWord ? pickMeaning(word.meaning, locale, lesson.track) : word.word,
+    explain: explain || note,
+    examples,
+  };
+}
+
+function packLine(
+  lesson: Lesson,
+  line: { text: string; reading?: string; sayVi?: string; meaning?: Record<Locale, string> },
+  locale: Locale,
+) {
+  const note = lesson.theory.levelNote || lesson.goal[locale] || lesson.goal[lesson.track];
+  const words = lesson.vocab.filter((item) => containsWord(line.text, item.word));
+  const pattern = lesson.theory.patterns.find(
+    (item) => norm(item.example) === norm(line.text) || containsWord(item.example, line.text) || containsWord(line.text, item.form.replace(/[_+…]+/g, "").trim()),
+  );
+  const examples = uniqueLines(
+    words.flatMap((item) => examplesAround(lesson, item.word, line.text)),
+    4,
+  );
+  return {
+    reading: line.reading || undefined,
+    sayVi: line.sayVi || undefined,
+    translation: pickMeaning(line.meaning, locale, lesson.track),
+    explain: joinExplain([
+      pattern ? `${pattern.use} ${pattern.note}`.trim() : undefined,
+      glossInside(lesson, line.text, locale),
+      words[0] && !pattern ? words[0].usage : undefined,
+      note,
+    ]),
+    examples,
+  };
+}
+
+export function lookupTap(
+  lesson: Lesson,
+  text: string,
+  locale: Locale,
+): Pick<TapRecord, "reading" | "sayVi" | "translation" | "explain" | "answer" | "examples"> {
+  const needle = norm(text);
+  const goal = lesson.goal[locale] || lesson.goal[lesson.track];
+  const trackTitle = lesson.title[lesson.track];
+  const { theory } = lesson;
+  const note = theory.levelNote || goal;
+
+  if (norm(trackTitle) === needle) {
+    return {
+      translation: locale === lesson.track ? undefined : lesson.title[locale] || undefined,
+      explain: joinExplain([note, theory.structure, theory.tip]),
+      examples: uniqueLines([theory.examples[0], theory.patterns[0]?.example, lesson.sentences[0]?.text], 3),
+    };
+  }
+  if (Object.values(lesson.title).some((value) => value && norm(value) === needle)) {
+    return {
+      translation: trackTitle,
+      explain: joinExplain([note, theory.structure, theory.tip]),
+      examples: uniqueLines([theory.patterns[0]?.example, lesson.sentences[0]?.text], 3),
+    };
+  }
+  if (Object.values(lesson.goal).some((value) => value && norm(value) === needle) || norm(theory.levelTitle) === needle) {
+    return { explain: joinExplain([note, theory.structure, ...theory.points.slice(0, 3)]), examples: theory.examples.slice(0, 3) };
+  }
+  if (norm(theory.levelNote) === needle) {
+    return { explain: joinExplain([goal, ...theory.points.slice(0, 3)]), examples: theory.examples.slice(0, 3) };
+  }
+
+  const exactWord = lesson.vocab.find((item) => norm(item.word) === needle);
+  if (exactWord) return packWord(lesson, exactWord, locale, true);
+
+  const exactLine = [...lesson.sentences, ...(lesson.quotes || [])].find((item) => norm(item.text) === needle);
+  if (exactLine) return packLine(lesson, exactLine, locale);
+
+  const byMeaningWord = lesson.vocab.find((item) => meaningHit(item.meaning, needle));
+  if (byMeaningWord) return packWord(lesson, byMeaningWord, locale, false);
+
+  const byMeaningLine = [...lesson.sentences, ...(lesson.quotes || [])].find((item) => meaningHit(item.meaning, needle));
+  if (byMeaningLine) return packLine(lesson, byMeaningLine, locale);
+
+  const pattern = theory.patterns.find(
+    (item) =>
+      norm(item.example) === needle ||
+      norm(item.form) === needle ||
+      norm(item.use) === needle ||
+      norm(item.note) === needle,
+  );
+  if (pattern) {
+    return {
+      translation: locale === lesson.track ? undefined : pattern.use,
+      explain: joinExplain([pattern.use, pattern.note, note]),
+      examples: uniqueLines([pattern.example, ...examplesAround(lesson, pattern.form.replace(/[_+…]+/g, " ").trim(), pattern.example)], 4),
+    };
+  }
+
+  const apply = theory.apply.find(
+    (item) => norm(item.sample) === needle || norm(item.frame) === needle || norm(item.prompt) === needle,
+  );
+  if (apply) {
+    return {
+      translation: locale === lesson.track ? undefined : apply.sample,
+      explain: joinExplain([apply.prompt, glossInside(lesson, apply.sample, locale), note]),
+      examples: uniqueLines([apply.sample, apply.frame, ...examplesAround(lesson, apply.sample.split(/\s+/)[0] || apply.sample, apply.sample)], 4),
+    };
+  }
+
+  const fuzzyWord = lesson.vocab.find((item) => {
+    const word = item.word.trim();
     if (!word) return false;
-    const cjkOrThai = /[\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF]/.test(word);
-    if (cjkOrThai) return needle.includes(word);
+    if (/[\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF]/.test(word)) return needle.includes(norm(word)) && word.length >= 1;
     if (word.length < 3) return false;
-    return needle.includes(word);
+    return needle.includes(norm(word));
   });
+  if (fuzzyWord && (norm(fuzzyWord.word) === needle || text.trim() === fuzzyWord.word || containsWord(text, fuzzyWord.word))) {
+    if (norm(text) === norm(fuzzyWord.word) || text.trim() === fuzzyWord.word) return packWord(lesson, fuzzyWord, locale, true);
+  }
+
+  const point =
+    theory.points.find((item) => norm(item) === needle) ||
+    theory.usage.find((item) => norm(item) === needle) ||
+    theory.contrasts.find((item) => norm(item) === needle) ||
+    theory.mistakes.find((item) => norm(item) === needle) ||
+    theory.examples.find((item) => norm(item) === needle);
+  if (point) {
+    const asLine = [...lesson.sentences, ...(lesson.quotes || [])].find((item) => norm(item.text) === needle);
+    if (asLine) return packLine(lesson, asLine, locale);
+    return {
+      explain: joinExplain([point, note, glossInside(lesson, point, locale)]),
+      examples: examplesAround(lesson, point.split(/\s+/)[0] || point).slice(0, 4),
+    };
+  }
+
+  if (norm(theory.structure) === needle) {
+    return { explain: joinExplain([theory.structure, note]), examples: uniqueLines(theory.patterns.map((item) => item.example), 3) };
+  }
+  if (norm(theory.tip) === needle) {
+    return { explain: joinExplain([theory.tip, note]), examples: theory.examples.slice(0, 3) };
+  }
+  if (norm(theory.table.title) === needle) {
+    return { explain: joinExplain([note, theory.structure]), examples: theory.table.rows.slice(0, 5) };
+  }
+
+  for (const row of theory.table?.rows || []) {
+    const [left, right] = row.split(" → ");
+    if (left && norm(left) === needle) {
+      const hit = lesson.vocab.find((item) => norm(item.word) === needle);
+      if (hit) return packWord(lesson, hit, locale, true);
+      return { translation: right, explain: note, examples: uniqueLines([right, row], 3) };
+    }
+    if (right && norm(right) === needle) {
+      const hit = lesson.sentences.find((item) => norm(item.text) === needle);
+      if (hit) return packLine(lesson, hit, locale);
+      return { explain: joinExplain([left, note]), examples: uniqueLines([left, row], 3) };
+    }
+  }
+
+  const listenExact = lesson.listening.lines.find((row) => norm(row) === needle) || (norm(lesson.listening.text) === needle ? lesson.listening.text : "");
+  if (listenExact) {
+    const hit = lesson.sentences.find((item) => norm(item.text) === needle || containsWord(listenExact, item.text));
+    if (hit) return packLine(lesson, hit, locale);
+    return { explain: joinExplain([glossInside(lesson, listenExact, locale), note]), examples: lesson.listening.lines.slice(0, 4) };
+  }
+
+  if (fuzzyWord) return packWord(lesson, fuzzyWord, locale, true);
+
+  const fuzzyLine = lineFromAsk(lesson, needle);
+  if (fuzzyLine) return packLine(lesson, fuzzyLine, locale);
+
+  return { explain: joinExplain([note, ...theory.points.slice(0, 2)]), examples: uniqueLines([theory.examples[0], lesson.sentences[0]?.text], 2) };
 }
 
 function lineFromAsk(lesson: Lesson, needle: string) {
@@ -236,131 +480,4 @@ function lineFromAsk(lesson: Lesson, needle: string) {
     const line = norm(item.text);
     return line.length >= 4 && (needle.includes(line) || line.includes(needle));
   });
-}
-
-export function lookupTap(
-  lesson: Lesson,
-  text: string,
-  locale: Locale,
-): Pick<TapRecord, "reading" | "sayVi" | "translation" | "explain" | "answer"> {
-  const needle = norm(text);
-  const goal = lesson.goal[locale] || lesson.goal[lesson.track];
-  const trackTitle = lesson.title[lesson.track];
-  const { theory } = lesson;
-  const note = theory.levelNote || goal;
-
-  if (norm(trackTitle) === needle) {
-    return {
-      translation: locale === lesson.track ? undefined : lesson.title[locale] || undefined,
-      explain: note,
-    };
-  }
-  if (Object.values(lesson.title).some((value) => value && norm(value) === needle)) {
-    return { translation: trackTitle, explain: note };
-  }
-  if (Object.values(lesson.goal).some((value) => value && norm(value) === needle) || norm(theory.levelTitle) === needle) {
-    return { explain: note };
-  }
-  if (norm(theory.levelNote) === needle) {
-    return { explain: goal };
-  }
-
-  const word = vocabFromAsk(lesson, needle);
-  if (word) {
-    const askedWord = norm(word.word) === needle || needle.includes(norm(word.word));
-    return {
-      reading: word.reading || undefined,
-      sayVi: word.sayVi || undefined,
-      translation: askedWord ? pickMeaning(word.meaning, locale, lesson.track) : word.word,
-      explain: word.usage || note,
-    };
-  }
-
-  const line = lineFromAsk(lesson, needle);
-  if (line) {
-    return {
-      reading: line.reading || undefined,
-      sayVi: line.sayVi || undefined,
-      translation: norm(line.text) === needle ? pickMeaning(line.meaning, locale, lesson.track) : line.text,
-      explain: note,
-    };
-  }
-
-  const pattern = theory.patterns.find(
-    (item) =>
-      norm(item.example) === needle ||
-      norm(item.form) === needle ||
-      norm(item.use) === needle ||
-      norm(item.note) === needle,
-  );
-  if (pattern) {
-    return {
-      translation: locale === lesson.track ? undefined : pattern.use,
-      explain: [pattern.form, pattern.note || pattern.use].filter(Boolean).join(" · ") || note,
-    };
-  }
-
-  const apply = theory.apply.find(
-    (item) => norm(item.sample) === needle || norm(item.frame) === needle || norm(item.prompt) === needle,
-  );
-  if (apply) {
-    return {
-      translation: locale === lesson.track ? undefined : apply.sample,
-      explain: `${apply.prompt} ${apply.frame} → ${apply.sample}`.trim(),
-    };
-  }
-
-  const point =
-    theory.points.find((item) => norm(item) === needle) ||
-    theory.usage.find((item) => norm(item) === needle) ||
-    theory.contrasts.find((item) => norm(item) === needle) ||
-    theory.mistakes.find((item) => norm(item) === needle) ||
-    theory.examples.find((item) => norm(item) === needle);
-  if (point) {
-    return { explain: note };
-  }
-
-  if (norm(theory.structure) === needle) {
-    return { explain: note };
-  }
-  if (norm(theory.tip) === needle) {
-    return { explain: note };
-  }
-  if (norm(theory.table.title) === needle) {
-    return { explain: theory.table.rows.slice(0, 3).join(" · ") || note };
-  }
-
-  for (const row of theory.table?.rows || []) {
-    const [left, right] = row.split(" → ");
-    if (left && norm(left) === needle) {
-      const hit = lesson.vocab.find((item) => norm(item.word) === needle);
-      return {
-        translation: pickMeaning(hit?.meaning, locale, lesson.track),
-        explain: right || hit?.usage || note,
-        reading: hit?.reading,
-        sayVi: hit?.sayVi,
-      };
-    }
-    if (right && norm(right) === needle) {
-      const hit = lesson.sentences.find((item) => norm(item.text) === needle);
-      return {
-        translation: pickMeaning(hit?.meaning, locale, lesson.track),
-        explain: note,
-        reading: hit?.reading,
-        sayVi: hit?.sayVi,
-      };
-    }
-  }
-
-  const listenHit = lesson.sentences.find((item) => needle.includes(norm(item.text)) || norm(item.text).includes(needle));
-  if (listenHit && (norm(lesson.listening.text) === needle || lesson.listening.lines.some((row) => norm(row) === needle))) {
-    return {
-      translation: pickMeaning(listenHit.meaning, locale, lesson.track),
-      explain: note,
-      reading: listenHit.reading,
-      sayVi: listenHit.sayVi,
-    };
-  }
-
-  return { explain: goal };
 }

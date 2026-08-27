@@ -476,7 +476,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }, [answers, quiz]);
 
   return (
-    <div className="learn-desk mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
+    <div className={`learn-desk mx-auto grid gap-6 ${drawerOpen ? "is-ask-open" : ""}`}>
       <aside className="learn-rail">
         <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("lessonMap")}</p>
         <ol className="mt-3 grid gap-4">
@@ -775,39 +775,44 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             </div>
           )}
       </article>
-      <TapHistory
-        open={drawerOpen}
-        thinking={aiOn && thinking}
-        items={history}
-        locale={locale}
-        slow={slow}
-        labels={{
-          title: t("tapHistory"),
-          empty: t("tapHistoryEmpty"),
-          close: t("tapHistoryClose"),
-          clear: t("tapHistoryClear"),
-          hear: t("hear"),
-          youAsked: t("youAsked"),
-          reply: t("linlinReply"),
-          replyStub: t("linlinReplyStub"),
-          thinking: t("linlinThinking"),
-          translation: t("tapTranslate"),
-          explain: t("tapExplain"),
-          phonetic: t("phonetic"),
-          sayVi: t("sayViLabel"),
-          count: t("tapHistoryCount", { n: history.length }),
-        }}
-        onClose={() => setHistoryOpen(false)}
-        onClear={() => saveTapHistory([])}
-      />
-      {aiOn ? (
+      {drawerOpen ? (
+        <aside className="learn-ask-slot">
+          <TapHistory
+            open={drawerOpen}
+            thinking={aiOn && thinking}
+            items={history}
+            locale={locale}
+            slow={slow}
+            labels={{
+              title: t("tapHistory"),
+              empty: t("tapHistoryEmpty"),
+              close: t("tapHistoryClose"),
+              clear: t("tapHistoryClear"),
+              hear: t("hear"),
+              youAsked: t("youAsked"),
+              reply: t("linlinReply"),
+              replyStub: t("linlinReplyStub"),
+              thinking: t("linlinThinking"),
+              translation: t("tapTranslate"),
+              explain: t("tapExplain"),
+              phonetic: t("phonetic"),
+              sayVi: t("sayViLabel"),
+              example: t("tapExample"),
+              count: t("tapHistoryCount", { n: history.length }),
+            }}
+            onClose={() => setHistoryOpen(false)}
+            onClear={() => saveTapHistory([])}
+          />
+        </aside>
+      ) : null}
+      {aiOn && !drawerOpen ? (
         <AskFab
-          open={drawerOpen}
-          thinking={aiOn && thinking}
+          open={false}
+          thinking={thinking}
           count={history.length}
           openLabel={t("tapHistory")}
           closeLabel={t("tapHistoryClose")}
-          onToggle={() => setHistoryOpen((value) => !value)}
+          onToggle={() => setHistoryOpen(true)}
         />
       ) : null}
     </div>

@@ -324,14 +324,19 @@ body {
   animation: drawer-in 440ms var(--ease) both;
 }
 
-.sheet-root.is-docked {
-  z-index: 40;
-  padding-top: 4.75rem;
+.drawer-panel.is-inline {
+  width: 100%;
+  height: 34rem;
+  max-height: min(40rem, calc(100dvh - 6.5rem));
+  position: sticky;
+  top: 5.5rem;
+  z-index: 1;
 }
 
-.sheet-root.is-docked .drawer-panel {
-  height: auto;
-  max-height: calc(100dvh - 6.5rem);
+@media (min-width: 640px) {
+  .drawer-panel.is-inline {
+    height: 40rem;
+  }
 }
 
 .sheet-scrim {
@@ -1111,7 +1116,33 @@ details[open] .faq-body {
 }
 
 .learn-desk {
+  max-width: 72rem;
   padding-bottom: 4.75rem;
+}
+
+@media (min-width: 1024px) {
+  .learn-desk {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+
+.learn-desk.is-ask-open {
+  max-width: 88rem;
+}
+
+.learn-ask-slot {
+  min-width: 0;
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1280px) {
+  .learn-desk.is-ask-open {
+    grid-template-columns: 14.5rem minmax(0, 1fr) minmax(19rem, 22rem);
+  }
+
+  .learn-ask-slot {
+    grid-column: auto;
+  }
 }
 
 .learn-stage {
