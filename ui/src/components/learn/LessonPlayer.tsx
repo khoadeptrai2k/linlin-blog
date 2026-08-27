@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { Phonetic, SpeakButton, speakText } from "@/components/learn/LearnAudio";
 import { MatchGame } from "@/components/learn/LearnGame";
-import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory } from "@/lib/learn/types";
+import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory, VocabItem } from "@/lib/learn/types";
 
 function loadDone(track: string) {
   try {
@@ -115,19 +115,37 @@ type TheorySlide =
   | { type: "table" }
   | { type: "tip" };
 
+function uniqueLines(rows: string[] | undefined, seen: string[] = []) {
+  const used = new Set(seen.map((item) => item.trim()));
+  const out: string[] = [];
+  for (const row of rows || []) {
+    const key = row.trim();
+    if (!key || used.has(key)) continue;
+    used.add(key);
+    out.push(row);
+  }
+  return out;
+}
+
 function theorySlides(theory: LessonTheory): TheorySlide[] {
   const slides: TheorySlide[] = [{ type: "intro" }];
-  for (let i = 0; i < theory.points.length; i += 3) {
-    slides.push({ type: "points", items: theory.points.slice(i, i + 3) });
+  const points = uniqueLines(theory.points);
+  if (points.length) slides.push({ type: "points", items: points.slice(0, 8) });
+  if (theory.structure && theory.structure.trim() !== theory.levelNote.trim()) {
+    slides.push({ type: "structure" });
   }
-  if (theory.structure) slides.push({ type: "structure" });
-  theory.patterns.forEach((pattern) => slides.push({ type: "pattern", pattern }));
-  if (theory.contrasts?.length) slides.push({ type: "list", titleKey: "contrasts", items: theory.contrasts });
-  if (theory.mistakes?.length) slides.push({ type: "list", titleKey: "mistakes", items: theory.mistakes });
-  for (let i = 0; i < (theory.examples?.length ?? 0); i += 2) {
-    slides.push({ type: "list", titleKey: "examples", items: theory.examples.slice(i, i + 2) });
-  }
-  if (theory.usage?.length) slides.push({ type: "list", titleKey: "usage", items: theory.usage });
+  theory.patterns.slice(0, 3).forEach((pattern) => slides.push({ type: "pattern", pattern }));
+  const contrasts = uniqueLines(theory.contrasts);
+  const mistakes = uniqueLines(theory.mistakes);
+  const usage = uniqueLines(theory.usage, points);
+  const examples = uniqueLines(
+    theory.examples,
+    theory.patterns.map((item) => item.example),
+  );
+  if (contrasts.length) slides.push({ type: "list", titleKey: "contrasts", items: contrasts.slice(0, 6) });
+  if (mistakes.length) slides.push({ type: "list", titleKey: "mistakes", items: mistakes.slice(0, 6) });
+  if (usage.length) slides.push({ type: "list", titleKey: "usage", items: usage.slice(0, 6) });
+  if (examples.length) slides.push({ type: "list", titleKey: "examples", items: examples.slice(0, 6) });
   if (theory.table?.rows?.length) slides.push({ type: "table" });
   if (theory.tip) slides.push({ type: "tip" });
   return slides;
@@ -281,15 +299,25 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }
 
   function railLabel(stepName: string, i: number) {
-    if (stepName === "words") return lesson.vocab[i]?.word ?? `${i + 1}`;
-    if (stepName === "lines") return lesson.sentences[i]?.text ?? `${i + 1}`;
-    if (stepName === "quotes") return quotes[i]?.text ?? `${i + 1}`;
-    if (stepName === "apply") return lesson.theory.apply[i]?.prompt ?? `${i + 1}`;
-    if (stepName === "quiz") return `${i + 1}`;
-    if (stepName === "theory") return String(i + 1);
-    if (stepName === "listen") return t("listen");
+    if (stepName === "words") return lesson.vocab[i]?.word ?? t("quizItem", { n: i + 1 });
+    if (stepName === "lines") return lesson.sentences[i]?.text ?? t("quizItem", { n: i + 1 });
+    if (stepName === "quotes") return quotes[i]?.text ?? t("quizItem", { n: i + 1 });
+    if (stepName === "apply") return lesson.theory.apply[i]?.prompt ?? t("quizItem", { n: i + 1 });
+    if (stepName === "quiz") return t("quizItem", { n: i + 1 });
+    if (stepName === "listen") return t("listenClip");
     if (stepName === "game") return t("game");
-    return String(i + 1);
+    if (stepName === "theory") {
+      const item = slides[i];
+      if (!item) return t("overview");
+      if (item.type === "intro") return t("overview");
+      if (item.type === "points") return t("keyPoints");
+      if (item.type === "structure") return t("structure");
+      if (item.type === "pattern") return item.pattern.form.replace(/_{2,}/g, "…").slice(0, 36);
+      if (item.type === "list") return t(item.titleKey);
+      if (item.type === "table") return t("swapTable");
+      return t("tip");
+    }
+    return t("quizItem", { n: i + 1 });
   }
 
   function countFor(stepName: string) {
@@ -368,9 +396,9 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   }, [answers, quiz]);
 
   return (
-    <div className="learn-desk mx-auto grid max-w-5xl gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
+    <div className="learn-desk mx-auto grid max-w-5xl gap-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
       <aside className="learn-rail">
-        <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("learnedList")}</p>
+        <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("lessonMap")}</p>
         <ol className="mt-3 grid gap-4">
           {steps.map((stepName, stepIndex) => (
             <li key={stepName}>
@@ -400,26 +428,33 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
       </aside>
 
       <article className="learn-card glass-tile min-w-0 p-0">
-        <div className="shrink-0 px-5 py-4 sm:px-7">
-          <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
-            {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
-          </p>
-          <h1 className="font-display mt-2 text-2xl leading-tight text-sky-700 sm:text-3xl">
-            {lesson.title[lesson.track]}
-          </h1>
+        <div className="learn-card-head">
+          <div className="flex items-start justify-between gap-3">
+            <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
+              {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
+            </p>
+            <button type="button" className={slow ? "learn-speed is-on" : "learn-speed"} onClick={() => setSlow((value) => !value)}>
+              {slow ? t("slow") : t("normal")}
+            </button>
+          </div>
+          <h1 className="font-display mt-2 text-xl leading-tight text-sky-700 sm:text-2xl">{lesson.title[lesson.track]}</h1>
           {support ? <p className="mt-1 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
-          <button
-            type="button"
-            className={slow ? "btn-primary mt-3 py-2" : "btn-ghost mt-3 py-2"}
-            onClick={() => setSlow((value) => !value)}
-          >
-            {slow ? t("slow") : t("normal")}
-          </button>
         </div>
 
         <div className="learn-stage min-h-0 flex-1 overflow-auto px-5 pb-4 sm:px-7">
           {current === "theory" && slide ? (
-            <TheorySlideView slide={slide} theory={lesson.theory} t={t} slow={slow} lang={lesson.speechLang} onSay={say} />
+            <TheorySlideView
+              slide={slide}
+              theory={lesson.theory}
+              goal={lesson.goal[lesson.track]}
+              goalSupport={support ? lesson.goal[support] : undefined}
+              vocab={lesson.vocab.slice(0, 8)}
+              support={support}
+              t={t}
+              slow={slow}
+              lang={lesson.speechLang}
+              onSay={say}
+            />
           ) : null}
 
           {current === "words" && word ? (
@@ -452,26 +487,29 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           ) : null}
 
           {current === "apply" && apply ? (
-            <div className="control-tile min-h-0">
-              <p className="text-sm text-ink-soft">{t("applyLead")}</p>
-              <p className="mt-3 font-semibold">{apply.prompt}</p>
-              <p className="font-display mt-2 text-xl leading-7 text-sky-700">{apply.frame}</p>
+            <div className="learn-board">
+              <p className="learn-kicker">{t("apply")}</p>
+              <h2 className="learn-board-title">{apply.prompt}</h2>
+              <p className="mt-1 text-sm leading-6 text-ink-soft">{t("applyLead")}</p>
+              <p className="font-display mt-4 text-2xl leading-8 text-sky-700">{apply.frame}</p>
               {reveal ? (
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <button type="button" className="text-left text-sm text-sky-700" onClick={() => say(apply.sample)}>
-                    {t("sample")}: {apply.sample}
-                  </button>
+                <ul className="mt-4 grid gap-2">
+                  <SpeakRow text={apply.sample} note={t("sample")} lang={lesson.speechLang} slow={slow} label={t("hear")} onSay={say} />
+                </ul>
+              ) : (
+                <div className="mt-4">
                   <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
                 </div>
-              ) : (
-                <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
               )}
             </div>
           ) : null}
 
           {current === "listen" ? (
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="learn-board">
+              <p className="learn-kicker">{t("listen")}</p>
+              <h2 className="learn-board-title">{t("listenClip")}</h2>
+              <p className="mt-1 text-sm leading-6 text-ink-soft">{t("listenFirst")}</p>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <button type="button" className="btn-primary" onClick={() => say(lesson.listening.text)}>
                   {t("playAudio")}
                 </button>
@@ -483,16 +521,19 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 ) : null}
               </div>
               {showScript && checked ? (
-                <ul className="mt-4 grid gap-2">
-                  {lesson.listening.lines.slice(0, 4).map((textLine) => (
-                    <li key={textLine} className="text-sm font-semibold leading-6">
-                      {textLine}
-                    </li>
+                <ul className="mt-5 grid gap-2">
+                  {lesson.listening.lines.slice(0, 6).map((textLine) => (
+                    <SpeakRow
+                      key={textLine}
+                      text={textLine}
+                      lang={lesson.speechLang}
+                      slow={slow}
+                      label={t("hear")}
+                      onSay={say}
+                    />
                   ))}
                 </ul>
-              ) : (
-                <p className="mt-4 text-sm leading-6 text-ink-soft">{t("listenFirst")}</p>
-              )}
+              ) : null}
             </div>
           ) : null}
 
@@ -630,38 +671,84 @@ function FocusCard({
 }) {
   const hidden = hideText || title === "……";
   return (
-    <div>
+    <div className="learn-board">
       {lead ? <p className="mb-3 text-sm leading-6 text-ink-soft">{lead}</p> : null}
-      <div className="control-tile min-h-0">
-        <div className="flex items-start justify-between gap-3">
-          <button type="button" className="text-left" onClick={() => speakText(speak, lang, slow)}>
-            <span className="font-display text-2xl font-semibold leading-snug text-sky-700">
-              {hidden ? "……" : title}
-            </span>
-          </button>
-          <SpeakButton text={speak} lang={lang} slow={slow} label={t("hear")} />
-        </div>
-        {hidden ? (
-          <p className="mt-2 text-sm text-ink-soft">{t("hearFirst")}</p>
-        ) : (
-          <Phonetic
-            reading={reading}
-            sayVi={sayVi}
-            locale={locale}
-            phoneticLabel={t("phonetic")}
-            sayViLabel={t("sayViLabel")}
-          />
-        )}
-        {meaning ? <p className="mt-2 text-sm text-ink-soft">{meaning}</p> : null}
-        {note ? <p className="mt-2 text-sm text-sky-700">{note}</p> : null}
+      <div className="flex items-start justify-between gap-3">
+        <button type="button" className="min-w-0 text-left" onClick={() => speakText(speak, lang, slow)}>
+          <span className="font-display text-3xl font-semibold leading-snug text-sky-700">
+            {hidden ? "……" : title}
+          </span>
+        </button>
+        <SpeakButton text={speak} lang={lang} slow={slow} label={t("hear")} />
       </div>
+      {hidden ? (
+        <p className="mt-3 text-sm text-ink-soft">{t("hearFirst")}</p>
+      ) : (
+        <Phonetic
+          reading={reading}
+          sayVi={sayVi}
+          locale={locale}
+          phoneticLabel={t("phonetic")}
+          sayViLabel={t("sayViLabel")}
+        />
+      )}
+      {meaning ? <p className="learn-goal mt-4 text-base leading-7">{meaning}</p> : null}
+      {note ? <p className="mt-3 text-sm leading-6 text-sky-700">{note}</p> : null}
     </div>
+  );
+}
+
+function SlideShell({
+  kicker,
+  title,
+  children,
+}: {
+  kicker: string;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="learn-board">
+      <p className="learn-kicker">{kicker}</p>
+      <h2 className="learn-board-title">{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function SpeakRow({
+  text,
+  note,
+  lang,
+  slow,
+  label,
+  onSay,
+}: {
+  text: string;
+  note?: string;
+  lang: string;
+  slow: boolean;
+  label: string;
+  onSay: (text: string) => void;
+}) {
+  return (
+    <li className="learn-speak-row">
+      <button type="button" className="min-w-0 flex-1 text-left" onClick={() => onSay(text)}>
+        <span className="block font-semibold leading-6 text-sky-700">{text}</span>
+        {note ? <span className="mt-0.5 block text-sm text-ink-soft">{note}</span> : null}
+      </button>
+      <SpeakButton text={text} lang={lang} slow={slow} label={label} />
+    </li>
   );
 }
 
 function TheorySlideView({
   slide,
   theory,
+  goal,
+  goalSupport,
+  vocab,
+  support,
   t,
   slow,
   lang,
@@ -669,6 +756,10 @@ function TheorySlideView({
 }: {
   slide: TheorySlide;
   theory: LessonTheory;
+  goal: string;
+  goalSupport?: string;
+  vocab: VocabItem[];
+  support: Locale | null;
   t: ReturnType<typeof useTranslations<"Learn">>;
   slow: boolean;
   lang: string;
@@ -676,77 +767,111 @@ function TheorySlideView({
 }) {
   if (slide.type === "intro") {
     return (
-      <div>
-        <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{theory.levelTitle}</p>
-        <p className="mt-3 leading-7">{theory.levelNote}</p>
-      </div>
+      <SlideShell kicker={t("theory")} title={theory.levelTitle || t("overview")}>
+        {goal ? (
+          <div className="learn-goal">
+            <p className="learn-kicker">{t("goalLabel")}</p>
+            <p className="mt-1 leading-6">{goal}</p>
+            {goalSupport ? <p className="mt-1 text-sm text-ink-soft">{goalSupport}</p> : null}
+          </div>
+        ) : null}
+        <p className="mt-4 leading-7">{theory.levelNote}</p>
+        {vocab.length ? (
+          <div className="mt-5">
+            <p className="learn-kicker">{t("todayHear")}</p>
+            <ul className="learn-chip-row">
+              {vocab.map((item) => (
+                <li key={item.word} className="learn-chip">
+                  <button type="button" className="min-w-0 text-left" onClick={() => onSay(item.word)}>
+                    <span className="block font-semibold text-sky-700">{item.word}</span>
+                    {support ? <span className="block truncate text-xs text-ink-soft">{item.meaning[support]}</span> : null}
+                  </button>
+                  <SpeakButton text={item.word} lang={lang} slow={slow} label={t("hear")} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </SlideShell>
     );
   }
   if (slide.type === "points") {
     return (
-      <ul className="grid gap-2">
-        {slide.items.map((point) => (
-          <li key={point} className="control-tile min-h-0 text-sm leading-6">
-            {point}
-          </li>
-        ))}
-      </ul>
+      <SlideShell kicker={t("keyPoints")} title={t("rememberThese")}>
+        <ol className="learn-points">
+          {slide.items.map((point, i) => (
+            <li key={`${i}-${point}`} className="learn-point">
+              <span className="learn-point-n">{i + 1}</span>
+              <span className="leading-6">{point}</span>
+            </li>
+          ))}
+        </ol>
+      </SlideShell>
     );
   }
   if (slide.type === "structure") {
     return (
-      <div>
-        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("structure")}</p>
-        <p className="mt-2 leading-7">{theory.structure}</p>
-      </div>
+      <SlideShell kicker={t("structure")} title={t("howSentence")}>
+        <p className="leading-7">{theory.structure}</p>
+      </SlideShell>
     );
   }
   if (slide.type === "pattern") {
     const pattern = slide.pattern;
     return (
-      <div className="control-tile min-h-0">
-        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t("pattern")}</p>
-        <div className="mt-2 flex items-start justify-between gap-3">
-          <button type="button" className="text-left" onClick={() => onSay(pattern.example)}>
-            <span className="block font-display text-lg font-semibold text-sky-700">{pattern.form}</span>
-            <span className="mt-1 block text-sm text-ink-soft">{pattern.use}</span>
-            <span className="mt-2 block leading-7">{pattern.example}</span>
-          </button>
-          <SpeakButton text={pattern.example} lang={lang} slow={slow} label={t("hear")} />
-        </div>
-      </div>
+      <SlideShell kicker={t("pattern")} title={pattern.form}>
+        <p className="text-sm leading-6 text-ink-soft">{pattern.use}</p>
+        <ul className="mt-4 grid gap-2">
+          <SpeakRow text={pattern.example} note={pattern.note} lang={lang} slow={slow} label={t("hear")} onSay={onSay} />
+        </ul>
+      </SlideShell>
     );
   }
   if (slide.type === "list") {
     return (
-      <div>
-        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t(slide.titleKey)}</p>
-        <ul className="mt-2 grid gap-2">
-          {slide.items.map((row) => (
-            <li key={row} className="leading-7">
-              {row}
-            </li>
-          ))}
+      <SlideShell kicker={t(slide.titleKey)} title={t(slide.titleKey)}>
+        <ul className="mt-1 grid gap-2">
+          {slide.items.map((row, i) =>
+            slide.titleKey === "examples" ? (
+              <SpeakRow key={`${i}-${row}`} text={row} lang={lang} slow={slow} label={t("hear")} onSay={onSay} />
+            ) : (
+              <li key={`${i}-${row}`} className="learn-point">
+                <span className="learn-point-n">{i + 1}</span>
+                <span className="leading-6">{row}</span>
+              </li>
+            ),
+          )}
         </ul>
-      </div>
+      </SlideShell>
     );
   }
   if (slide.type === "table") {
     return (
-      <div>
-        <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{theory.table.title}</p>
-        <ul className="mt-2 grid gap-2 text-sm leading-6">
-          {theory.table.rows.slice(0, 6).map((row) => (
-            <li key={row}>{row}</li>
-          ))}
+      <SlideShell kicker={t("swapTable")} title={theory.table.title}>
+        <ul className="learn-swap">
+          {theory.table.rows.slice(0, 8).map((row) => {
+            const [left, right] = row.split(" → ");
+            return (
+              <li key={row} className="learn-swap-row">
+                <button type="button" className="font-semibold text-sky-700" onClick={() => onSay(left || row)}>
+                  {left || row}
+                </button>
+                {right ? (
+                  <button type="button" className="text-left text-sm text-ink-soft" onClick={() => onSay(right)}>
+                    {right}
+                  </button>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
-      </div>
+      </SlideShell>
     );
   }
   return (
-    <p className="leading-7 text-sky-700">
-      {t("tip")}: {theory.tip}
-    </p>
+    <SlideShell kicker={t("tip")} title={t("keepThis")}>
+      <p className="leading-7">{theory.tip}</p>
+    </SlideShell>
   );
 }
 

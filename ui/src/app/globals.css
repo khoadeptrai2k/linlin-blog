@@ -868,14 +868,127 @@ details[open] .faq-body {
 
 .learn-card {
   display: flex;
-  height: 32rem;
+  height: 34rem;
   flex-direction: column;
 }
 
 @media (min-width: 640px) {
   .learn-card {
-    height: 38rem;
+    height: 40rem;
   }
+}
+
+.learn-card-head {
+  flex-shrink: 0;
+  padding: 1rem 1.25rem 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .learn-card-head {
+    padding: 1.15rem 1.75rem 0.9rem;
+  }
+}
+
+.learn-speed {
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ocean);
+  background: rgb(255 255 255 / 0.7);
+}
+
+.learn-speed.is-on {
+  color: #fff;
+  background: linear-gradient(180deg, var(--sky), var(--ocean));
+}
+
+.learn-board {
+  padding-bottom: 0.4rem;
+}
+
+.learn-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-500);
+}
+
+.learn-board-title {
+  margin-top: 0.35rem;
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  color: var(--ocean);
+}
+
+.learn-goal {
+  margin-top: 1rem;
+  border-radius: 1.1rem;
+  background: rgb(255 255 255 / 0.72);
+  padding: 0.85rem 1rem;
+}
+
+.learn-chip-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.learn-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.78);
+  padding: 0.55rem 0.55rem 0.55rem 0.75rem;
+}
+
+.learn-points,
+.learn-swap {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.learn-point,
+.learn-speak-row,
+.learn-swap-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.72);
+  padding: 0.7rem 0.8rem;
+}
+
+.learn-speak-row,
+.learn-swap-row {
+  align-items: center;
+}
+
+.learn-point-n {
+  display: grid;
+  height: 1.45rem;
+  width: 1.45rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--ocean);
+}
+
+.learn-swap-row {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.4fr) minmax(0, 1fr);
+  gap: 0.75rem;
 }
 
 .learn-stage {
@@ -987,9 +1100,9 @@ details[open] .faq-body {
   align-items: center;
   gap: 0.45rem;
   border-radius: 0.9rem;
-  padding: 0.35rem 0.5rem;
+  padding: 0.42rem 0.55rem;
   text-align: left;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   line-height: 1.35;
   color: var(--ink-soft);
   background: rgb(255 255 255 / 0.35);
