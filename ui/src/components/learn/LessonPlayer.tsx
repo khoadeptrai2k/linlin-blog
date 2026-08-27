@@ -775,36 +775,32 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             </div>
           )}
       </article>
-      {drawerOpen ? (
-        <aside className="learn-ask-slot">
-          <TapHistory
-            open={drawerOpen}
-            thinking={aiOn && thinking}
-            items={history}
-            locale={locale}
-            slow={slow}
-            labels={{
-              title: t("tapHistory"),
-              empty: t("tapHistoryEmpty"),
-              close: t("tapHistoryClose"),
-              clear: t("tapHistoryClear"),
-              hear: t("hear"),
-              youAsked: t("youAsked"),
-              reply: t("linlinReply"),
-              replyStub: t("linlinReplyStub"),
-              thinking: t("linlinThinking"),
-              translation: t("tapTranslate"),
-              explain: t("tapExplain"),
-              phonetic: t("phonetic"),
-              sayVi: t("sayViLabel"),
-              example: t("tapExample"),
-              count: t("tapHistoryCount", { n: history.length }),
-            }}
-            onClose={() => setHistoryOpen(false)}
-            onClear={() => saveTapHistory([])}
-          />
-        </aside>
-      ) : null}
+      <TapHistory
+        open={drawerOpen}
+        thinking={aiOn && thinking}
+        items={history}
+        locale={locale}
+        slow={slow}
+        labels={{
+          title: t("tapHistory"),
+          empty: t("tapHistoryEmpty"),
+          close: t("tapHistoryClose"),
+          clear: t("tapHistoryClear"),
+          hear: t("hear"),
+          youAsked: t("youAsked"),
+          reply: t("linlinReply"),
+          replyStub: t("linlinReplyStub"),
+          thinking: t("linlinThinking"),
+          translation: t("tapTranslate"),
+          explain: t("tapExplain"),
+          phonetic: t("phonetic"),
+          sayVi: t("sayViLabel"),
+          example: t("tapExample"),
+          count: t("tapHistoryCount", { n: history.length }),
+        }}
+        onClose={() => setHistoryOpen(false)}
+        onClear={() => saveTapHistory([])}
+      />
       {aiOn && !drawerOpen ? (
         <AskFab
           open={false}
