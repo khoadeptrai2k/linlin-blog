@@ -378,7 +378,14 @@
     "loadingLesson": "กำลังเตรียมบท…",
     "ofItems": "{n}/{total}",
     "nextItem": "ข้อถัดไป",
-    "questionOf": "ข้อ {n}/{total}"
+    "questionOf": "ข้อ {n}/{total}",
+    "learnedList": "ที่เรียนแล้ว",
+    "needAnswer": "เลือกหรือพิมพ์คำตอบ แล้วกดตรวจ",
+    "typeThis": "พิมพ์คำหรือประโยค",
+    "hearFirst": "กดลำโพงแล้วเลือก ตัวอักษรจะขึ้นหลังตรวจ",
+    "right": "ถูก",
+    "wrong": "ยังไม่ถูก คำตอบ: {answer}",
+    "retry": "ลองใหม่"
   },
   "Footer": {
     "tagline": "เรียนอย่างอ่อนโยน จำได้ยาวนาน",

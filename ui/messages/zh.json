@@ -378,7 +378,14 @@
     "loadingLesson": "正在准备这一课…",
     "ofItems": "{n}/{total}",
     "nextItem": "下一项",
-    "questionOf": "第 {n}/{total} 题"
+    "questionOf": "第 {n}/{total} 题",
+    "learnedList": "已学",
+    "needAnswer": "先选择或输入，再点核对。",
+    "typeThis": "输入这个词或句子。",
+    "hearFirst": "先点喇叭，再选。核对后才显示文字。",
+    "right": "对。",
+    "wrong": "还不对。答案：{answer}",
+    "retry": "再试"
   },
   "Footer": {
     "tagline": "温柔地学，长久地记。",

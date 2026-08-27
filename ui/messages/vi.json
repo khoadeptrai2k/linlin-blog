@@ -377,7 +377,14 @@
     "loadingLesson": "Đang soạn bài…",
     "ofItems": "{n}/{total}",
     "nextItem": "Mục tiếp",
-    "questionOf": "Câu {n}/{total}"
+    "questionOf": "Câu {n}/{total}",
+    "learnedList": "Đã học",
+    "needAnswer": "Chọn một đáp án hoặc nhập rồi bấm Kiểm tra.",
+    "typeThis": "Nhập đúng chữ / câu.",
+    "hearFirst": "Bấm loa, rồi chọn đáp án. Chữ hiện sau khi kiểm tra.",
+    "right": "Đúng.",
+    "wrong": "Chưa đúng. Đáp án: {answer}",
+    "retry": "Thử lại"
   },
   "Footer": {
     "tagline": "Học dịu dàng, nhớ thật lâu.",

@@ -870,6 +870,54 @@ details[open] .faq-body {
   width: 100%;
 }
 
+.learn-rail {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 7rem);
+  overflow: auto;
+  padding: 0.2rem 0.15rem 1rem;
+}
+
+@media (max-width: 1023px) {
+  .learn-rail {
+    position: static;
+    max-height: 11rem;
+    padding-bottom: 0;
+  }
+}
+
+.learn-rail-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 0.9rem;
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  background: rgb(255 255 255 / 0.35);
+}
+
+.learn-rail-item.is-active {
+  color: var(--ocean);
+  background: rgb(255 255 255 / 0.88);
+  font-weight: 600;
+}
+
+.learn-rail-item.is-done {
+  color: var(--ocean);
+}
+
+.learn-rail-mark {
+  display: grid;
+  width: 1.15rem;
+  flex-shrink: 0;
+  place-items: center;
+  font-size: 0.72rem;
+}
+
 .learn-dot {
   flex: 1;
   height: 0.42rem;

@@ -21,7 +21,7 @@ export default async function LessonPage({
 
   return (
     <section className="px-4 pb-16 pt-6 sm:px-6">
-      <div className="mx-auto mb-5 max-w-xl">
+      <div className="mx-auto mb-5 max-w-5xl">
         <Link href={`/learn/${track}`} className="text-sm font-semibold text-sky-700">
           ← {t("backTrack")}
         </Link>

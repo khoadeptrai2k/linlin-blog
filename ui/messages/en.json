@@ -377,7 +377,14 @@
     "loadingLesson": "Preparing the lesson…",
     "ofItems": "{n}/{total}",
     "nextItem": "Next",
-    "questionOf": "Question {n}/{total}"
+    "questionOf": "Question {n}/{total}",
+    "learnedList": "Learned",
+    "needAnswer": "Choose or type an answer, then tap Check.",
+    "typeThis": "Type the word or line.",
+    "hearFirst": "Tap the speaker, then choose. The text appears after Check.",
+    "right": "Correct.",
+    "wrong": "Not yet. Answer: {answer}",
+    "retry": "Try again"
   },
   "Footer": {
     "tagline": "Learn gently. Remember longer.",

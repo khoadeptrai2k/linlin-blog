@@ -26,6 +26,10 @@ function sameTokens(a: string[], b: string[]) {
   return a.length === b.length && a.every((item, i) => item === b[i]);
 }
 
+function norm(value: string) {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 function hashSeed(value: string) {
   let h = 2166136261;
   for (const ch of value) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
@@ -58,28 +62,36 @@ function isI18nText(value: I18nText | string): value is I18nText {
   return typeof value === "object" && value !== null && "vi" in value;
 }
 
+function makeMcq(id: string, prompt: string, answer: string, pool: string[], seed: string): Exercise | null {
+  const distractors = pick(pool, 3, answer, seed);
+  if (!answer || distractors.length < 2) return null;
+  return {
+    id,
+    type: "mcq",
+    prompt,
+    options: seededShuffle([answer, ...distractors].slice(0, 4), `${seed}-opt`),
+    answer,
+  };
+}
+
 function extraExercises(
   lesson: Lesson,
   support: Locale | null,
   whatMeans: (word: string) => string,
 ): Exercise[] {
   if (!support || lesson.vocab.length < 4 || lesson.kind === "play") return [];
-  const extras: Exercise[] = [];
   const glosses = lesson.vocab.map((item) => item.meaning[support]);
-
+  const extras: Exercise[] = [];
   lesson.vocab.slice(0, 3).forEach((item, index) => {
-    const answer = item.meaning[support];
-    const distractors = pick(glosses, 3, answer, `${lesson.id}-mean-${index}`);
-    if (distractors.length < 2) return;
-    extras.push({
-      id: `${lesson.id}-rt-mean-${index}`,
-      type: "mcq",
-      prompt: whatMeans(item.word),
-      options: seededShuffle([answer, ...distractors].slice(0, 4), `${lesson.id}-mean-opt-${index}`),
-      answer,
-    });
+    const drill = makeMcq(
+      `${lesson.id}-rt-mean-${index}`,
+      whatMeans(item.word),
+      item.meaning[support],
+      glosses,
+      `${lesson.id}-mean-${index}`,
+    );
+    if (drill) extras.push(drill);
   });
-
   return extras;
 }
 
@@ -121,14 +133,94 @@ function theorySlides(theory: LessonTheory): TheorySlide[] {
   return slides;
 }
 
-function chunkCount(current: string, lesson: Lesson, slides: TheorySlide[], quizLen: number) {
-  if (current === "theory") return Math.max(1, slides.length);
-  if (current === "words") return Math.max(1, lesson.vocab.length);
-  if (current === "lines") return Math.max(1, lesson.sentences.length);
-  if (current === "apply") return Math.max(1, lesson.theory.apply.length);
-  if (current === "quotes") return Math.max(1, (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6).length);
-  if (current === "quiz") return Math.max(1, quizLen);
-  return 1;
+function isRight(exercise: Exercise, given: string | string[] | undefined) {
+  if (exercise.type === "order") return Array.isArray(given) && sameTokens(given, exercise.answer);
+  return typeof given === "string" && norm(given) === norm(exercise.answer);
+}
+
+function hasAnswer(exercise: Exercise, given: string | string[] | undefined) {
+  if (exercise.type === "order") return Array.isArray(given) && given.length > 0;
+  return typeof given === "string" && given.trim().length > 0;
+}
+
+function drillFor(
+  current: string,
+  lesson: Lesson,
+  index: number,
+  support: Locale | null,
+  t: ReturnType<typeof useTranslations<"Learn">>,
+  quiz: Exercise[],
+): Exercise | null {
+  if (current === "quiz") return quiz[index] ?? null;
+  if (current === "words") {
+    const word = lesson.vocab[index];
+    if (!word) return null;
+    const words = lesson.vocab.map((item) => item.word);
+    if (support && index % 2 === 0) {
+      return makeMcq(
+        `${lesson.id}-word-mean-${index}`,
+        t("whatMeans", { word: word.word }),
+        word.meaning[support],
+        lesson.vocab.map((item) => item.meaning[support]),
+        `${lesson.id}-wm-${index}`,
+      );
+    }
+    const pickWord = makeMcq(
+      `${lesson.id}-word-pick-${index}`,
+      support ? t("whichWord", { gloss: word.meaning[support] }) : t("typeThis"),
+      word.word,
+      words,
+      `${lesson.id}-wp-${index}`,
+    );
+    if (pickWord) return pickWord;
+    return {
+      id: `${lesson.id}-word-type-${index}`,
+      type: "gap",
+      prompt: support ? word.meaning[support] : word.reading || word.sayVi || t("typeThis"),
+      answer: word.word,
+    };
+  }
+  if (current === "lines" || current === "quotes") {
+    const rows = current === "quotes" ? (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6) : lesson.sentences;
+    const row = rows[index];
+    if (!row) return null;
+    const texts = rows.map((item) => item.text);
+    const meaning = "meaning" in row ? row.meaning : undefined;
+    const prompt = support && meaning ? `${t("whichSentence")} · ${meaning[support]}` : t("whichSentence");
+    const choice = makeMcq(`${lesson.id}-${current}-pick-${index}`, prompt, row.text, texts, `${lesson.id}-${current}-${index}`);
+    if (choice) return choice;
+    const rawTokens = "tokens" in row && Array.isArray(row.tokens) ? row.tokens.filter((item): item is string => typeof item === "string") : [];
+    const tokens = rawTokens.length >= 2 ? rawTokens : row.text.split(/\s+/).filter(Boolean);
+    if (tokens.length >= 2) {
+      return {
+        id: `${lesson.id}-${current}-ord-${index}`,
+        type: "order",
+        prompt,
+        tokens: seededShuffle(tokens, `${lesson.id}-${current}-ord-${index}`),
+        answer: tokens,
+      };
+    }
+    return { id: `${lesson.id}-${current}-gap-${index}`, type: "gap", prompt: t("typeThis"), answer: row.text };
+  }
+  if (current === "apply") {
+    const item = lesson.theory.apply[index];
+    if (!item) return null;
+    const samples = lesson.theory.apply.map((row) => row.sample);
+    const choice = makeMcq(
+      `${lesson.id}-apply-${index}`,
+      item.prompt,
+      item.sample,
+      samples,
+      `${lesson.id}-ap-${index}`,
+    );
+    if (choice) return choice;
+    return { id: `${lesson.id}-apply-gap-${index}`, type: "gap", prompt: item.frame, answer: item.sample };
+  }
+  if (current === "listen") {
+    const lines = lesson.listening.lines.filter(Boolean);
+    return makeMcq(`${lesson.id}-listen-pick`, t("whichLine"), lines[0], lines, `${lesson.id}-listen`);
+  }
+  return null;
 }
 
 export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; locale: Locale; nextId?: string }) {
@@ -137,7 +229,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const [step, setStep] = useState(0);
   const [item, setItem] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
-  const [checked, setChecked] = useState(false);
+  const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>({});
+  const [passed, setPassed] = useState<Record<string, boolean>>({});
   const [done, setDone] = useState(false);
   const [showScript, setShowScript] = useState(false);
   const [slow, setSlow] = useState(false);
@@ -149,82 +242,24 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const quotes = (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6);
 
   const quiz = useMemo(
-    () =>
-      [
-        ...lesson.exercises,
-        ...extraExercises(lesson, support, (word) => t("whatMeans", { word })),
-      ].slice(0, 8),
+    () => [...lesson.exercises, ...extraExercises(lesson, support, (word) => t("whatMeans", { word }))].slice(0, 8),
     [lesson, support, t],
   );
 
-  const totalItems = chunkCount(current, lesson, slides, quiz.length);
+  const totalItems = (() => {
+    if (current === "theory") return Math.max(1, slides.length);
+    if (current === "words") return Math.max(1, lesson.vocab.length);
+    if (current === "lines") return Math.max(1, lesson.sentences.length);
+    if (current === "apply") return Math.max(1, lesson.theory.apply.length);
+    if (current === "quotes") return Math.max(1, quotes.length);
+    if (current === "quiz") return Math.max(1, quiz.length);
+    return 1;
+  })();
   const index = Math.min(item, totalItems - 1);
-
-  function resetInner() {
-    setItem(0);
-    setChecked(false);
-    setShowScript(false);
-  }
-
-  function changeStep(next: number) {
-    setStep(next);
-    resetInner();
-  }
-
-  const score = useMemo(() => {
-    let ok = 0;
-    for (const exercise of quiz) {
-      const given = answers[exercise.id];
-      if (exercise.type === "order") {
-        if (Array.isArray(given) && sameTokens(given, exercise.answer)) ok += 1;
-      } else if (typeof given === "string" && given.trim().toLowerCase() === exercise.answer.trim().toLowerCase()) {
-        ok += 1;
-      }
-    }
-    return { ok, total: quiz.length };
-  }, [answers, quiz]);
-
-  function say(text: string) {
-    speakText(text, lesson.speechLang, slow);
-  }
-
-  function finish() {
-    saveDone(lesson.track, lesson.id);
-    setDone(true);
-  }
-
-  function goBack() {
-    if (index > 0) {
-      setItem(index - 1);
-      setChecked(false);
-      return;
-    }
-    if (step > 0) changeStep(step - 1);
-  }
-
-  function goNext() {
-    if (current === "quiz") {
-      if (!checked) {
-        setChecked(true);
-        return;
-      }
-      if (index < totalItems - 1) {
-        setItem(index + 1);
-        setChecked(false);
-        return;
-      }
-      if (!done) {
-        finish();
-        return;
-      }
-      return;
-    }
-    if (index < totalItems - 1) {
-      setItem(index + 1);
-      return;
-    }
-    if (step < steps.length - 1) changeStep(step + 1);
-  }
+  const drill = drillFor(current, lesson, index, support, t, quiz);
+  const given = drill ? answers[drill.id] : undefined;
+  const checked = drill ? Boolean(checkedMap[drill.id]) : false;
+  const correct = drill ? isRight(drill, given) : true;
 
   function promptOf(exercise: Exercise) {
     if (exercise.type === "mcq" && exercise.promptKey === "whichPattern") return t("whichPattern");
@@ -245,40 +280,126 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     return exercise.prompt;
   }
 
-  const quizDone = current === "quiz" && checked && index === totalItems - 1 && done;
-  const nextLabel =
-    current === "quiz" && !checked
-      ? t("check")
-      : current === "quiz" && index < totalItems - 1
-        ? t("nextItem")
-        : current === "quiz" && !done
-          ? t("finish")
-          : index < totalItems - 1
-            ? t("nextItem")
-            : t("continue");
+  function railLabel(stepName: string, i: number) {
+    if (stepName === "words") return lesson.vocab[i]?.word ?? `${i + 1}`;
+    if (stepName === "lines") return lesson.sentences[i]?.text ?? `${i + 1}`;
+    if (stepName === "quotes") return quotes[i]?.text ?? `${i + 1}`;
+    if (stepName === "apply") return lesson.theory.apply[i]?.prompt ?? `${i + 1}`;
+    if (stepName === "quiz") return `${i + 1}`;
+    if (stepName === "theory") return String(i + 1);
+    if (stepName === "listen") return t("listen");
+    if (stepName === "game") return t("game");
+    return String(i + 1);
+  }
 
-  const slide = slides[index];
+  function countFor(stepName: string) {
+    if (stepName === "theory") return Math.max(1, slides.length);
+    if (stepName === "words") return Math.max(1, lesson.vocab.length);
+    if (stepName === "lines") return Math.max(1, lesson.sentences.length);
+    if (stepName === "apply") return Math.max(1, lesson.theory.apply.length);
+    if (stepName === "quotes") return Math.max(1, quotes.length);
+    if (stepName === "quiz") return Math.max(1, quiz.length);
+    return 1;
+  }
+
+  function keyOf(stepIndex: number, i: number) {
+    return `${steps[stepIndex]}:${i}`;
+  }
+
+  function say(text: string) {
+    speakText(text, lesson.speechLang, slow);
+  }
+
+  function finish() {
+    saveDone(lesson.track, lesson.id);
+    setDone(true);
+  }
+
+  function goTo(nextStep: number, nextItem: number) {
+    setStep(nextStep);
+    setItem(nextItem);
+    setShowScript(false);
+  }
+
+  function checkNow() {
+    if (!drill || !hasAnswer(drill, given)) return;
+    setCheckedMap((prev) => ({ ...prev, [drill.id]: true }));
+    if (isRight(drill, given)) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
+  }
+
+  function goNext() {
+    if (drill && !checked) return;
+    if (drill && checked) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
+    if (index < totalItems - 1) {
+      setItem(index + 1);
+      return;
+    }
+    if (step < steps.length - 1) {
+      goTo(step + 1, 0);
+      return;
+    }
+    if (!done) finish();
+  }
+
+  function goBack() {
+    if (index > 0) {
+      setItem(index - 1);
+      return;
+    }
+    if (step > 0) goTo(step - 1, countFor(steps[step - 1]) - 1);
+  }
+
+  const quizDone = current === "quiz" && done;
+  const canCheck = Boolean(drill && !checked && hasAnswer(drill, given));
+  const canNext = !drill || checked;
   const word = lesson.vocab[index];
   const line = lesson.sentences[index];
   const apply = lesson.theory.apply[index];
   const quote = quotes[index];
-  const exercise = quiz[index];
+  const slide = slides[index];
+  const reveal = !drill || checked;
+
+  const score = useMemo(() => {
+    let ok = 0;
+    for (const exercise of quiz) {
+      if (isRight(exercise, answers[exercise.id])) ok += 1;
+    }
+    return { ok, total: quiz.length };
+  }, [answers, quiz]);
 
   return (
-    <div className="learn-desk mx-auto max-w-xl">
-      <div className="mb-4 flex gap-1.5">
-        {steps.map((itemStep, i) => (
-          <button
-            key={itemStep}
-            type="button"
-            className={`learn-dot ${i === step ? "is-active" : i < step ? "is-done" : ""}`}
-            onClick={() => changeStep(i)}
-            aria-label={t(itemStep)}
-          />
-        ))}
-      </div>
+    <div className="learn-desk mx-auto grid max-w-5xl gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
+      <aside className="learn-rail">
+        <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("learnedList")}</p>
+        <ol className="mt-3 grid gap-4">
+          {steps.map((stepName, stepIndex) => (
+            <li key={stepName}>
+              <p className="text-xs font-semibold tracking-[0.12em] text-sky-700 uppercase">{t(stepName)}</p>
+              <ul className="mt-1.5 grid gap-1">
+                {Array.from({ length: countFor(stepName) }, (_, i) => {
+                  const key = keyOf(stepIndex, i);
+                  const here = stepIndex === step && i === index;
+                  const learned = Boolean(passed[key]);
+                  return (
+                    <li key={key}>
+                      <button
+                        type="button"
+                        className={`learn-rail-item ${here ? "is-active" : ""} ${learned ? "is-done" : ""}`}
+                        onClick={() => goTo(stepIndex, i)}
+                      >
+                        <span className="learn-rail-mark">{learned ? "✓" : here ? "•" : i + 1}</span>
+                        <span className="truncate">{railLabel(stepName, i)}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </aside>
 
-      <article className="glass-tile p-0">
+      <article className="glass-tile min-w-0 p-0">
         <div className="px-5 py-5 sm:px-7">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
             {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
@@ -287,35 +408,31 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             {lesson.title[lesson.track]}
           </h1>
           {support ? <p className="mt-1 text-sm text-ink-soft">{lesson.title[support]}</p> : null}
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" className={slow ? "btn-primary py-2" : "btn-ghost py-2"} onClick={() => setSlow((v) => !v)}>
-              {slow ? t("slow") : t("normal")}
-            </button>
-          </div>
+          <button
+            type="button"
+            className={slow ? "btn-primary mt-3 py-2" : "btn-ghost mt-3 py-2"}
+            onClick={() => setSlow((value) => !value)}
+          >
+            {slow ? t("slow") : t("normal")}
+          </button>
         </div>
 
-        <div className="px-5 pb-5 sm:px-7">
+        <div className="px-5 pb-6 sm:px-7">
           {current === "theory" && slide ? (
-            <TheorySlideView
-              slide={slide}
-              theory={lesson.theory}
-              t={t}
-              slow={slow}
-              lang={lesson.speechLang}
-              onSay={say}
-            />
+            <TheorySlideView slide={slide} theory={lesson.theory} t={t} slow={slow} lang={lesson.speechLang} onSay={say} />
           ) : null}
 
           {current === "words" && word ? (
             <FocusCard
               title={word.word}
+              speak={word.word}
               reading={word.reading}
               sayVi={word.sayVi}
-              meaning={support ? word.meaning[support] : undefined}
-              note={word.usage ? `${t("howUsed")}: ${word.usage}` : undefined}
+              meaning={reveal && support ? word.meaning[support] : undefined}
+              note={reveal && word.usage ? `${t("howUsed")}: ${word.usage}` : undefined}
+              hideText={!reveal && Boolean(drill && drill.type === "mcq" && drill.answer === word.word)}
               locale={locale}
               t={t}
-              onSay={() => say(word.word)}
               lang={lesson.speechLang}
               slow={slow}
             />
@@ -323,13 +440,12 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
           {current === "lines" && line ? (
             <FocusCard
-              title={line.text}
-              reading={line.reading}
-              sayVi={line.sayVi}
-              meaning={support ? line.meaning[support] : undefined}
+              title={reveal ? line.text : "……"}
+              speak={line.text}
+              reading={reveal ? line.reading : undefined}
+              sayVi={reveal ? line.sayVi : undefined}
               locale={locale}
               t={t}
-              onSay={() => say(line.text)}
               lang={lesson.speechLang}
               slow={slow}
             />
@@ -340,12 +456,16 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               <p className="text-sm text-ink-soft">{t("applyLead")}</p>
               <p className="mt-3 font-semibold">{apply.prompt}</p>
               <p className="font-display mt-2 text-xl leading-7 text-sky-700">{apply.frame}</p>
-              <div className="mt-3 flex items-center justify-between gap-3">
-                <button type="button" className="text-left text-sm text-sky-700" onClick={() => say(apply.sample)}>
-                  {t("sample")}: {apply.sample}
-                </button>
+              {reveal ? (
+                <div className="mt-3 flex items-center justify-between gap-3">
+                  <button type="button" className="text-left text-sm text-sky-700" onClick={() => say(apply.sample)}>
+                    {t("sample")}: {apply.sample}
+                  </button>
+                  <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                </div>
+              ) : (
                 <SpeakButton text={apply.sample} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-              </div>
+              )}
             </div>
           ) : null}
 
@@ -356,18 +476,17 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                   {t("playAudio")}
                 </button>
                 <SpeakButton text={lesson.listening.text} lang={lesson.speechLang} slow={slow} label={t("hear")} />
-                <button type="button" className="btn-ghost" onClick={() => setShowScript((v) => !v)}>
-                  {showScript ? t("hideTranscript") : t("showTranscript")}
-                </button>
+                {checked ? (
+                  <button type="button" className="btn-ghost" onClick={() => setShowScript((value) => !value)}>
+                    {showScript ? t("hideTranscript") : t("showTranscript")}
+                  </button>
+                ) : null}
               </div>
-              {showScript ? (
+              {showScript && checked ? (
                 <ul className="mt-4 grid gap-2">
                   {lesson.listening.lines.slice(0, 4).map((textLine) => (
-                    <li key={textLine} className="flex items-start justify-between gap-2 text-sm leading-6">
-                      <button type="button" className="text-left font-semibold" onClick={() => say(textLine)}>
-                        {textLine}
-                      </button>
-                      <SpeakButton text={textLine} lang={lesson.speechLang} slow={slow} label={t("hear")} />
+                    <li key={textLine} className="text-sm font-semibold leading-6">
+                      {textLine}
                     </li>
                   ))}
                 </ul>
@@ -379,13 +498,12 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
           {current === "quotes" && quote ? (
             <FocusCard
-              title={quote.text}
-              reading={quote.reading}
-              sayVi={quote.sayVi}
-              meaning={support ? quote.meaning[support] : undefined}
+              title={reveal ? quote.text : "……"}
+              speak={quote.text}
+              reading={reveal ? quote.reading : undefined}
+              sayVi={reveal ? quote.sayVi : undefined}
               locale={locale}
               t={t}
-              onSay={() => say(quote.text)}
               lang={lesson.speechLang}
               slow={slow}
               lead={t("quotesLead")}
@@ -405,28 +523,28 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             </div>
           ) : null}
 
-          {current === "quiz" && exercise ? (
-            <div>
-              <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">
-                {t("questionOf", { n: index + 1, total: quiz.length })}
-              </p>
-              <p className="mt-2 font-semibold leading-7">{promptOf(exercise)}</p>
+          {drill ? (
+            <div className="mt-5">
+              <p className="font-semibold leading-7">{promptOf(drill)}</p>
               <ExerciseField
-                exercise={exercise}
-                value={answers[exercise.id]}
+                exercise={drill}
+                value={given}
                 disabled={checked}
-                onChange={(value) => setAnswers((prev) => ({ ...prev, [exercise.id]: value }))}
+                onChange={(value) => setAnswers((prev) => ({ ...prev, [drill.id]: value }))}
               />
-              {checked && index === totalItems - 1 ? (
-                <p className="mt-3 text-sm font-semibold text-sky-700">
-                  {t("score", { ok: score.ok, total: score.total })}
+              {checked ? (
+                <p className={`mt-3 text-sm font-semibold ${correct ? "text-sky-700" : "text-ink-soft"}`}>
+                  {correct ? t("right") : t("wrong", { answer: Array.isArray(drill.answer) ? drill.answer.join(" ") : drill.answer })}
                 </p>
-              ) : null}
+              ) : (
+                <p className="mt-3 text-sm text-ink-soft">{t("needAnswer")}</p>
+              )}
             </div>
           ) : null}
 
           {quizDone ? (
             <div className="mt-5 flex flex-wrap gap-3">
+              <p className="w-full font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
               <Link href={`/learn/${lesson.track}`} className="btn-ghost">
                 {t("backTrack")}
               </Link>
@@ -441,13 +559,32 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               )}
             </div>
           ) : (
-            <div className="mt-6 flex justify-between gap-3">
+            <div className="mt-6 flex flex-wrap justify-between gap-3">
               <button type="button" className="btn-ghost" disabled={step === 0 && index === 0} onClick={goBack}>
                 {t("back")}
               </button>
-              <button type="button" className="btn-primary" onClick={goNext}>
-                {nextLabel}
-              </button>
+              <div className="flex flex-wrap gap-2">
+                {drill && !checked ? (
+                  <button type="button" className="btn-primary" disabled={!canCheck} onClick={checkNow}>
+                    {t("check")}
+                  </button>
+                ) : null}
+                {drill && checked && !correct ? (
+                  <button
+                    type="button"
+                    className="btn-ghost"
+                    onClick={() => {
+                      setCheckedMap((prev) => ({ ...prev, [drill.id]: false }));
+                      setAnswers((prev) => ({ ...prev, [drill.id]: drill.type === "order" ? [] : "" }));
+                    }}
+                  >
+                    {t("retry")}
+                  </button>
+                ) : null}
+                <button type="button" className="btn-primary" disabled={!canNext} onClick={goNext}>
+                  {step === steps.length - 1 && index === totalItems - 1 ? t("finish") : t("nextItem")}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -458,46 +595,55 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
 function FocusCard({
   title,
+  speak,
   reading,
   sayVi,
   meaning,
   note,
   lead,
+  hideText,
   locale,
   t,
-  onSay,
   lang,
   slow,
 }: {
   title: string;
+  speak: string;
   reading?: string;
   sayVi?: string;
   meaning?: string;
   note?: string;
   lead?: string;
+  hideText?: boolean;
   locale: Locale;
   t: ReturnType<typeof useTranslations<"Learn">>;
-  onSay: () => void;
   lang: string;
   slow: boolean;
 }) {
+  const hidden = hideText || title === "……";
   return (
     <div>
       {lead ? <p className="mb-3 text-sm leading-6 text-ink-soft">{lead}</p> : null}
       <div className="control-tile min-h-0">
         <div className="flex items-start justify-between gap-3">
-          <button type="button" className="text-left" onClick={onSay}>
-            <span className="font-display text-2xl font-semibold leading-snug text-sky-700">{title}</span>
+          <button type="button" className="text-left" onClick={() => speakText(speak, lang, slow)}>
+            <span className="font-display text-2xl font-semibold leading-snug text-sky-700">
+              {hidden ? "……" : title}
+            </span>
           </button>
-          <SpeakButton text={title} lang={lang} slow={slow} label={t("hear")} />
+          <SpeakButton text={speak} lang={lang} slow={slow} label={t("hear")} />
         </div>
-        <Phonetic
-          reading={reading}
-          sayVi={sayVi}
-          locale={locale}
-          phoneticLabel={t("phonetic")}
-          sayViLabel={t("sayViLabel")}
-        />
+        {hidden ? (
+          <p className="mt-2 text-sm text-ink-soft">{t("hearFirst")}</p>
+        ) : (
+          <Phonetic
+            reading={reading}
+            sayVi={sayVi}
+            locale={locale}
+            phoneticLabel={t("phonetic")}
+            sayViLabel={t("sayViLabel")}
+          />
+        )}
         {meaning ? <p className="mt-2 text-sm text-ink-soft">{meaning}</p> : null}
         {note ? <p className="mt-2 text-sm text-sky-700">{note}</p> : null}
       </div>
@@ -557,7 +703,6 @@ function TheorySlideView({
             <span className="block font-display text-lg font-semibold text-sky-700">{pattern.form}</span>
             <span className="mt-1 block text-sm text-ink-soft">{pattern.use}</span>
             <span className="mt-2 block leading-7">{pattern.example}</span>
-            {pattern.note ? <span className="mt-1 block text-sm text-sky-700">{pattern.note}</span> : null}
           </button>
           <SpeakButton text={pattern.example} lang={lang} slow={slow} label={t("hear")} />
         </div>
@@ -570,11 +715,8 @@ function TheorySlideView({
         <p className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase opacity-70">{t(slide.titleKey)}</p>
         <ul className="mt-2 grid gap-2">
           {slide.items.map((row) => (
-            <li key={row} className="flex items-start justify-between gap-3 leading-7">
-              <button type="button" className="text-left" onClick={() => onSay(row)}>
-                {row}
-              </button>
-              <SpeakButton text={row} lang={lang} slow={slow} label={t("hear")} />
+            <li key={row} className="leading-7">
+              {row}
             </li>
           ))}
         </ul>
@@ -642,6 +784,7 @@ function ExerciseField({
         value={typeof value === "string" ? value : ""}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
+        placeholder="…"
         className="mt-3 w-full rounded-2xl border border-white/70 bg-white/70 px-4 py-3 text-sm"
       />
     );
