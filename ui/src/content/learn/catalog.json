@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-08-27T01:57:54.458Z",
+  "generatedAt": "2026-08-27T03:40:46.927Z",
   "note": "Original Linlin path. Sounds first. Five steps per topic. Not official exam papers.",
   "tracks": [
     {
       "id": "vi",
       "lessonCount": 260,
-      "exerciseCount": 2872,
+      "exerciseCount": 2976,
       "units": [
         {
           "id": "sounds",
@@ -15,6 +15,12 @@
             "en": "Sounds and reading",
             "zh": "读音",
             "th": "เสียงและการอ่าน"
+          },
+          "goal": {
+            "vi": "Học nghe–đọc trước khi vào câu đời sống.",
+            "en": "Hear and read the script before daily sentences.",
+            "zh": "先听、先认读，再进入生活句子。",
+            "th": "ฟังและอ่านก่อนเข้าประโยคชีวิต"
           },
           "lessonIds": [
             "vi-sounds-teach-1",
@@ -33,6 +39,12 @@
             "zh": "问候",
             "th": "ทักทาย"
           },
+          "goal": {
+            "vi": "Chào, xưng tên, nói cảm ơn và xin lỗi.",
+            "en": "Greet, say your name, thank and apologise.",
+            "zh": "打招呼、报名字、说谢谢和对不起。",
+            "th": "ทักทาย บอกชื่อ ขอบคุณ และขอโทษ"
+          },
           "lessonIds": [
             "vi-greet-teach-1",
             "vi-greet-words-1",
@@ -49,6 +61,12 @@
             "en": "Numbers",
             "zh": "数字",
             "th": "ตัวเลข"
+          },
+          "goal": {
+            "vi": "Đếm, hỏi số lượng, nói giá đơn giản.",
+            "en": "Count, ask how many, say a simple price.",
+            "zh": "数数、问数量、说简单价格。",
+            "th": "นับ ถามจำนวน พูดราคาแบบง่าย"
           },
           "lessonIds": [
             "vi-numbers-teach-1",
@@ -67,6 +85,12 @@
             "zh": "时间和日子",
             "th": "เวลาและวัน"
           },
+          "goal": {
+            "vi": "Nói giờ, hôm nay, ngày mai, và hẹn giờ.",
+            "en": "Say the time, today, tomorrow, and make a time.",
+            "zh": "说时间、今天、明天，并约定时间。",
+            "th": "พูดเวลา วันนี้ พรุ่งนี้ และนัดเวลา"
+          },
           "lessonIds": [
             "vi-time-teach-1",
             "vi-time-words-1",
@@ -83,6 +107,12 @@
             "en": "Café",
             "zh": "咖啡馆",
             "th": "คาเฟ่"
+          },
+          "goal": {
+            "vi": "Xin bàn, gọi đồ uống, thêm đường.",
+            "en": "Ask for a table, order a drink, extra sugar.",
+            "zh": "要桌子、点饮料、加糖。",
+            "th": "ขอโต๊ะ สั่งเครื่องดื่ม ขอน้ำตาล"
           },
           "lessonIds": [
             "vi-cafe-teach-1",
@@ -101,6 +131,12 @@
             "zh": "饮食",
             "th": "อาหาร"
           },
+          "goal": {
+            "vi": "Gọi món, nói khẩu vị, xin thêm.",
+            "en": "Order food, say taste, ask for more.",
+            "zh": "点菜、说口味、再要一份。",
+            "th": "สั่งอาหาร บอกรส ขอเพิ่ม"
+          },
           "lessonIds": [
             "vi-food-teach-1",
             "vi-food-words-1",
@@ -117,6 +153,12 @@
             "en": "Market",
             "zh": "市场",
             "th": "ตลาด"
+          },
+          "goal": {
+            "vi": "Hỏi còn hàng, hỏi giá, xin túi.",
+            "en": "Ask if it is left, ask the price, take a bag.",
+            "zh": "问还有没有、问价、拿袋子。",
+            "th": "ถามว่ายังมีไหม ถามราคา รับถุง"
           },
           "lessonIds": [
             "vi-market-teach-1",
@@ -135,6 +177,12 @@
             "zh": "家",
             "th": "บ้าน"
           },
+          "goal": {
+            "vi": "Tên phòng, đồ trong nhà, lời mời vào.",
+            "en": "Name rooms, things at home, invite someone in.",
+            "zh": "房间、家里的东西、请进。",
+            "th": "ชื่อห้อง ของในบ้าน เชิญเข้ามา"
+          },
           "lessonIds": [
             "vi-home-teach-1",
             "vi-home-words-1",
@@ -151,6 +199,12 @@
             "en": "Messages",
             "zh": "短信",
             "th": "ข้อความ"
+          },
+          "goal": {
+            "vi": "Xin lỗi vì trễ, hẹn giờ, gửi vị trí.",
+            "en": "Apologise for being late, set a time, send a pin.",
+            "zh": "为迟到道歉、约时间、发定位。",
+            "th": "ขอโทษที่สาย นัดเวลา ส่งพิกัด"
           },
           "lessonIds": [
             "vi-messages-teach-1",
@@ -169,6 +223,12 @@
             "zh": "家庭",
             "th": "ครอบครัว"
           },
+          "goal": {
+            "vi": "Nói bố mẹ, anh chị em, và người nhà.",
+            "en": "Name parents, siblings, and family.",
+            "zh": "说父母、兄弟姐妹和家人。",
+            "th": "พูดถึงพ่อแม่ พี่น้อง และครอบครัว"
+          },
           "lessonIds": [
             "vi-family-teach-1",
             "vi-family-words-1",
@@ -185,6 +245,12 @@
             "en": "Clothes",
             "zh": "衣服",
             "th": "เสื้อผ้า"
+          },
+          "goal": {
+            "vi": "Nói áo, quần, giày, mặc gì hôm nay.",
+            "en": "Name shirts, trousers, shoes, and what you wear today.",
+            "zh": "说衣服、裤子、鞋，以及今天穿什么。",
+            "th": "พูดเสื้อ กางเกง รองเท้า และวันนี้ใส่อะไร"
           },
           "lessonIds": [
             "vi-clothes-teach-1",
@@ -203,6 +269,12 @@
             "zh": "天气",
             "th": "อากาศ"
           },
+          "goal": {
+            "vi": "Nói nắng, mưa, nóng, lạnh, và mang theo gì.",
+            "en": "Say sun, rain, hot, cold, and what to bring.",
+            "zh": "说晴、雨、热、冷，以及要带什么。",
+            "th": "พูดแดด ฝน ร้อน หนาว และต้องพกอะไร"
+          },
           "lessonIds": [
             "vi-weather-teach-1",
             "vi-weather-words-1",
@@ -219,6 +291,12 @@
             "en": "Feelings",
             "zh": "心情",
             "th": "ความรู้สึก"
+          },
+          "goal": {
+            "vi": "Nói vui, mệt, lo, và hỏi người khác thế nào.",
+            "en": "Say happy, tired, worried, and ask how someone feels.",
+            "zh": "说开心、累、担心，并问别人怎么样。",
+            "th": "พูดดีใจ เหนื่อย กังวล และถามคนอื่นเป็นอย่างไร"
           },
           "lessonIds": [
             "vi-feelings-teach-1",
@@ -237,6 +315,12 @@
             "zh": "颜色",
             "th": "สี"
           },
+          "goal": {
+            "vi": "Nói màu đồ, hỏi màu nào, chọn màu mình thích.",
+            "en": "Name colours, ask which colour, pick one you like.",
+            "zh": "说颜色、问哪个颜色、选自己喜欢的。",
+            "th": "พูดสี ถามสีไหน เลือกสีที่ชอบ"
+          },
           "lessonIds": [
             "vi-colors-teach-1",
             "vi-colors-words-1",
@@ -253,6 +337,12 @@
             "en": "Daily routine",
             "zh": "日常生活",
             "th": "ชีวิตประจำวัน"
+          },
+          "goal": {
+            "vi": "Nói dậy, ăn, đi làm, về nhà, ngủ.",
+            "en": "Talk about waking, eating, going out, coming home, sleeping.",
+            "zh": "说起床、吃饭、出门、回家、睡觉。",
+            "th": "พูดเรื่องตื่น กิน ออกไป กลับบ้าน นอน"
           },
           "lessonIds": [
             "vi-daily-teach-1",
@@ -271,6 +361,12 @@
             "zh": "购物",
             "th": "การซื้อของ"
           },
+          "goal": {
+            "vi": "Hỏi còn hàng, đổi size, trả hàng, xin hóa đơn.",
+            "en": "Ask for stock, change size, return an item, ask for a receipt.",
+            "zh": "问有没有货、换尺码、退货、要发票。",
+            "th": "ถามว่ามีของไหม เปลี่ยนไซซ์ คืนของ ขอใบเสร็จ"
+          },
           "lessonIds": [
             "vi-shopping-teach-1",
             "vi-shopping-words-1",
@@ -287,6 +383,12 @@
             "en": "Restaurant",
             "zh": "餐馆",
             "th": "ร้านอาหาร"
+          },
+          "goal": {
+            "vi": "Đặt bàn, gọi món, xin không cay, xin hóa đơn.",
+            "en": "Book a table, order, ask for mild spice, ask for the bill.",
+            "zh": "订座、点菜、不要辣、买单。",
+            "th": "จองโต๊ะ สั่งอาหาร ขอไม่เผ็ด ขอคิดเงิน"
           },
           "lessonIds": [
             "vi-restaurant-teach-1",
@@ -305,6 +407,12 @@
             "zh": "酒店",
             "th": "โรงแรม"
           },
+          "goal": {
+            "vi": "Nhận phòng, xin thêm khăn, hỏi wifi, trả phòng.",
+            "en": "Check in, ask for towels, ask for wifi, check out.",
+            "zh": "入住、要毛巾、问无线网、退房。",
+            "th": "เช็กอิน ขอผ้าขนหนู ถามไวไฟ เช็กเอาต์"
+          },
           "lessonIds": [
             "vi-hotel-teach-1",
             "vi-hotel-words-1",
@@ -321,6 +429,12 @@
             "en": "Phone",
             "zh": "手机",
             "th": "โทรศัพท์"
+          },
+          "goal": {
+            "vi": "Gọi, nhắn, hết pin, hỏi wifi, nói máy hỏng.",
+            "en": "Call, text, low battery, ask for wifi, say the phone is broken.",
+            "zh": "打电话、发信息、没电、问无线网、说手机坏了。",
+            "th": "โทร ส่งข้อความ แบตหมด ถามไวไฟ บอกว่าเครื่องพัง"
           },
           "lessonIds": [
             "vi-phone-teach-1",
@@ -339,6 +453,12 @@
             "zh": "爱好",
             "th": "งานอดิเรก"
           },
+          "goal": {
+            "vi": "Nói mình thích làm gì lúc rảnh.",
+            "en": "Say what you like to do in free time.",
+            "zh": "说空闲时喜欢做什么。",
+            "th": "พูดว่าว่างๆ ชอบทำอะไร"
+          },
           "lessonIds": [
             "vi-hobbies-teach-1",
             "vi-hobbies-words-1",
@@ -355,6 +475,12 @@
             "en": "Sports",
             "zh": "运动",
             "th": "กีฬา"
+          },
+          "goal": {
+            "vi": "Nói môn mình chơi, tập, và hỏi người khác.",
+            "en": "Name a sport, say you train, and ask what others play.",
+            "zh": "说自己打球、锻炼，并问别人。",
+            "th": "พูดกีฬาที่เล่น ออกกำลัง และถามคนอื่น"
           },
           "lessonIds": [
             "vi-sports-teach-1",
@@ -373,6 +499,12 @@
             "zh": "钱",
             "th": "เงิน"
           },
+          "goal": {
+            "vi": "Nói giá, chuyển khoản, đổi tiền, xin hóa đơn.",
+            "en": "Talk about prices, transfers, changing money, asking for a receipt.",
+            "zh": "说价格、转账、换钱、要收据。",
+            "th": "พูดราคา โอนเงิน แลกเงิน ขอใบเสร็จ"
+          },
           "lessonIds": [
             "vi-money-teach-1",
             "vi-money-words-1",
@@ -389,6 +521,12 @@
             "en": "Cooking",
             "zh": "做饭",
             "th": "ทำอาหาร"
+          },
+          "goal": {
+            "vi": "Nói nguyên liệu, cắt, nêm, và mời ăn.",
+            "en": "Name ingredients, cutting, seasoning, and inviting someone to eat.",
+            "zh": "说食材、切、调味，并请客吃饭。",
+            "th": "พูดวัตถุดิบ หั่น ปรุง และชวนกิน"
           },
           "lessonIds": [
             "vi-cooking-teach-1",
@@ -407,6 +545,12 @@
             "zh": "打扫",
             "th": "เก็บบ้าน"
           },
+          "goal": {
+            "vi": "Nói quét, lau, giặt, và nhà sạch hay bẩn.",
+            "en": "Talk about sweeping, wiping, laundry, and a clean or dirty home.",
+            "zh": "说扫地、擦、洗衣服，以及家里干净还是脏。",
+            "th": "พูดกวาด เช็ด ซักผ้า และบ้านสะอาดหรือสกปรก"
+          },
           "lessonIds": [
             "vi-cleaning-teach-1",
             "vi-cleaning-words-1",
@@ -423,6 +567,12 @@
             "en": "Pets",
             "zh": "宠物",
             "th": "สัตว์เลี้ยง"
+          },
+          "goal": {
+            "vi": "Nói chó mèo, cho ăn, dắt đi, và thú cưng bệnh.",
+            "en": "Talk about dogs and cats, feeding, walking, and a sick pet.",
+            "zh": "说猫狗、喂食、遛狗，以及宠物生病。",
+            "th": "พูดแมวหมา ให้อาหาร พาเดิน และสัตว์เลี้ยงป่วย"
           },
           "lessonIds": [
             "vi-pets-teach-1",
@@ -441,6 +591,12 @@
             "zh": "节日",
             "th": "วันหยุด"
           },
+          "goal": {
+            "vi": "Nói nghỉ lễ, tặng quà, chúc mừng, và kế hoạch.",
+            "en": "Talk about days off, gifts, wishes, and plans.",
+            "zh": "说放假、送礼、祝福和计划。",
+            "th": "พูดวันหยุด ของขวัญ คำอวยพร และแผน"
+          },
           "lessonIds": [
             "vi-holidays-teach-1",
             "vi-holidays-words-1",
@@ -457,6 +613,12 @@
             "en": "Neighbours",
             "zh": "邻居",
             "th": "เพื่อนบ้าน"
+          },
+          "goal": {
+            "vi": "Chào hàng xóm, xin lỗi vì ồn, nhờ giữ đồ.",
+            "en": "Greet neighbours, apologise for noise, ask them to keep a parcel.",
+            "zh": "打招呼、为噪音道歉、请帮忙收快递。",
+            "th": "ทักเพื่อนบ้าน ขอโทษที่เสียงดัง ฝากพัสดุ"
           },
           "lessonIds": [
             "vi-neighbors-teach-1",
@@ -475,6 +637,12 @@
             "zh": "网络和设备",
             "th": "เน็ตและเครื่อง"
           },
+          "goal": {
+            "vi": "Nói wifi chậm, tải tệp, họp online, và bảo mật đơn giản.",
+            "en": "Talk about slow wifi, downloads, online meetings, and simple privacy.",
+            "zh": "说网慢、下载、线上开会，以及简单隐私。",
+            "th": "พูดเน็ตช้า ดาวน์โหลด ประชุมออนไลน์ และความเป็นส่วนตัวแบบง่าย"
+          },
           "lessonIds": [
             "vi-internet-teach-1",
             "vi-internet-words-1",
@@ -491,6 +659,12 @@
             "en": "School",
             "zh": "学校",
             "th": "โรงเรียน"
+          },
+          "goal": {
+            "vi": "Nói lớp, bài tập, giáo viên, và xin nghỉ.",
+            "en": "Talk about class, homework, teachers, and asking for a day off.",
+            "zh": "说课、作业、老师，以及请假。",
+            "th": "พูดห้องเรียน การบ้าน ครู และขอลา"
           },
           "lessonIds": [
             "vi-school-teach-1",
@@ -509,6 +683,12 @@
             "zh": "外貌",
             "th": "รูปร่างหน้าตา"
           },
+          "goal": {
+            "vi": "Tả tóc, cao thấp, và người đang mặc gì.",
+            "en": "Describe hair, height, and what someone is wearing.",
+            "zh": "说头发、高矮、以及穿着。",
+            "th": "บรรยายผม ส่วนสูง และว่าใครใส่อะไร"
+          },
           "lessonIds": [
             "vi-appearance-teach-1",
             "vi-appearance-words-1",
@@ -525,6 +705,12 @@
             "en": "Forms and papers",
             "zh": "表格证件",
             "th": "แบบฟอร์มและเอกสาร"
+          },
+          "goal": {
+            "vi": "Điền tên, ngày sinh, địa chỉ, số giấy tờ.",
+            "en": "Fill in name, date of birth, address, ID number.",
+            "zh": "填姓名、生日、地址、证件号。",
+            "th": "กรอกชื่อ วันเกิด ที่อยู่ เลขเอกสาร"
           },
           "lessonIds": [
             "vi-forms-teach-1",
@@ -543,6 +729,12 @@
             "zh": "出租车",
             "th": "แท็กซี่"
           },
+          "goal": {
+            "vi": "Gọi xe, nói điểm đến, xin đi meter, xuống xe.",
+            "en": "Call a car, say the destination, ask for the meter, get out.",
+            "zh": "叫车、说目的地、打表、下车。",
+            "th": "เรียกรถ บอกที่หมาย ขอมิเตอร์ ลงรถ"
+          },
           "lessonIds": [
             "vi-taxi-teach-1",
             "vi-taxi-words-1",
@@ -559,6 +751,12 @@
             "en": "Airport",
             "zh": "机场",
             "th": "สนามบิน"
+          },
+          "goal": {
+            "vi": "Check-in, hành lý, cửa bay, hộ chiếu, chậm chuyến.",
+            "en": "Check in, luggage, gate, passport, a delay.",
+            "zh": "值机、行李、登机口、护照、晚点。",
+            "th": "เช็กอิน กระเป๋า ประตูขึ้นเครื่อง พาสปอร์ต ไฟลต์ดีเลย์"
           },
           "lessonIds": [
             "vi-airport-teach-1",
@@ -577,6 +775,12 @@
             "zh": "紧急情况",
             "th": "เหตุฉุกเฉิน"
           },
+          "goal": {
+            "vi": "Gọi giúp, nói chỗ, mất đồ, tai nạn nhỏ.",
+            "en": "Call for help, say the place, lost item, a small accident.",
+            "zh": "求救、说地点、丢东西、小事故。",
+            "th": "เรียกช่วย บอกที่ ของหาย อุบัติเหตุเล็ก"
+          },
           "lessonIds": [
             "vi-emergency-teach-1",
             "vi-emergency-words-1",
@@ -593,6 +797,12 @@
             "en": "Renting",
             "zh": "租房",
             "th": "เช่าบ้าน"
+          },
+          "goal": {
+            "vi": "Hỏi giá thuê, cọc, hóa đơn điện nước, hợp đồng.",
+            "en": "Ask rent, deposit, utility bills, the contract.",
+            "zh": "问租金、押金、水电、合同。",
+            "th": "ถามค่าเช่า ค่ามัดจำ ค่าน้ำไฟ สัญญา"
           },
           "lessonIds": [
             "vi-rent-teach-1",
@@ -611,6 +821,12 @@
             "zh": "电影和出门",
             "th": "หนังและการออกไป"
           },
+          "goal": {
+            "vi": "Mua vé phim, chọn giờ, nói thể loại, hẹn đi chơi.",
+            "en": "Buy a ticket, pick a time, name a genre, arrange a night out.",
+            "zh": "买票、选场次、说类型、约出门。",
+            "th": "ซื้อตั๋วหนัง เลือกเวลา บอกแนว นัดออกไป"
+          },
           "lessonIds": [
             "vi-cinema-teach-1",
             "vi-cinema-words-1",
@@ -627,6 +843,12 @@
             "en": "Seasons and climate",
             "zh": "季节气候",
             "th": "ฤดูและอากาศ"
+          },
+          "goal": {
+            "vi": "Nói bốn mùa, mưa nắng, và mặc gì theo mùa.",
+            "en": "Name seasons, rain and sun, and what to wear.",
+            "zh": "说四季、晴雨，以及按季节穿什么。",
+            "th": "พูดสี่ฤดู ฝนแดด และว่าฤดูไหนใส่อะไร"
           },
           "lessonIds": [
             "vi-seasons-teach-1",
@@ -645,6 +867,12 @@
             "zh": "寻物",
             "th": "ของหาย"
           },
+          "goal": {
+            "vi": "Tả đồ mất, hỏi phòng thất lạc, để lại số điện thoại.",
+            "en": "Describe a lost item, ask at lost and found, leave a number.",
+            "zh": "描述丢失物、问失物处、留电话。",
+            "th": "บรรยายของหาย ถามจุดรับของหาย ฝากเบอร์"
+          },
           "lessonIds": [
             "vi-lost-teach-1",
             "vi-lost-words-1",
@@ -661,6 +889,12 @@
             "en": "Getting around",
             "zh": "出行",
             "th": "การเดินทาง"
+          },
+          "goal": {
+            "vi": "Hỏi đường, mua vé, nói mình trễ.",
+            "en": "Ask the way, buy a ticket, say you are late.",
+            "zh": "问路、买票、说自己晚了。",
+            "th": "ถามทาง ซื้อตั๋ว บอกว่าสาย"
           },
           "lessonIds": [
             "vi-travel-teach-1",
@@ -679,6 +913,12 @@
             "zh": "在城市里",
             "th": "ในเมือง"
           },
+          "goal": {
+            "vi": "Hỏi chỗ, ngân hàng, hiệu thuốc, nhà vệ sinh.",
+            "en": "Ask for places: bank, pharmacy, toilet.",
+            "zh": "问地方：银行、药店、厕所。",
+            "th": "ถามที่ ธนาคาร ร้านยา ห้องน้ำ"
+          },
           "lessonIds": [
             "vi-city-teach-1",
             "vi-city-words-1",
@@ -695,6 +935,12 @@
             "en": "Body and health",
             "zh": "身体和健康",
             "th": "ร่างกายและสุขภาพ"
+          },
+          "goal": {
+            "vi": "Nói đau ở đâu, xin thuốc, hẹn bác sĩ.",
+            "en": "Say where it hurts, ask for medicine, see a doctor.",
+            "zh": "说哪里疼、要药、看医生。",
+            "th": "บอกจุดที่เจ็บ ขอยา นัดหมอ"
           },
           "lessonIds": [
             "vi-body-teach-1",
@@ -713,6 +959,12 @@
             "zh": "学习",
             "th": "การเรียน"
           },
+          "goal": {
+            "vi": "Nói về bài học 15 phút, hỏi nghĩa, xin nói chậm.",
+            "en": "Talk about a 15-minute lesson, ask meaning, ask to slow down.",
+            "zh": "说十五分钟的课、问意思、请说慢。",
+            "th": "พูดถึงบท 15 นาที ถามความหมาย ขอพูดช้า"
+          },
           "lessonIds": [
             "vi-study-teach-1",
             "vi-study-words-1",
@@ -729,6 +981,12 @@
             "en": "Gentle complaints",
             "zh": "委婉投诉",
             "th": "การร้องเรียนอย่างสุภาพ"
+          },
+          "goal": {
+            "vi": "Nói sự cố, xin đổi, giữ giọng lịch sự.",
+            "en": "Name the problem, ask for a change, stay polite.",
+            "zh": "说明问题、请求更换，并保持礼貌。",
+            "th": "บอกปัญหา ขอเปลี่ยน และรักษาน้ำเสียงสุภาพ"
           },
           "lessonIds": [
             "vi-complaints-teach-1",
@@ -747,6 +1005,12 @@
             "zh": "给建议",
             "th": "การให้คำแนะนำ"
           },
+          "goal": {
+            "vi": "Đưa ý kiến nhẹ, nêu lý do, không ra lệnh.",
+            "en": "Give soft advice, add a reason, avoid orders.",
+            "zh": "给温和建议、说明理由，不要下命令。",
+            "th": "ให้คำแนะนำเบาๆ บอกเหตุผล ไม่สั่ง"
+          },
           "lessonIds": [
             "vi-advice-teach-1",
             "vi-advice-words-1",
@@ -763,6 +1027,12 @@
             "en": "Plans",
             "zh": "计划",
             "th": "แผน"
+          },
+          "goal": {
+            "vi": "Nói ý định, điều kiện, đổi lịch, và phương án B.",
+            "en": "Talk about intentions, conditions, changing plans, and a backup.",
+            "zh": "说打算、条件、改期，以及备选方案。",
+            "th": "พูดความตั้งใจ เงื่อนไข เลื่อนนัด และแผนสำรอง"
           },
           "lessonIds": [
             "vi-plans-teach-1",
@@ -781,6 +1051,12 @@
             "zh": "人际关系",
             "th": "ความสัมพันธ์"
           },
+          "goal": {
+            "vi": "Nói bạn bè, ranh giới, xin lỗi, và giữ hòa khí.",
+            "en": "Talk about friends, boundaries, apologies, and keeping the peace.",
+            "zh": "说朋友、界限、道歉，以及维持和气。",
+            "th": "พูดเรื่องเพื่อน เส้นแบ่ง ขอโทษ และรักษาบรรยากาศ"
+          },
           "lessonIds": [
             "vi-relationships-teach-1",
             "vi-relationships-words-1",
@@ -797,6 +1073,12 @@
             "en": "Everyday news",
             "zh": "生活新闻",
             "th": "ข่าวในชีวิต"
+          },
+          "goal": {
+            "vi": "Nói tin ngắn, nguồn, nghi ngờ, và ý kiến nhẹ.",
+            "en": "Talk about a short news item, the source, doubt, and a mild view.",
+            "zh": "说一则短新闻、来源、怀疑，以及温和看法。",
+            "th": "พูดข่าวสั้น แหล่งที่มา ความสงสัย และความเห็นเบาๆ"
           },
           "lessonIds": [
             "vi-news-teach-1",
@@ -815,6 +1097,12 @@
             "zh": "邀请和拒绝",
             "th": "การชวนและการปฏิเสธ"
           },
+          "goal": {
+            "vi": "Mời ai đó, nhận lời, hoặc từ chối nhẹ.",
+            "en": "Invite someone, accept, or decline gently.",
+            "zh": "邀请、接受，或温和拒绝。",
+            "th": "ชวนคน รับคำ หรือปฏิเสธอย่างสุภาพ"
+          },
           "lessonIds": [
             "vi-invitations-teach-1",
             "vi-invitations-words-1",
@@ -831,6 +1119,12 @@
             "en": "Giving opinions",
             "zh": "表达观点",
             "th": "การให้ความเห็น"
+          },
+          "goal": {
+            "vi": "Nêu ý, đồng ý, không đồng ý, và đưa một lý do ngắn.",
+            "en": "Give an opinion, agree, disagree, and add one short reason.",
+            "zh": "提出看法、同意、不同意，并给一个短理由。",
+            "th": "ให้ความเห็น เห็นด้วย ไม่เห็นด้วย และให้เหตุผลสั้น"
           },
           "lessonIds": [
             "vi-opinion-teach-1",
@@ -849,6 +1143,12 @@
             "zh": "工作",
             "th": "งาน"
           },
+          "goal": {
+            "vi": "Nói lịch họp, deadline, xin hỗ trợ.",
+            "en": "Talk about meetings, deadlines, and asking for help.",
+            "zh": "说会议、截止日期、请求帮助。",
+            "th": "พูดเรื่องประชุม เดดไลน์ และขอความช่วยเหลือ"
+          },
           "lessonIds": [
             "vi-work-teach-1",
             "vi-work-words-1",
@@ -865,6 +1165,12 @@
             "en": "Environment",
             "zh": "环境",
             "th": "สิ่งแวดล้อม"
+          },
+          "goal": {
+            "vi": "Nói về thành phố, rác, xe, và thói quen nhỏ.",
+            "en": "Talk about cities, waste, transport, and small habits.",
+            "zh": "谈城市、垃圾、交通和小习惯。",
+            "th": "พูดเรื่องเมือง ขยะ การเดินทาง และนิสัยเล็กๆ"
           },
           "lessonIds": [
             "vi-environment-teach-1",
@@ -883,6 +1189,12 @@
             "zh": "教育",
             "th": "การศึกษา"
           },
+          "goal": {
+            "vi": "Nói về cách học, kỳ thi, và áp lực.",
+            "en": "Talk about study methods, exams, and pressure.",
+            "zh": "谈学习方法、考试和压力。",
+            "th": "พูดเรื่องวิธีเรียน การสอบ และความกดดัน"
+          },
           "lessonIds": [
             "vi-education-teach-1",
             "vi-education-words-1",
@@ -896,7 +1208,7 @@
     {
       "id": "en",
       "lessonCount": 260,
-      "exerciseCount": 2846,
+      "exerciseCount": 2950,
       "units": [
         {
           "id": "sounds",
@@ -906,6 +1218,12 @@
             "en": "Sounds and reading",
             "zh": "读音",
             "th": "เสียงและการอ่าน"
+          },
+          "goal": {
+            "vi": "Học nghe–đọc trước khi vào câu đời sống.",
+            "en": "Hear and read the script before daily sentences.",
+            "zh": "先听、先认读，再进入生活句子。",
+            "th": "ฟังและอ่านก่อนเข้าประโยคชีวิต"
           },
           "lessonIds": [
             "en-sounds-teach-1",
@@ -924,6 +1242,12 @@
             "zh": "问候",
             "th": "ทักทาย"
           },
+          "goal": {
+            "vi": "Chào, xưng tên, nói cảm ơn và xin lỗi.",
+            "en": "Greet, say your name, thank and apologise.",
+            "zh": "打招呼、报名字、说谢谢和对不起。",
+            "th": "ทักทาย บอกชื่อ ขอบคุณ และขอโทษ"
+          },
           "lessonIds": [
             "en-greet-teach-1",
             "en-greet-words-1",
@@ -940,6 +1264,12 @@
             "en": "Numbers",
             "zh": "数字",
             "th": "ตัวเลข"
+          },
+          "goal": {
+            "vi": "Đếm, hỏi số lượng, nói giá đơn giản.",
+            "en": "Count, ask how many, say a simple price.",
+            "zh": "数数、问数量、说简单价格。",
+            "th": "นับ ถามจำนวน พูดราคาแบบง่าย"
           },
           "lessonIds": [
             "en-numbers-teach-1",
@@ -958,6 +1288,12 @@
             "zh": "时间和日子",
             "th": "เวลาและวัน"
           },
+          "goal": {
+            "vi": "Nói giờ, hôm nay, ngày mai, và hẹn giờ.",
+            "en": "Say the time, today, tomorrow, and make a time.",
+            "zh": "说时间、今天、明天，并约定时间。",
+            "th": "พูดเวลา วันนี้ พรุ่งนี้ และนัดเวลา"
+          },
           "lessonIds": [
             "en-time-teach-1",
             "en-time-words-1",
@@ -974,6 +1310,12 @@
             "en": "Café",
             "zh": "咖啡馆",
             "th": "คาเฟ่"
+          },
+          "goal": {
+            "vi": "Xin bàn, gọi đồ uống, thêm đường.",
+            "en": "Ask for a table, order a drink, extra sugar.",
+            "zh": "要桌子、点饮料、加糖。",
+            "th": "ขอโต๊ะ สั่งเครื่องดื่ม ขอน้ำตาล"
           },
           "lessonIds": [
             "en-cafe-teach-1",
@@ -992,6 +1334,12 @@
             "zh": "饮食",
             "th": "อาหาร"
           },
+          "goal": {
+            "vi": "Gọi món, nói khẩu vị, xin thêm.",
+            "en": "Order food, say taste, ask for more.",
+            "zh": "点菜、说口味、再要一份。",
+            "th": "สั่งอาหาร บอกรส ขอเพิ่ม"
+          },
           "lessonIds": [
             "en-food-teach-1",
             "en-food-words-1",
@@ -1008,6 +1356,12 @@
             "en": "Market",
             "zh": "市场",
             "th": "ตลาด"
+          },
+          "goal": {
+            "vi": "Hỏi còn hàng, hỏi giá, xin túi.",
+            "en": "Ask if it is left, ask the price, take a bag.",
+            "zh": "问还有没有、问价、拿袋子。",
+            "th": "ถามว่ายังมีไหม ถามราคา รับถุง"
           },
           "lessonIds": [
             "en-market-teach-1",
@@ -1026,6 +1380,12 @@
             "zh": "家",
             "th": "บ้าน"
           },
+          "goal": {
+            "vi": "Tên phòng, đồ trong nhà, lời mời vào.",
+            "en": "Name rooms, things at home, invite someone in.",
+            "zh": "房间、家里的东西、请进。",
+            "th": "ชื่อห้อง ของในบ้าน เชิญเข้ามา"
+          },
           "lessonIds": [
             "en-home-teach-1",
             "en-home-words-1",
@@ -1042,6 +1402,12 @@
             "en": "Messages",
             "zh": "短信",
             "th": "ข้อความ"
+          },
+          "goal": {
+            "vi": "Xin lỗi vì trễ, hẹn giờ, gửi vị trí.",
+            "en": "Apologise for being late, set a time, send a pin.",
+            "zh": "为迟到道歉、约时间、发定位。",
+            "th": "ขอโทษที่สาย นัดเวลา ส่งพิกัด"
           },
           "lessonIds": [
             "en-messages-teach-1",
@@ -1060,6 +1426,12 @@
             "zh": "家庭",
             "th": "ครอบครัว"
           },
+          "goal": {
+            "vi": "Nói bố mẹ, anh chị em, và người nhà.",
+            "en": "Name parents, siblings, and family.",
+            "zh": "说父母、兄弟姐妹和家人。",
+            "th": "พูดถึงพ่อแม่ พี่น้อง และครอบครัว"
+          },
           "lessonIds": [
             "en-family-teach-1",
             "en-family-words-1",
@@ -1076,6 +1448,12 @@
             "en": "Clothes",
             "zh": "衣服",
             "th": "เสื้อผ้า"
+          },
+          "goal": {
+            "vi": "Nói áo, quần, giày, mặc gì hôm nay.",
+            "en": "Name shirts, trousers, shoes, and what you wear today.",
+            "zh": "说衣服、裤子、鞋，以及今天穿什么。",
+            "th": "พูดเสื้อ กางเกง รองเท้า และวันนี้ใส่อะไร"
           },
           "lessonIds": [
             "en-clothes-teach-1",
@@ -1094,6 +1472,12 @@
             "zh": "天气",
             "th": "อากาศ"
           },
+          "goal": {
+            "vi": "Nói nắng, mưa, nóng, lạnh, và mang theo gì.",
+            "en": "Say sun, rain, hot, cold, and what to bring.",
+            "zh": "说晴、雨、热、冷，以及要带什么。",
+            "th": "พูดแดด ฝน ร้อน หนาว และต้องพกอะไร"
+          },
           "lessonIds": [
             "en-weather-teach-1",
             "en-weather-words-1",
@@ -1110,6 +1494,12 @@
             "en": "Feelings",
             "zh": "心情",
             "th": "ความรู้สึก"
+          },
+          "goal": {
+            "vi": "Nói vui, mệt, lo, và hỏi người khác thế nào.",
+            "en": "Say happy, tired, worried, and ask how someone feels.",
+            "zh": "说开心、累、担心，并问别人怎么样。",
+            "th": "พูดดีใจ เหนื่อย กังวล และถามคนอื่นเป็นอย่างไร"
           },
           "lessonIds": [
             "en-feelings-teach-1",
@@ -1128,6 +1518,12 @@
             "zh": "颜色",
             "th": "สี"
           },
+          "goal": {
+            "vi": "Nói màu đồ, hỏi màu nào, chọn màu mình thích.",
+            "en": "Name colours, ask which colour, pick one you like.",
+            "zh": "说颜色、问哪个颜色、选自己喜欢的。",
+            "th": "พูดสี ถามสีไหน เลือกสีที่ชอบ"
+          },
           "lessonIds": [
             "en-colors-teach-1",
             "en-colors-words-1",
@@ -1144,6 +1540,12 @@
             "en": "Daily routine",
             "zh": "日常生活",
             "th": "ชีวิตประจำวัน"
+          },
+          "goal": {
+            "vi": "Nói dậy, ăn, đi làm, về nhà, ngủ.",
+            "en": "Talk about waking, eating, going out, coming home, sleeping.",
+            "zh": "说起床、吃饭、出门、回家、睡觉。",
+            "th": "พูดเรื่องตื่น กิน ออกไป กลับบ้าน นอน"
           },
           "lessonIds": [
             "en-daily-teach-1",
@@ -1162,6 +1564,12 @@
             "zh": "购物",
             "th": "การซื้อของ"
           },
+          "goal": {
+            "vi": "Hỏi còn hàng, đổi size, trả hàng, xin hóa đơn.",
+            "en": "Ask for stock, change size, return an item, ask for a receipt.",
+            "zh": "问有没有货、换尺码、退货、要发票。",
+            "th": "ถามว่ามีของไหม เปลี่ยนไซซ์ คืนของ ขอใบเสร็จ"
+          },
           "lessonIds": [
             "en-shopping-teach-1",
             "en-shopping-words-1",
@@ -1178,6 +1586,12 @@
             "en": "Restaurant",
             "zh": "餐馆",
             "th": "ร้านอาหาร"
+          },
+          "goal": {
+            "vi": "Đặt bàn, gọi món, xin không cay, xin hóa đơn.",
+            "en": "Book a table, order, ask for mild spice, ask for the bill.",
+            "zh": "订座、点菜、不要辣、买单。",
+            "th": "จองโต๊ะ สั่งอาหาร ขอไม่เผ็ด ขอคิดเงิน"
           },
           "lessonIds": [
             "en-restaurant-teach-1",
@@ -1196,6 +1610,12 @@
             "zh": "酒店",
             "th": "โรงแรม"
           },
+          "goal": {
+            "vi": "Nhận phòng, xin thêm khăn, hỏi wifi, trả phòng.",
+            "en": "Check in, ask for towels, ask for wifi, check out.",
+            "zh": "入住、要毛巾、问无线网、退房。",
+            "th": "เช็กอิน ขอผ้าขนหนู ถามไวไฟ เช็กเอาต์"
+          },
           "lessonIds": [
             "en-hotel-teach-1",
             "en-hotel-words-1",
@@ -1212,6 +1632,12 @@
             "en": "Phone",
             "zh": "手机",
             "th": "โทรศัพท์"
+          },
+          "goal": {
+            "vi": "Gọi, nhắn, hết pin, hỏi wifi, nói máy hỏng.",
+            "en": "Call, text, low battery, ask for wifi, say the phone is broken.",
+            "zh": "打电话、发信息、没电、问无线网、说手机坏了。",
+            "th": "โทร ส่งข้อความ แบตหมด ถามไวไฟ บอกว่าเครื่องพัง"
           },
           "lessonIds": [
             "en-phone-teach-1",
@@ -1230,6 +1656,12 @@
             "zh": "爱好",
             "th": "งานอดิเรก"
           },
+          "goal": {
+            "vi": "Nói mình thích làm gì lúc rảnh.",
+            "en": "Say what you like to do in free time.",
+            "zh": "说空闲时喜欢做什么。",
+            "th": "พูดว่าว่างๆ ชอบทำอะไร"
+          },
           "lessonIds": [
             "en-hobbies-teach-1",
             "en-hobbies-words-1",
@@ -1246,6 +1678,12 @@
             "en": "Sports",
             "zh": "运动",
             "th": "กีฬา"
+          },
+          "goal": {
+            "vi": "Nói môn mình chơi, tập, và hỏi người khác.",
+            "en": "Name a sport, say you train, and ask what others play.",
+            "zh": "说自己打球、锻炼，并问别人。",
+            "th": "พูดกีฬาที่เล่น ออกกำลัง และถามคนอื่น"
           },
           "lessonIds": [
             "en-sports-teach-1",
@@ -1264,6 +1702,12 @@
             "zh": "钱",
             "th": "เงิน"
           },
+          "goal": {
+            "vi": "Nói giá, chuyển khoản, đổi tiền, xin hóa đơn.",
+            "en": "Talk about prices, transfers, changing money, asking for a receipt.",
+            "zh": "说价格、转账、换钱、要收据。",
+            "th": "พูดราคา โอนเงิน แลกเงิน ขอใบเสร็จ"
+          },
           "lessonIds": [
             "en-money-teach-1",
             "en-money-words-1",
@@ -1280,6 +1724,12 @@
             "en": "Cooking",
             "zh": "做饭",
             "th": "ทำอาหาร"
+          },
+          "goal": {
+            "vi": "Nói nguyên liệu, cắt, nêm, và mời ăn.",
+            "en": "Name ingredients, cutting, seasoning, and inviting someone to eat.",
+            "zh": "说食材、切、调味，并请客吃饭。",
+            "th": "พูดวัตถุดิบ หั่น ปรุง และชวนกิน"
           },
           "lessonIds": [
             "en-cooking-teach-1",
@@ -1298,6 +1748,12 @@
             "zh": "打扫",
             "th": "เก็บบ้าน"
           },
+          "goal": {
+            "vi": "Nói quét, lau, giặt, và nhà sạch hay bẩn.",
+            "en": "Talk about sweeping, wiping, laundry, and a clean or dirty home.",
+            "zh": "说扫地、擦、洗衣服，以及家里干净还是脏。",
+            "th": "พูดกวาด เช็ด ซักผ้า และบ้านสะอาดหรือสกปรก"
+          },
           "lessonIds": [
             "en-cleaning-teach-1",
             "en-cleaning-words-1",
@@ -1314,6 +1770,12 @@
             "en": "Pets",
             "zh": "宠物",
             "th": "สัตว์เลี้ยง"
+          },
+          "goal": {
+            "vi": "Nói chó mèo, cho ăn, dắt đi, và thú cưng bệnh.",
+            "en": "Talk about dogs and cats, feeding, walking, and a sick pet.",
+            "zh": "说猫狗、喂食、遛狗，以及宠物生病。",
+            "th": "พูดแมวหมา ให้อาหาร พาเดิน และสัตว์เลี้ยงป่วย"
           },
           "lessonIds": [
             "en-pets-teach-1",
@@ -1332,6 +1794,12 @@
             "zh": "节日",
             "th": "วันหยุด"
           },
+          "goal": {
+            "vi": "Nói nghỉ lễ, tặng quà, chúc mừng, và kế hoạch.",
+            "en": "Talk about days off, gifts, wishes, and plans.",
+            "zh": "说放假、送礼、祝福和计划。",
+            "th": "พูดวันหยุด ของขวัญ คำอวยพร และแผน"
+          },
           "lessonIds": [
             "en-holidays-teach-1",
             "en-holidays-words-1",
@@ -1348,6 +1816,12 @@
             "en": "Neighbours",
             "zh": "邻居",
             "th": "เพื่อนบ้าน"
+          },
+          "goal": {
+            "vi": "Chào hàng xóm, xin lỗi vì ồn, nhờ giữ đồ.",
+            "en": "Greet neighbours, apologise for noise, ask them to keep a parcel.",
+            "zh": "打招呼、为噪音道歉、请帮忙收快递。",
+            "th": "ทักเพื่อนบ้าน ขอโทษที่เสียงดัง ฝากพัสดุ"
           },
           "lessonIds": [
             "en-neighbors-teach-1",
@@ -1366,6 +1840,12 @@
             "zh": "网络和设备",
             "th": "เน็ตและเครื่อง"
           },
+          "goal": {
+            "vi": "Nói wifi chậm, tải tệp, họp online, và bảo mật đơn giản.",
+            "en": "Talk about slow wifi, downloads, online meetings, and simple privacy.",
+            "zh": "说网慢、下载、线上开会，以及简单隐私。",
+            "th": "พูดเน็ตช้า ดาวน์โหลด ประชุมออนไลน์ และความเป็นส่วนตัวแบบง่าย"
+          },
           "lessonIds": [
             "en-internet-teach-1",
             "en-internet-words-1",
@@ -1382,6 +1862,12 @@
             "en": "School",
             "zh": "学校",
             "th": "โรงเรียน"
+          },
+          "goal": {
+            "vi": "Nói lớp, bài tập, giáo viên, và xin nghỉ.",
+            "en": "Talk about class, homework, teachers, and asking for a day off.",
+            "zh": "说课、作业、老师，以及请假。",
+            "th": "พูดห้องเรียน การบ้าน ครู และขอลา"
           },
           "lessonIds": [
             "en-school-teach-1",
@@ -1400,6 +1886,12 @@
             "zh": "外貌",
             "th": "รูปร่างหน้าตา"
           },
+          "goal": {
+            "vi": "Tả tóc, cao thấp, và người đang mặc gì.",
+            "en": "Describe hair, height, and what someone is wearing.",
+            "zh": "说头发、高矮、以及穿着。",
+            "th": "บรรยายผม ส่วนสูง และว่าใครใส่อะไร"
+          },
           "lessonIds": [
             "en-appearance-teach-1",
             "en-appearance-words-1",
@@ -1416,6 +1908,12 @@
             "en": "Forms and papers",
             "zh": "表格证件",
             "th": "แบบฟอร์มและเอกสาร"
+          },
+          "goal": {
+            "vi": "Điền tên, ngày sinh, địa chỉ, số giấy tờ.",
+            "en": "Fill in name, date of birth, address, ID number.",
+            "zh": "填姓名、生日、地址、证件号。",
+            "th": "กรอกชื่อ วันเกิด ที่อยู่ เลขเอกสาร"
           },
           "lessonIds": [
             "en-forms-teach-1",
@@ -1434,6 +1932,12 @@
             "zh": "出租车",
             "th": "แท็กซี่"
           },
+          "goal": {
+            "vi": "Gọi xe, nói điểm đến, xin đi meter, xuống xe.",
+            "en": "Call a car, say the destination, ask for the meter, get out.",
+            "zh": "叫车、说目的地、打表、下车。",
+            "th": "เรียกรถ บอกที่หมาย ขอมิเตอร์ ลงรถ"
+          },
           "lessonIds": [
             "en-taxi-teach-1",
             "en-taxi-words-1",
@@ -1450,6 +1954,12 @@
             "en": "Airport",
             "zh": "机场",
             "th": "สนามบิน"
+          },
+          "goal": {
+            "vi": "Check-in, hành lý, cửa bay, hộ chiếu, chậm chuyến.",
+            "en": "Check in, luggage, gate, passport, a delay.",
+            "zh": "值机、行李、登机口、护照、晚点。",
+            "th": "เช็กอิน กระเป๋า ประตูขึ้นเครื่อง พาสปอร์ต ไฟลต์ดีเลย์"
           },
           "lessonIds": [
             "en-airport-teach-1",
@@ -1468,6 +1978,12 @@
             "zh": "紧急情况",
             "th": "เหตุฉุกเฉิน"
           },
+          "goal": {
+            "vi": "Gọi giúp, nói chỗ, mất đồ, tai nạn nhỏ.",
+            "en": "Call for help, say the place, lost item, a small accident.",
+            "zh": "求救、说地点、丢东西、小事故。",
+            "th": "เรียกช่วย บอกที่ ของหาย อุบัติเหตุเล็ก"
+          },
           "lessonIds": [
             "en-emergency-teach-1",
             "en-emergency-words-1",
@@ -1484,6 +2000,12 @@
             "en": "Renting",
             "zh": "租房",
             "th": "เช่าบ้าน"
+          },
+          "goal": {
+            "vi": "Hỏi giá thuê, cọc, hóa đơn điện nước, hợp đồng.",
+            "en": "Ask rent, deposit, utility bills, the contract.",
+            "zh": "问租金、押金、水电、合同。",
+            "th": "ถามค่าเช่า ค่ามัดจำ ค่าน้ำไฟ สัญญา"
           },
           "lessonIds": [
             "en-rent-teach-1",
@@ -1502,6 +2024,12 @@
             "zh": "电影和出门",
             "th": "หนังและการออกไป"
           },
+          "goal": {
+            "vi": "Mua vé phim, chọn giờ, nói thể loại, hẹn đi chơi.",
+            "en": "Buy a ticket, pick a time, name a genre, arrange a night out.",
+            "zh": "买票、选场次、说类型、约出门。",
+            "th": "ซื้อตั๋วหนัง เลือกเวลา บอกแนว นัดออกไป"
+          },
           "lessonIds": [
             "en-cinema-teach-1",
             "en-cinema-words-1",
@@ -1518,6 +2046,12 @@
             "en": "Seasons and climate",
             "zh": "季节气候",
             "th": "ฤดูและอากาศ"
+          },
+          "goal": {
+            "vi": "Nói bốn mùa, mưa nắng, và mặc gì theo mùa.",
+            "en": "Name seasons, rain and sun, and what to wear.",
+            "zh": "说四季、晴雨，以及按季节穿什么。",
+            "th": "พูดสี่ฤดู ฝนแดด และว่าฤดูไหนใส่อะไร"
           },
           "lessonIds": [
             "en-seasons-teach-1",
@@ -1536,6 +2070,12 @@
             "zh": "寻物",
             "th": "ของหาย"
           },
+          "goal": {
+            "vi": "Tả đồ mất, hỏi phòng thất lạc, để lại số điện thoại.",
+            "en": "Describe a lost item, ask at lost and found, leave a number.",
+            "zh": "描述丢失物、问失物处、留电话。",
+            "th": "บรรยายของหาย ถามจุดรับของหาย ฝากเบอร์"
+          },
           "lessonIds": [
             "en-lost-teach-1",
             "en-lost-words-1",
@@ -1552,6 +2092,12 @@
             "en": "Getting around",
             "zh": "出行",
             "th": "การเดินทาง"
+          },
+          "goal": {
+            "vi": "Hỏi đường, mua vé, nói mình trễ.",
+            "en": "Ask the way, buy a ticket, say you are late.",
+            "zh": "问路、买票、说自己晚了。",
+            "th": "ถามทาง ซื้อตั๋ว บอกว่าสาย"
           },
           "lessonIds": [
             "en-travel-teach-1",
@@ -1570,6 +2116,12 @@
             "zh": "在城市里",
             "th": "ในเมือง"
           },
+          "goal": {
+            "vi": "Hỏi chỗ, ngân hàng, hiệu thuốc, nhà vệ sinh.",
+            "en": "Ask for places: bank, pharmacy, toilet.",
+            "zh": "问地方：银行、药店、厕所。",
+            "th": "ถามที่ ธนาคาร ร้านยา ห้องน้ำ"
+          },
           "lessonIds": [
             "en-city-teach-1",
             "en-city-words-1",
@@ -1586,6 +2138,12 @@
             "en": "Body and health",
             "zh": "身体和健康",
             "th": "ร่างกายและสุขภาพ"
+          },
+          "goal": {
+            "vi": "Nói đau ở đâu, xin thuốc, hẹn bác sĩ.",
+            "en": "Say where it hurts, ask for medicine, see a doctor.",
+            "zh": "说哪里疼、要药、看医生。",
+            "th": "บอกจุดที่เจ็บ ขอยา นัดหมอ"
           },
           "lessonIds": [
             "en-body-teach-1",
@@ -1604,6 +2162,12 @@
             "zh": "学习",
             "th": "การเรียน"
           },
+          "goal": {
+            "vi": "Nói về bài học 15 phút, hỏi nghĩa, xin nói chậm.",
+            "en": "Talk about a 15-minute lesson, ask meaning, ask to slow down.",
+            "zh": "说十五分钟的课、问意思、请说慢。",
+            "th": "พูดถึงบท 15 นาที ถามความหมาย ขอพูดช้า"
+          },
           "lessonIds": [
             "en-study-teach-1",
             "en-study-words-1",
@@ -1620,6 +2184,12 @@
             "en": "Gentle complaints",
             "zh": "委婉投诉",
             "th": "การร้องเรียนอย่างสุภาพ"
+          },
+          "goal": {
+            "vi": "Nói sự cố, xin đổi, giữ giọng lịch sự.",
+            "en": "Name the problem, ask for a change, stay polite.",
+            "zh": "说明问题、请求更换，并保持礼貌。",
+            "th": "บอกปัญหา ขอเปลี่ยน และรักษาน้ำเสียงสุภาพ"
           },
           "lessonIds": [
             "en-complaints-teach-1",
@@ -1638,6 +2208,12 @@
             "zh": "给建议",
             "th": "การให้คำแนะนำ"
           },
+          "goal": {
+            "vi": "Đưa ý kiến nhẹ, nêu lý do, không ra lệnh.",
+            "en": "Give soft advice, add a reason, avoid orders.",
+            "zh": "给温和建议、说明理由，不要下命令。",
+            "th": "ให้คำแนะนำเบาๆ บอกเหตุผล ไม่สั่ง"
+          },
           "lessonIds": [
             "en-advice-teach-1",
             "en-advice-words-1",
@@ -1654,6 +2230,12 @@
             "en": "Plans",
             "zh": "计划",
             "th": "แผน"
+          },
+          "goal": {
+            "vi": "Nói ý định, điều kiện, đổi lịch, và phương án B.",
+            "en": "Talk about intentions, conditions, changing plans, and a backup.",
+            "zh": "说打算、条件、改期，以及备选方案。",
+            "th": "พูดความตั้งใจ เงื่อนไข เลื่อนนัด และแผนสำรอง"
           },
           "lessonIds": [
             "en-plans-teach-1",
@@ -1672,6 +2254,12 @@
             "zh": "人际关系",
             "th": "ความสัมพันธ์"
           },
+          "goal": {
+            "vi": "Nói bạn bè, ranh giới, xin lỗi, và giữ hòa khí.",
+            "en": "Talk about friends, boundaries, apologies, and keeping the peace.",
+            "zh": "说朋友、界限、道歉，以及维持和气。",
+            "th": "พูดเรื่องเพื่อน เส้นแบ่ง ขอโทษ และรักษาบรรยากาศ"
+          },
           "lessonIds": [
             "en-relationships-teach-1",
             "en-relationships-words-1",
@@ -1688,6 +2276,12 @@
             "en": "Everyday news",
             "zh": "生活新闻",
             "th": "ข่าวในชีวิต"
+          },
+          "goal": {
+            "vi": "Nói tin ngắn, nguồn, nghi ngờ, và ý kiến nhẹ.",
+            "en": "Talk about a short news item, the source, doubt, and a mild view.",
+            "zh": "说一则短新闻、来源、怀疑，以及温和看法。",
+            "th": "พูดข่าวสั้น แหล่งที่มา ความสงสัย และความเห็นเบาๆ"
           },
           "lessonIds": [
             "en-news-teach-1",
@@ -1706,6 +2300,12 @@
             "zh": "邀请和拒绝",
             "th": "การชวนและการปฏิเสธ"
           },
+          "goal": {
+            "vi": "Mời ai đó, nhận lời, hoặc từ chối nhẹ.",
+            "en": "Invite someone, accept, or decline gently.",
+            "zh": "邀请、接受，或温和拒绝。",
+            "th": "ชวนคน รับคำ หรือปฏิเสธอย่างสุภาพ"
+          },
           "lessonIds": [
             "en-invitations-teach-1",
             "en-invitations-words-1",
@@ -1722,6 +2322,12 @@
             "en": "Giving opinions",
             "zh": "表达观点",
             "th": "การให้ความเห็น"
+          },
+          "goal": {
+            "vi": "Nêu ý, đồng ý, không đồng ý, và đưa một lý do ngắn.",
+            "en": "Give an opinion, agree, disagree, and add one short reason.",
+            "zh": "提出看法、同意、不同意，并给一个短理由。",
+            "th": "ให้ความเห็น เห็นด้วย ไม่เห็นด้วย และให้เหตุผลสั้น"
           },
           "lessonIds": [
             "en-opinion-teach-1",
@@ -1740,6 +2346,12 @@
             "zh": "工作",
             "th": "งาน"
           },
+          "goal": {
+            "vi": "Nói lịch họp, deadline, xin hỗ trợ.",
+            "en": "Talk about meetings, deadlines, and asking for help.",
+            "zh": "说会议、截止日期、请求帮助。",
+            "th": "พูดเรื่องประชุม เดดไลน์ และขอความช่วยเหลือ"
+          },
           "lessonIds": [
             "en-work-teach-1",
             "en-work-words-1",
@@ -1756,6 +2368,12 @@
             "en": "Environment",
             "zh": "环境",
             "th": "สิ่งแวดล้อม"
+          },
+          "goal": {
+            "vi": "Nói về thành phố, rác, xe, và thói quen nhỏ.",
+            "en": "Talk about cities, waste, transport, and small habits.",
+            "zh": "谈城市、垃圾、交通和小习惯。",
+            "th": "พูดเรื่องเมือง ขยะ การเดินทาง และนิสัยเล็กๆ"
           },
           "lessonIds": [
             "en-environment-teach-1",
@@ -1774,6 +2392,12 @@
             "zh": "教育",
             "th": "การศึกษา"
           },
+          "goal": {
+            "vi": "Nói về cách học, kỳ thi, và áp lực.",
+            "en": "Talk about study methods, exams, and pressure.",
+            "zh": "谈学习方法、考试和压力。",
+            "th": "พูดเรื่องวิธีเรียน การสอบ และความกดดัน"
+          },
           "lessonIds": [
             "en-education-teach-1",
             "en-education-words-1",
@@ -1787,7 +2411,7 @@
     {
       "id": "zh",
       "lessonCount": 260,
-      "exerciseCount": 3118,
+      "exerciseCount": 3222,
       "units": [
         {
           "id": "sounds",
@@ -1797,6 +2421,12 @@
             "en": "Sounds and reading",
             "zh": "读音",
             "th": "เสียงและการอ่าน"
+          },
+          "goal": {
+            "vi": "Học nghe–đọc trước khi vào câu đời sống.",
+            "en": "Hear and read the script before daily sentences.",
+            "zh": "先听、先认读，再进入生活句子。",
+            "th": "ฟังและอ่านก่อนเข้าประโยคชีวิต"
           },
           "lessonIds": [
             "zh-sounds-teach-1",
@@ -1815,6 +2445,12 @@
             "zh": "问候",
             "th": "ทักทาย"
           },
+          "goal": {
+            "vi": "Chào, xưng tên, nói cảm ơn và xin lỗi.",
+            "en": "Greet, say your name, thank and apologise.",
+            "zh": "打招呼、报名字、说谢谢和对不起。",
+            "th": "ทักทาย บอกชื่อ ขอบคุณ และขอโทษ"
+          },
           "lessonIds": [
             "zh-greet-teach-1",
             "zh-greet-words-1",
@@ -1831,6 +2467,12 @@
             "en": "Numbers",
             "zh": "数字",
             "th": "ตัวเลข"
+          },
+          "goal": {
+            "vi": "Đếm, hỏi số lượng, nói giá đơn giản.",
+            "en": "Count, ask how many, say a simple price.",
+            "zh": "数数、问数量、说简单价格。",
+            "th": "นับ ถามจำนวน พูดราคาแบบง่าย"
           },
           "lessonIds": [
             "zh-numbers-teach-1",
@@ -1849,6 +2491,12 @@
             "zh": "时间和日子",
             "th": "เวลาและวัน"
           },
+          "goal": {
+            "vi": "Nói giờ, hôm nay, ngày mai, và hẹn giờ.",
+            "en": "Say the time, today, tomorrow, and make a time.",
+            "zh": "说时间、今天、明天，并约定时间。",
+            "th": "พูดเวลา วันนี้ พรุ่งนี้ และนัดเวลา"
+          },
           "lessonIds": [
             "zh-time-teach-1",
             "zh-time-words-1",
@@ -1865,6 +2513,12 @@
             "en": "Café",
             "zh": "咖啡馆",
             "th": "คาเฟ่"
+          },
+          "goal": {
+            "vi": "Xin bàn, gọi đồ uống, thêm đường.",
+            "en": "Ask for a table, order a drink, extra sugar.",
+            "zh": "要桌子、点饮料、加糖。",
+            "th": "ขอโต๊ะ สั่งเครื่องดื่ม ขอน้ำตาล"
           },
           "lessonIds": [
             "zh-cafe-teach-1",
@@ -1883,6 +2537,12 @@
             "zh": "饮食",
             "th": "อาหาร"
           },
+          "goal": {
+            "vi": "Gọi món, nói khẩu vị, xin thêm.",
+            "en": "Order food, say taste, ask for more.",
+            "zh": "点菜、说口味、再要一份。",
+            "th": "สั่งอาหาร บอกรส ขอเพิ่ม"
+          },
           "lessonIds": [
             "zh-food-teach-1",
             "zh-food-words-1",
@@ -1899,6 +2559,12 @@
             "en": "Market",
             "zh": "市场",
             "th": "ตลาด"
+          },
+          "goal": {
+            "vi": "Hỏi còn hàng, hỏi giá, xin túi.",
+            "en": "Ask if it is left, ask the price, take a bag.",
+            "zh": "问还有没有、问价、拿袋子。",
+            "th": "ถามว่ายังมีไหม ถามราคา รับถุง"
           },
           "lessonIds": [
             "zh-market-teach-1",
@@ -1917,6 +2583,12 @@
             "zh": "家",
             "th": "บ้าน"
           },
+          "goal": {
+            "vi": "Tên phòng, đồ trong nhà, lời mời vào.",
+            "en": "Name rooms, things at home, invite someone in.",
+            "zh": "房间、家里的东西、请进。",
+            "th": "ชื่อห้อง ของในบ้าน เชิญเข้ามา"
+          },
           "lessonIds": [
             "zh-home-teach-1",
             "zh-home-words-1",
@@ -1933,6 +2605,12 @@
             "en": "Messages",
             "zh": "短信",
             "th": "ข้อความ"
+          },
+          "goal": {
+            "vi": "Xin lỗi vì trễ, hẹn giờ, gửi vị trí.",
+            "en": "Apologise for being late, set a time, send a pin.",
+            "zh": "为迟到道歉、约时间、发定位。",
+            "th": "ขอโทษที่สาย นัดเวลา ส่งพิกัด"
           },
           "lessonIds": [
             "zh-messages-teach-1",
@@ -1951,6 +2629,12 @@
             "zh": "家庭",
             "th": "ครอบครัว"
           },
+          "goal": {
+            "vi": "Nói bố mẹ, anh chị em, và người nhà.",
+            "en": "Name parents, siblings, and family.",
+            "zh": "说父母、兄弟姐妹和家人。",
+            "th": "พูดถึงพ่อแม่ พี่น้อง และครอบครัว"
+          },
           "lessonIds": [
             "zh-family-teach-1",
             "zh-family-words-1",
@@ -1967,6 +2651,12 @@
             "en": "Clothes",
             "zh": "衣服",
             "th": "เสื้อผ้า"
+          },
+          "goal": {
+            "vi": "Nói áo, quần, giày, mặc gì hôm nay.",
+            "en": "Name shirts, trousers, shoes, and what you wear today.",
+            "zh": "说衣服、裤子、鞋，以及今天穿什么。",
+            "th": "พูดเสื้อ กางเกง รองเท้า และวันนี้ใส่อะไร"
           },
           "lessonIds": [
             "zh-clothes-teach-1",
@@ -1985,6 +2675,12 @@
             "zh": "天气",
             "th": "อากาศ"
           },
+          "goal": {
+            "vi": "Nói nắng, mưa, nóng, lạnh, và mang theo gì.",
+            "en": "Say sun, rain, hot, cold, and what to bring.",
+            "zh": "说晴、雨、热、冷，以及要带什么。",
+            "th": "พูดแดด ฝน ร้อน หนาว และต้องพกอะไร"
+          },
           "lessonIds": [
             "zh-weather-teach-1",
             "zh-weather-words-1",
@@ -2001,6 +2697,12 @@
             "en": "Feelings",
             "zh": "心情",
             "th": "ความรู้สึก"
+          },
+          "goal": {
+            "vi": "Nói vui, mệt, lo, và hỏi người khác thế nào.",
+            "en": "Say happy, tired, worried, and ask how someone feels.",
+            "zh": "说开心、累、担心，并问别人怎么样。",
+            "th": "พูดดีใจ เหนื่อย กังวล และถามคนอื่นเป็นอย่างไร"
           },
           "lessonIds": [
             "zh-feelings-teach-1",
@@ -2019,6 +2721,12 @@
             "zh": "颜色",
             "th": "สี"
           },
+          "goal": {
+            "vi": "Nói màu đồ, hỏi màu nào, chọn màu mình thích.",
+            "en": "Name colours, ask which colour, pick one you like.",
+            "zh": "说颜色、问哪个颜色、选自己喜欢的。",
+            "th": "พูดสี ถามสีไหน เลือกสีที่ชอบ"
+          },
           "lessonIds": [
             "zh-colors-teach-1",
             "zh-colors-words-1",
@@ -2035,6 +2743,12 @@
             "en": "Daily routine",
             "zh": "日常生活",
             "th": "ชีวิตประจำวัน"
+          },
+          "goal": {
+            "vi": "Nói dậy, ăn, đi làm, về nhà, ngủ.",
+            "en": "Talk about waking, eating, going out, coming home, sleeping.",
+            "zh": "说起床、吃饭、出门、回家、睡觉。",
+            "th": "พูดเรื่องตื่น กิน ออกไป กลับบ้าน นอน"
           },
           "lessonIds": [
             "zh-daily-teach-1",
@@ -2053,6 +2767,12 @@
             "zh": "购物",
             "th": "การซื้อของ"
           },
+          "goal": {
+            "vi": "Hỏi còn hàng, đổi size, trả hàng, xin hóa đơn.",
+            "en": "Ask for stock, change size, return an item, ask for a receipt.",
+            "zh": "问有没有货、换尺码、退货、要发票。",
+            "th": "ถามว่ามีของไหม เปลี่ยนไซซ์ คืนของ ขอใบเสร็จ"
+          },
           "lessonIds": [
             "zh-shopping-teach-1",
             "zh-shopping-words-1",
@@ -2069,6 +2789,12 @@
             "en": "Restaurant",
             "zh": "餐馆",
             "th": "ร้านอาหาร"
+          },
+          "goal": {
+            "vi": "Đặt bàn, gọi món, xin không cay, xin hóa đơn.",
+            "en": "Book a table, order, ask for mild spice, ask for the bill.",
+            "zh": "订座、点菜、不要辣、买单。",
+            "th": "จองโต๊ะ สั่งอาหาร ขอไม่เผ็ด ขอคิดเงิน"
           },
           "lessonIds": [
             "zh-restaurant-teach-1",
@@ -2087,6 +2813,12 @@
             "zh": "酒店",
             "th": "โรงแรม"
           },
+          "goal": {
+            "vi": "Nhận phòng, xin thêm khăn, hỏi wifi, trả phòng.",
+            "en": "Check in, ask for towels, ask for wifi, check out.",
+            "zh": "入住、要毛巾、问无线网、退房。",
+            "th": "เช็กอิน ขอผ้าขนหนู ถามไวไฟ เช็กเอาต์"
+          },
           "lessonIds": [
             "zh-hotel-teach-1",
             "zh-hotel-words-1",
@@ -2103,6 +2835,12 @@
             "en": "Phone",
             "zh": "手机",
             "th": "โทรศัพท์"
+          },
+          "goal": {
+            "vi": "Gọi, nhắn, hết pin, hỏi wifi, nói máy hỏng.",
+            "en": "Call, text, low battery, ask for wifi, say the phone is broken.",
+            "zh": "打电话、发信息、没电、问无线网、说手机坏了。",
+            "th": "โทร ส่งข้อความ แบตหมด ถามไวไฟ บอกว่าเครื่องพัง"
           },
           "lessonIds": [
             "zh-phone-teach-1",
@@ -2121,6 +2859,12 @@
             "zh": "爱好",
             "th": "งานอดิเรก"
           },
+          "goal": {
+            "vi": "Nói mình thích làm gì lúc rảnh.",
+            "en": "Say what you like to do in free time.",
+            "zh": "说空闲时喜欢做什么。",
+            "th": "พูดว่าว่างๆ ชอบทำอะไร"
+          },
           "lessonIds": [
             "zh-hobbies-teach-1",
             "zh-hobbies-words-1",
@@ -2137,6 +2881,12 @@
             "en": "Sports",
             "zh": "运动",
             "th": "กีฬา"
+          },
+          "goal": {
+            "vi": "Nói môn mình chơi, tập, và hỏi người khác.",
+            "en": "Name a sport, say you train, and ask what others play.",
+            "zh": "说自己打球、锻炼，并问别人。",
+            "th": "พูดกีฬาที่เล่น ออกกำลัง และถามคนอื่น"
           },
           "lessonIds": [
             "zh-sports-teach-1",
@@ -2155,6 +2905,12 @@
             "zh": "钱",
             "th": "เงิน"
           },
+          "goal": {
+            "vi": "Nói giá, chuyển khoản, đổi tiền, xin hóa đơn.",
+            "en": "Talk about prices, transfers, changing money, asking for a receipt.",
+            "zh": "说价格、转账、换钱、要收据。",
+            "th": "พูดราคา โอนเงิน แลกเงิน ขอใบเสร็จ"
+          },
           "lessonIds": [
             "zh-money-teach-1",
             "zh-money-words-1",
@@ -2171,6 +2927,12 @@
             "en": "Cooking",
             "zh": "做饭",
             "th": "ทำอาหาร"
+          },
+          "goal": {
+            "vi": "Nói nguyên liệu, cắt, nêm, và mời ăn.",
+            "en": "Name ingredients, cutting, seasoning, and inviting someone to eat.",
+            "zh": "说食材、切、调味，并请客吃饭。",
+            "th": "พูดวัตถุดิบ หั่น ปรุง และชวนกิน"
           },
           "lessonIds": [
             "zh-cooking-teach-1",
@@ -2189,6 +2951,12 @@
             "zh": "打扫",
             "th": "เก็บบ้าน"
           },
+          "goal": {
+            "vi": "Nói quét, lau, giặt, và nhà sạch hay bẩn.",
+            "en": "Talk about sweeping, wiping, laundry, and a clean or dirty home.",
+            "zh": "说扫地、擦、洗衣服，以及家里干净还是脏。",
+            "th": "พูดกวาด เช็ด ซักผ้า และบ้านสะอาดหรือสกปรก"
+          },
           "lessonIds": [
             "zh-cleaning-teach-1",
             "zh-cleaning-words-1",
@@ -2205,6 +2973,12 @@
             "en": "Pets",
             "zh": "宠物",
             "th": "สัตว์เลี้ยง"
+          },
+          "goal": {
+            "vi": "Nói chó mèo, cho ăn, dắt đi, và thú cưng bệnh.",
+            "en": "Talk about dogs and cats, feeding, walking, and a sick pet.",
+            "zh": "说猫狗、喂食、遛狗，以及宠物生病。",
+            "th": "พูดแมวหมา ให้อาหาร พาเดิน และสัตว์เลี้ยงป่วย"
           },
           "lessonIds": [
             "zh-pets-teach-1",
@@ -2223,6 +2997,12 @@
             "zh": "节日",
             "th": "วันหยุด"
           },
+          "goal": {
+            "vi": "Nói nghỉ lễ, tặng quà, chúc mừng, và kế hoạch.",
+            "en": "Talk about days off, gifts, wishes, and plans.",
+            "zh": "说放假、送礼、祝福和计划。",
+            "th": "พูดวันหยุด ของขวัญ คำอวยพร และแผน"
+          },
           "lessonIds": [
             "zh-holidays-teach-1",
             "zh-holidays-words-1",
@@ -2239,6 +3019,12 @@
             "en": "Neighbours",
             "zh": "邻居",
             "th": "เพื่อนบ้าน"
+          },
+          "goal": {
+            "vi": "Chào hàng xóm, xin lỗi vì ồn, nhờ giữ đồ.",
+            "en": "Greet neighbours, apologise for noise, ask them to keep a parcel.",
+            "zh": "打招呼、为噪音道歉、请帮忙收快递。",
+            "th": "ทักเพื่อนบ้าน ขอโทษที่เสียงดัง ฝากพัสดุ"
           },
           "lessonIds": [
             "zh-neighbors-teach-1",
@@ -2257,6 +3043,12 @@
             "zh": "网络和设备",
             "th": "เน็ตและเครื่อง"
           },
+          "goal": {
+            "vi": "Nói wifi chậm, tải tệp, họp online, và bảo mật đơn giản.",
+            "en": "Talk about slow wifi, downloads, online meetings, and simple privacy.",
+            "zh": "说网慢、下载、线上开会，以及简单隐私。",
+            "th": "พูดเน็ตช้า ดาวน์โหลด ประชุมออนไลน์ และความเป็นส่วนตัวแบบง่าย"
+          },
           "lessonIds": [
             "zh-internet-teach-1",
             "zh-internet-words-1",
@@ -2273,6 +3065,12 @@
             "en": "School",
             "zh": "学校",
             "th": "โรงเรียน"
+          },
+          "goal": {
+            "vi": "Nói lớp, bài tập, giáo viên, và xin nghỉ.",
+            "en": "Talk about class, homework, teachers, and asking for a day off.",
+            "zh": "说课、作业、老师，以及请假。",
+            "th": "พูดห้องเรียน การบ้าน ครู และขอลา"
           },
           "lessonIds": [
             "zh-school-teach-1",
@@ -2291,6 +3089,12 @@
             "zh": "外貌",
             "th": "รูปร่างหน้าตา"
           },
+          "goal": {
+            "vi": "Tả tóc, cao thấp, và người đang mặc gì.",
+            "en": "Describe hair, height, and what someone is wearing.",
+            "zh": "说头发、高矮、以及穿着。",
+            "th": "บรรยายผม ส่วนสูง และว่าใครใส่อะไร"
+          },
           "lessonIds": [
             "zh-appearance-teach-1",
             "zh-appearance-words-1",
@@ -2307,6 +3111,12 @@
             "en": "Forms and papers",
             "zh": "表格证件",
             "th": "แบบฟอร์มและเอกสาร"
+          },
+          "goal": {
+            "vi": "Điền tên, ngày sinh, địa chỉ, số giấy tờ.",
+            "en": "Fill in name, date of birth, address, ID number.",
+            "zh": "填姓名、生日、地址、证件号。",
+            "th": "กรอกชื่อ วันเกิด ที่อยู่ เลขเอกสาร"
           },
           "lessonIds": [
             "zh-forms-teach-1",
@@ -2325,6 +3135,12 @@
             "zh": "出租车",
             "th": "แท็กซี่"
           },
+          "goal": {
+            "vi": "Gọi xe, nói điểm đến, xin đi meter, xuống xe.",
+            "en": "Call a car, say the destination, ask for the meter, get out.",
+            "zh": "叫车、说目的地、打表、下车。",
+            "th": "เรียกรถ บอกที่หมาย ขอมิเตอร์ ลงรถ"
+          },
           "lessonIds": [
             "zh-taxi-teach-1",
             "zh-taxi-words-1",
@@ -2341,6 +3157,12 @@
             "en": "Airport",
             "zh": "机场",
             "th": "สนามบิน"
+          },
+          "goal": {
+            "vi": "Check-in, hành lý, cửa bay, hộ chiếu, chậm chuyến.",
+            "en": "Check in, luggage, gate, passport, a delay.",
+            "zh": "值机、行李、登机口、护照、晚点。",
+            "th": "เช็กอิน กระเป๋า ประตูขึ้นเครื่อง พาสปอร์ต ไฟลต์ดีเลย์"
           },
           "lessonIds": [
             "zh-airport-teach-1",
@@ -2359,6 +3181,12 @@
             "zh": "紧急情况",
             "th": "เหตุฉุกเฉิน"
           },
+          "goal": {
+            "vi": "Gọi giúp, nói chỗ, mất đồ, tai nạn nhỏ.",
+            "en": "Call for help, say the place, lost item, a small accident.",
+            "zh": "求救、说地点、丢东西、小事故。",
+            "th": "เรียกช่วย บอกที่ ของหาย อุบัติเหตุเล็ก"
+          },
           "lessonIds": [
             "zh-emergency-teach-1",
             "zh-emergency-words-1",
@@ -2375,6 +3203,12 @@
             "en": "Renting",
             "zh": "租房",
             "th": "เช่าบ้าน"
+          },
+          "goal": {
+            "vi": "Hỏi giá thuê, cọc, hóa đơn điện nước, hợp đồng.",
+            "en": "Ask rent, deposit, utility bills, the contract.",
+            "zh": "问租金、押金、水电、合同。",
+            "th": "ถามค่าเช่า ค่ามัดจำ ค่าน้ำไฟ สัญญา"
           },
           "lessonIds": [
             "zh-rent-teach-1",
@@ -2393,6 +3227,12 @@
             "zh": "电影和出门",
             "th": "หนังและการออกไป"
           },
+          "goal": {
+            "vi": "Mua vé phim, chọn giờ, nói thể loại, hẹn đi chơi.",
+            "en": "Buy a ticket, pick a time, name a genre, arrange a night out.",
+            "zh": "买票、选场次、说类型、约出门。",
+            "th": "ซื้อตั๋วหนัง เลือกเวลา บอกแนว นัดออกไป"
+          },
           "lessonIds": [
             "zh-cinema-teach-1",
             "zh-cinema-words-1",
@@ -2409,6 +3249,12 @@
             "en": "Seasons and climate",
             "zh": "季节气候",
             "th": "ฤดูและอากาศ"
+          },
+          "goal": {
+            "vi": "Nói bốn mùa, mưa nắng, và mặc gì theo mùa.",
+            "en": "Name seasons, rain and sun, and what to wear.",
+            "zh": "说四季、晴雨，以及按季节穿什么。",
+            "th": "พูดสี่ฤดู ฝนแดด และว่าฤดูไหนใส่อะไร"
           },
           "lessonIds": [
             "zh-seasons-teach-1",
@@ -2427,6 +3273,12 @@
             "zh": "寻物",
             "th": "ของหาย"
           },
+          "goal": {
+            "vi": "Tả đồ mất, hỏi phòng thất lạc, để lại số điện thoại.",
+            "en": "Describe a lost item, ask at lost and found, leave a number.",
+            "zh": "描述丢失物、问失物处、留电话。",
+            "th": "บรรยายของหาย ถามจุดรับของหาย ฝากเบอร์"
+          },
           "lessonIds": [
             "zh-lost-teach-1",
             "zh-lost-words-1",
@@ -2443,6 +3295,12 @@
             "en": "Getting around",
             "zh": "出行",
             "th": "การเดินทาง"
+          },
+          "goal": {
+            "vi": "Hỏi đường, mua vé, nói mình trễ.",
+            "en": "Ask the way, buy a ticket, say you are late.",
+            "zh": "问路、买票、说自己晚了。",
+            "th": "ถามทาง ซื้อตั๋ว บอกว่าสาย"
           },
           "lessonIds": [
             "zh-travel-teach-1",
@@ -2461,6 +3319,12 @@
             "zh": "在城市里",
             "th": "ในเมือง"
           },
+          "goal": {
+            "vi": "Hỏi chỗ, ngân hàng, hiệu thuốc, nhà vệ sinh.",
+            "en": "Ask for places: bank, pharmacy, toilet.",
+            "zh": "问地方：银行、药店、厕所。",
+            "th": "ถามที่ ธนาคาร ร้านยา ห้องน้ำ"
+          },
           "lessonIds": [
             "zh-city-teach-1",
             "zh-city-words-1",
@@ -2477,6 +3341,12 @@
             "en": "Body and health",
             "zh": "身体和健康",
             "th": "ร่างกายและสุขภาพ"
+          },
+          "goal": {
+            "vi": "Nói đau ở đâu, xin thuốc, hẹn bác sĩ.",
+            "en": "Say where it hurts, ask for medicine, see a doctor.",
+            "zh": "说哪里疼、要药、看医生。",
+            "th": "บอกจุดที่เจ็บ ขอยา นัดหมอ"
           },
           "lessonIds": [
             "zh-body-teach-1",
@@ -2495,6 +3365,12 @@
             "zh": "学习",
             "th": "การเรียน"
           },
+          "goal": {
+            "vi": "Nói về bài học 15 phút, hỏi nghĩa, xin nói chậm.",
+            "en": "Talk about a 15-minute lesson, ask meaning, ask to slow down.",
+            "zh": "说十五分钟的课、问意思、请说慢。",
+            "th": "พูดถึงบท 15 นาที ถามความหมาย ขอพูดช้า"
+          },
           "lessonIds": [
             "zh-study-teach-1",
             "zh-study-words-1",
@@ -2511,6 +3387,12 @@
             "en": "Gentle complaints",
             "zh": "委婉投诉",
             "th": "การร้องเรียนอย่างสุภาพ"
+          },
+          "goal": {
+            "vi": "Nói sự cố, xin đổi, giữ giọng lịch sự.",
+            "en": "Name the problem, ask for a change, stay polite.",
+            "zh": "说明问题、请求更换，并保持礼貌。",
+            "th": "บอกปัญหา ขอเปลี่ยน และรักษาน้ำเสียงสุภาพ"
           },
           "lessonIds": [
             "zh-complaints-teach-1",
@@ -2529,6 +3411,12 @@
             "zh": "给建议",
             "th": "การให้คำแนะนำ"
           },
+          "goal": {
+            "vi": "Đưa ý kiến nhẹ, nêu lý do, không ra lệnh.",
+            "en": "Give soft advice, add a reason, avoid orders.",
+            "zh": "给温和建议、说明理由，不要下命令。",
+            "th": "ให้คำแนะนำเบาๆ บอกเหตุผล ไม่สั่ง"
+          },
           "lessonIds": [
             "zh-advice-teach-1",
             "zh-advice-words-1",
@@ -2545,6 +3433,12 @@
             "en": "Plans",
             "zh": "计划",
             "th": "แผน"
+          },
+          "goal": {
+            "vi": "Nói ý định, điều kiện, đổi lịch, và phương án B.",
+            "en": "Talk about intentions, conditions, changing plans, and a backup.",
+            "zh": "说打算、条件、改期，以及备选方案。",
+            "th": "พูดความตั้งใจ เงื่อนไข เลื่อนนัด และแผนสำรอง"
           },
           "lessonIds": [
             "zh-plans-teach-1",
@@ -2563,6 +3457,12 @@
             "zh": "人际关系",
             "th": "ความสัมพันธ์"
           },
+          "goal": {
+            "vi": "Nói bạn bè, ranh giới, xin lỗi, và giữ hòa khí.",
+            "en": "Talk about friends, boundaries, apologies, and keeping the peace.",
+            "zh": "说朋友、界限、道歉，以及维持和气。",
+            "th": "พูดเรื่องเพื่อน เส้นแบ่ง ขอโทษ และรักษาบรรยากาศ"
+          },
           "lessonIds": [
             "zh-relationships-teach-1",
             "zh-relationships-words-1",
@@ -2579,6 +3479,12 @@
             "en": "Everyday news",
             "zh": "生活新闻",
             "th": "ข่าวในชีวิต"
+          },
+          "goal": {
+            "vi": "Nói tin ngắn, nguồn, nghi ngờ, và ý kiến nhẹ.",
+            "en": "Talk about a short news item, the source, doubt, and a mild view.",
+            "zh": "说一则短新闻、来源、怀疑，以及温和看法。",
+            "th": "พูดข่าวสั้น แหล่งที่มา ความสงสัย และความเห็นเบาๆ"
           },
           "lessonIds": [
             "zh-news-teach-1",
@@ -2597,6 +3503,12 @@
             "zh": "邀请和拒绝",
             "th": "การชวนและการปฏิเสธ"
           },
+          "goal": {
+            "vi": "Mời ai đó, nhận lời, hoặc từ chối nhẹ.",
+            "en": "Invite someone, accept, or decline gently.",
+            "zh": "邀请、接受，或温和拒绝。",
+            "th": "ชวนคน รับคำ หรือปฏิเสธอย่างสุภาพ"
+          },
           "lessonIds": [
             "zh-invitations-teach-1",
             "zh-invitations-words-1",
@@ -2613,6 +3525,12 @@
             "en": "Giving opinions",
             "zh": "表达观点",
             "th": "การให้ความเห็น"
+          },
+          "goal": {
+            "vi": "Nêu ý, đồng ý, không đồng ý, và đưa một lý do ngắn.",
+            "en": "Give an opinion, agree, disagree, and add one short reason.",
+            "zh": "提出看法、同意、不同意，并给一个短理由。",
+            "th": "ให้ความเห็น เห็นด้วย ไม่เห็นด้วย และให้เหตุผลสั้น"
           },
           "lessonIds": [
             "zh-opinion-teach-1",
@@ -2631,6 +3549,12 @@
             "zh": "工作",
             "th": "งาน"
           },
+          "goal": {
+            "vi": "Nói lịch họp, deadline, xin hỗ trợ.",
+            "en": "Talk about meetings, deadlines, and asking for help.",
+            "zh": "说会议、截止日期、请求帮助。",
+            "th": "พูดเรื่องประชุม เดดไลน์ และขอความช่วยเหลือ"
+          },
           "lessonIds": [
             "zh-work-teach-1",
             "zh-work-words-1",
@@ -2647,6 +3571,12 @@
             "en": "Environment",
             "zh": "环境",
             "th": "สิ่งแวดล้อม"
+          },
+          "goal": {
+            "vi": "Nói về thành phố, rác, xe, và thói quen nhỏ.",
+            "en": "Talk about cities, waste, transport, and small habits.",
+            "zh": "谈城市、垃圾、交通和小习惯。",
+            "th": "พูดเรื่องเมือง ขยะ การเดินทาง และนิสัยเล็กๆ"
           },
           "lessonIds": [
             "zh-environment-teach-1",
@@ -2665,6 +3595,12 @@
             "zh": "教育",
             "th": "การศึกษา"
           },
+          "goal": {
+            "vi": "Nói về cách học, kỳ thi, và áp lực.",
+            "en": "Talk about study methods, exams, and pressure.",
+            "zh": "谈学习方法、考试和压力。",
+            "th": "พูดเรื่องวิธีเรียน การสอบ และความกดดัน"
+          },
           "lessonIds": [
             "zh-education-teach-1",
             "zh-education-words-1",
@@ -2678,7 +3614,7 @@
     {
       "id": "th",
       "lessonCount": 260,
-      "exerciseCount": 2298,
+      "exerciseCount": 3256,
       "units": [
         {
           "id": "sounds",
@@ -2688,6 +3624,12 @@
             "en": "Sounds and reading",
             "zh": "读音",
             "th": "เสียงและการอ่าน"
+          },
+          "goal": {
+            "vi": "Học nghe–đọc trước khi vào câu đời sống.",
+            "en": "Hear and read the script before daily sentences.",
+            "zh": "先听、先认读，再进入生活句子。",
+            "th": "ฟังและอ่านก่อนเข้าประโยคชีวิต"
           },
           "lessonIds": [
             "th-sounds-teach-1",
@@ -2706,6 +3648,12 @@
             "zh": "问候",
             "th": "ทักทาย"
           },
+          "goal": {
+            "vi": "Chào, xưng tên, nói cảm ơn và xin lỗi.",
+            "en": "Greet, say your name, thank and apologise.",
+            "zh": "打招呼、报名字、说谢谢和对不起。",
+            "th": "ทักทาย บอกชื่อ ขอบคุณ และขอโทษ"
+          },
           "lessonIds": [
             "th-greet-teach-1",
             "th-greet-words-1",
@@ -2722,6 +3670,12 @@
             "en": "Numbers",
             "zh": "数字",
             "th": "ตัวเลข"
+          },
+          "goal": {
+            "vi": "Đếm, hỏi số lượng, nói giá đơn giản.",
+            "en": "Count, ask how many, say a simple price.",
+            "zh": "数数、问数量、说简单价格。",
+            "th": "นับ ถามจำนวน พูดราคาแบบง่าย"
           },
           "lessonIds": [
             "th-numbers-teach-1",
@@ -2740,6 +3694,12 @@
             "zh": "时间和日子",
             "th": "เวลาและวัน"
           },
+          "goal": {
+            "vi": "Nói giờ, hôm nay, ngày mai, và hẹn giờ.",
+            "en": "Say the time, today, tomorrow, and make a time.",
+            "zh": "说时间、今天、明天，并约定时间。",
+            "th": "พูดเวลา วันนี้ พรุ่งนี้ และนัดเวลา"
+          },
           "lessonIds": [
             "th-time-teach-1",
             "th-time-words-1",
@@ -2756,6 +3716,12 @@
             "en": "Café",
             "zh": "咖啡馆",
             "th": "คาเฟ่"
+          },
+          "goal": {
+            "vi": "Xin bàn, gọi đồ uống, thêm đường.",
+            "en": "Ask for a table, order a drink, extra sugar.",
+            "zh": "要桌子、点饮料、加糖。",
+            "th": "ขอโต๊ะ สั่งเครื่องดื่ม ขอน้ำตาล"
           },
           "lessonIds": [
             "th-cafe-teach-1",
@@ -2774,6 +3740,12 @@
             "zh": "饮食",
             "th": "อาหาร"
           },
+          "goal": {
+            "vi": "Gọi món, nói khẩu vị, xin thêm.",
+            "en": "Order food, say taste, ask for more.",
+            "zh": "点菜、说口味、再要一份。",
+            "th": "สั่งอาหาร บอกรส ขอเพิ่ม"
+          },
           "lessonIds": [
             "th-food-teach-1",
             "th-food-words-1",
@@ -2790,6 +3762,12 @@
             "en": "Market",
             "zh": "市场",
             "th": "ตลาด"
+          },
+          "goal": {
+            "vi": "Hỏi còn hàng, hỏi giá, xin túi.",
+            "en": "Ask if it is left, ask the price, take a bag.",
+            "zh": "问还有没有、问价、拿袋子。",
+            "th": "ถามว่ายังมีไหม ถามราคา รับถุง"
           },
           "lessonIds": [
             "th-market-teach-1",
@@ -2808,6 +3786,12 @@
             "zh": "家",
             "th": "บ้าน"
           },
+          "goal": {
+            "vi": "Tên phòng, đồ trong nhà, lời mời vào.",
+            "en": "Name rooms, things at home, invite someone in.",
+            "zh": "房间、家里的东西、请进。",
+            "th": "ชื่อห้อง ของในบ้าน เชิญเข้ามา"
+          },
           "lessonIds": [
             "th-home-teach-1",
             "th-home-words-1",
@@ -2824,6 +3808,12 @@
             "en": "Messages",
             "zh": "短信",
             "th": "ข้อความ"
+          },
+          "goal": {
+            "vi": "Xin lỗi vì trễ, hẹn giờ, gửi vị trí.",
+            "en": "Apologise for being late, set a time, send a pin.",
+            "zh": "为迟到道歉、约时间、发定位。",
+            "th": "ขอโทษที่สาย นัดเวลา ส่งพิกัด"
           },
           "lessonIds": [
             "th-messages-teach-1",
@@ -2842,6 +3832,12 @@
             "zh": "家庭",
             "th": "ครอบครัว"
           },
+          "goal": {
+            "vi": "Nói bố mẹ, anh chị em, và người nhà.",
+            "en": "Name parents, siblings, and family.",
+            "zh": "说父母、兄弟姐妹和家人。",
+            "th": "พูดถึงพ่อแม่ พี่น้อง และครอบครัว"
+          },
           "lessonIds": [
             "th-family-teach-1",
             "th-family-words-1",
@@ -2858,6 +3854,12 @@
             "en": "Clothes",
             "zh": "衣服",
             "th": "เสื้อผ้า"
+          },
+          "goal": {
+            "vi": "Nói áo, quần, giày, mặc gì hôm nay.",
+            "en": "Name shirts, trousers, shoes, and what you wear today.",
+            "zh": "说衣服、裤子、鞋，以及今天穿什么。",
+            "th": "พูดเสื้อ กางเกง รองเท้า และวันนี้ใส่อะไร"
           },
           "lessonIds": [
             "th-clothes-teach-1",
@@ -2876,6 +3878,12 @@
             "zh": "天气",
             "th": "อากาศ"
           },
+          "goal": {
+            "vi": "Nói nắng, mưa, nóng, lạnh, và mang theo gì.",
+            "en": "Say sun, rain, hot, cold, and what to bring.",
+            "zh": "说晴、雨、热、冷，以及要带什么。",
+            "th": "พูดแดด ฝน ร้อน หนาว และต้องพกอะไร"
+          },
           "lessonIds": [
             "th-weather-teach-1",
             "th-weather-words-1",
@@ -2892,6 +3900,12 @@
             "en": "Feelings",
             "zh": "心情",
             "th": "ความรู้สึก"
+          },
+          "goal": {
+            "vi": "Nói vui, mệt, lo, và hỏi người khác thế nào.",
+            "en": "Say happy, tired, worried, and ask how someone feels.",
+            "zh": "说开心、累、担心，并问别人怎么样。",
+            "th": "พูดดีใจ เหนื่อย กังวล และถามคนอื่นเป็นอย่างไร"
           },
           "lessonIds": [
             "th-feelings-teach-1",
@@ -2910,6 +3924,12 @@
             "zh": "颜色",
             "th": "สี"
           },
+          "goal": {
+            "vi": "Nói màu đồ, hỏi màu nào, chọn màu mình thích.",
+            "en": "Name colours, ask which colour, pick one you like.",
+            "zh": "说颜色、问哪个颜色、选自己喜欢的。",
+            "th": "พูดสี ถามสีไหน เลือกสีที่ชอบ"
+          },
           "lessonIds": [
             "th-colors-teach-1",
             "th-colors-words-1",
@@ -2926,6 +3946,12 @@
             "en": "Daily routine",
             "zh": "日常生活",
             "th": "ชีวิตประจำวัน"
+          },
+          "goal": {
+            "vi": "Nói dậy, ăn, đi làm, về nhà, ngủ.",
+            "en": "Talk about waking, eating, going out, coming home, sleeping.",
+            "zh": "说起床、吃饭、出门、回家、睡觉。",
+            "th": "พูดเรื่องตื่น กิน ออกไป กลับบ้าน นอน"
           },
           "lessonIds": [
             "th-daily-teach-1",
@@ -2944,6 +3970,12 @@
             "zh": "购物",
             "th": "การซื้อของ"
           },
+          "goal": {
+            "vi": "Hỏi còn hàng, đổi size, trả hàng, xin hóa đơn.",
+            "en": "Ask for stock, change size, return an item, ask for a receipt.",
+            "zh": "问有没有货、换尺码、退货、要发票。",
+            "th": "ถามว่ามีของไหม เปลี่ยนไซซ์ คืนของ ขอใบเสร็จ"
+          },
           "lessonIds": [
             "th-shopping-teach-1",
             "th-shopping-words-1",
@@ -2960,6 +3992,12 @@
             "en": "Restaurant",
             "zh": "餐馆",
             "th": "ร้านอาหาร"
+          },
+          "goal": {
+            "vi": "Đặt bàn, gọi món, xin không cay, xin hóa đơn.",
+            "en": "Book a table, order, ask for mild spice, ask for the bill.",
+            "zh": "订座、点菜、不要辣、买单。",
+            "th": "จองโต๊ะ สั่งอาหาร ขอไม่เผ็ด ขอคิดเงิน"
           },
           "lessonIds": [
             "th-restaurant-teach-1",
@@ -2978,6 +4016,12 @@
             "zh": "酒店",
             "th": "โรงแรม"
           },
+          "goal": {
+            "vi": "Nhận phòng, xin thêm khăn, hỏi wifi, trả phòng.",
+            "en": "Check in, ask for towels, ask for wifi, check out.",
+            "zh": "入住、要毛巾、问无线网、退房。",
+            "th": "เช็กอิน ขอผ้าขนหนู ถามไวไฟ เช็กเอาต์"
+          },
           "lessonIds": [
             "th-hotel-teach-1",
             "th-hotel-words-1",
@@ -2994,6 +4038,12 @@
             "en": "Phone",
             "zh": "手机",
             "th": "โทรศัพท์"
+          },
+          "goal": {
+            "vi": "Gọi, nhắn, hết pin, hỏi wifi, nói máy hỏng.",
+            "en": "Call, text, low battery, ask for wifi, say the phone is broken.",
+            "zh": "打电话、发信息、没电、问无线网、说手机坏了。",
+            "th": "โทร ส่งข้อความ แบตหมด ถามไวไฟ บอกว่าเครื่องพัง"
           },
           "lessonIds": [
             "th-phone-teach-1",
@@ -3012,6 +4062,12 @@
             "zh": "爱好",
             "th": "งานอดิเรก"
           },
+          "goal": {
+            "vi": "Nói mình thích làm gì lúc rảnh.",
+            "en": "Say what you like to do in free time.",
+            "zh": "说空闲时喜欢做什么。",
+            "th": "พูดว่าว่างๆ ชอบทำอะไร"
+          },
           "lessonIds": [
             "th-hobbies-teach-1",
             "th-hobbies-words-1",
@@ -3028,6 +4084,12 @@
             "en": "Sports",
             "zh": "运动",
             "th": "กีฬา"
+          },
+          "goal": {
+            "vi": "Nói môn mình chơi, tập, và hỏi người khác.",
+            "en": "Name a sport, say you train, and ask what others play.",
+            "zh": "说自己打球、锻炼，并问别人。",
+            "th": "พูดกีฬาที่เล่น ออกกำลัง และถามคนอื่น"
           },
           "lessonIds": [
             "th-sports-teach-1",
@@ -3046,6 +4108,12 @@
             "zh": "钱",
             "th": "เงิน"
           },
+          "goal": {
+            "vi": "Nói giá, chuyển khoản, đổi tiền, xin hóa đơn.",
+            "en": "Talk about prices, transfers, changing money, asking for a receipt.",
+            "zh": "说价格、转账、换钱、要收据。",
+            "th": "พูดราคา โอนเงิน แลกเงิน ขอใบเสร็จ"
+          },
           "lessonIds": [
             "th-money-teach-1",
             "th-money-words-1",
@@ -3062,6 +4130,12 @@
             "en": "Cooking",
             "zh": "做饭",
             "th": "ทำอาหาร"
+          },
+          "goal": {
+            "vi": "Nói nguyên liệu, cắt, nêm, và mời ăn.",
+            "en": "Name ingredients, cutting, seasoning, and inviting someone to eat.",
+            "zh": "说食材、切、调味，并请客吃饭。",
+            "th": "พูดวัตถุดิบ หั่น ปรุง และชวนกิน"
           },
           "lessonIds": [
             "th-cooking-teach-1",
@@ -3080,6 +4154,12 @@
             "zh": "打扫",
             "th": "เก็บบ้าน"
           },
+          "goal": {
+            "vi": "Nói quét, lau, giặt, và nhà sạch hay bẩn.",
+            "en": "Talk about sweeping, wiping, laundry, and a clean or dirty home.",
+            "zh": "说扫地、擦、洗衣服，以及家里干净还是脏。",
+            "th": "พูดกวาด เช็ด ซักผ้า และบ้านสะอาดหรือสกปรก"
+          },
           "lessonIds": [
             "th-cleaning-teach-1",
             "th-cleaning-words-1",
@@ -3096,6 +4176,12 @@
             "en": "Pets",
             "zh": "宠物",
             "th": "สัตว์เลี้ยง"
+          },
+          "goal": {
+            "vi": "Nói chó mèo, cho ăn, dắt đi, và thú cưng bệnh.",
+            "en": "Talk about dogs and cats, feeding, walking, and a sick pet.",
+            "zh": "说猫狗、喂食、遛狗，以及宠物生病。",
+            "th": "พูดแมวหมา ให้อาหาร พาเดิน และสัตว์เลี้ยงป่วย"
           },
           "lessonIds": [
             "th-pets-teach-1",
@@ -3114,6 +4200,12 @@
             "zh": "节日",
             "th": "วันหยุด"
           },
+          "goal": {
+            "vi": "Nói nghỉ lễ, tặng quà, chúc mừng, và kế hoạch.",
+            "en": "Talk about days off, gifts, wishes, and plans.",
+            "zh": "说放假、送礼、祝福和计划。",
+            "th": "พูดวันหยุด ของขวัญ คำอวยพร และแผน"
+          },
           "lessonIds": [
             "th-holidays-teach-1",
             "th-holidays-words-1",
@@ -3130,6 +4222,12 @@
             "en": "Neighbours",
             "zh": "邻居",
             "th": "เพื่อนบ้าน"
+          },
+          "goal": {
+            "vi": "Chào hàng xóm, xin lỗi vì ồn, nhờ giữ đồ.",
+            "en": "Greet neighbours, apologise for noise, ask them to keep a parcel.",
+            "zh": "打招呼、为噪音道歉、请帮忙收快递。",
+            "th": "ทักเพื่อนบ้าน ขอโทษที่เสียงดัง ฝากพัสดุ"
           },
           "lessonIds": [
             "th-neighbors-teach-1",
@@ -3148,6 +4246,12 @@
             "zh": "网络和设备",
             "th": "เน็ตและเครื่อง"
           },
+          "goal": {
+            "vi": "Nói wifi chậm, tải tệp, họp online, và bảo mật đơn giản.",
+            "en": "Talk about slow wifi, downloads, online meetings, and simple privacy.",
+            "zh": "说网慢、下载、线上开会，以及简单隐私。",
+            "th": "พูดเน็ตช้า ดาวน์โหลด ประชุมออนไลน์ และความเป็นส่วนตัวแบบง่าย"
+          },
           "lessonIds": [
             "th-internet-teach-1",
             "th-internet-words-1",
@@ -3164,6 +4268,12 @@
             "en": "School",
             "zh": "学校",
             "th": "โรงเรียน"
+          },
+          "goal": {
+            "vi": "Nói lớp, bài tập, giáo viên, và xin nghỉ.",
+            "en": "Talk about class, homework, teachers, and asking for a day off.",
+            "zh": "说课、作业、老师，以及请假。",
+            "th": "พูดห้องเรียน การบ้าน ครู และขอลา"
           },
           "lessonIds": [
             "th-school-teach-1",
@@ -3182,6 +4292,12 @@
             "zh": "外貌",
             "th": "รูปร่างหน้าตา"
           },
+          "goal": {
+            "vi": "Tả tóc, cao thấp, và người đang mặc gì.",
+            "en": "Describe hair, height, and what someone is wearing.",
+            "zh": "说头发、高矮、以及穿着。",
+            "th": "บรรยายผม ส่วนสูง และว่าใครใส่อะไร"
+          },
           "lessonIds": [
             "th-appearance-teach-1",
             "th-appearance-words-1",
@@ -3198,6 +4314,12 @@
             "en": "Forms and papers",
             "zh": "表格证件",
             "th": "แบบฟอร์มและเอกสาร"
+          },
+          "goal": {
+            "vi": "Điền tên, ngày sinh, địa chỉ, số giấy tờ.",
+            "en": "Fill in name, date of birth, address, ID number.",
+            "zh": "填姓名、生日、地址、证件号。",
+            "th": "กรอกชื่อ วันเกิด ที่อยู่ เลขเอกสาร"
           },
           "lessonIds": [
             "th-forms-teach-1",
@@ -3216,6 +4338,12 @@
             "zh": "出租车",
             "th": "แท็กซี่"
           },
+          "goal": {
+            "vi": "Gọi xe, nói điểm đến, xin đi meter, xuống xe.",
+            "en": "Call a car, say the destination, ask for the meter, get out.",
+            "zh": "叫车、说目的地、打表、下车。",
+            "th": "เรียกรถ บอกที่หมาย ขอมิเตอร์ ลงรถ"
+          },
           "lessonIds": [
             "th-taxi-teach-1",
             "th-taxi-words-1",
@@ -3232,6 +4360,12 @@
             "en": "Airport",
             "zh": "机场",
             "th": "สนามบิน"
+          },
+          "goal": {
+            "vi": "Check-in, hành lý, cửa bay, hộ chiếu, chậm chuyến.",
+            "en": "Check in, luggage, gate, passport, a delay.",
+            "zh": "值机、行李、登机口、护照、晚点。",
+            "th": "เช็กอิน กระเป๋า ประตูขึ้นเครื่อง พาสปอร์ต ไฟลต์ดีเลย์"
           },
           "lessonIds": [
             "th-airport-teach-1",
@@ -3250,6 +4384,12 @@
             "zh": "紧急情况",
             "th": "เหตุฉุกเฉิน"
           },
+          "goal": {
+            "vi": "Gọi giúp, nói chỗ, mất đồ, tai nạn nhỏ.",
+            "en": "Call for help, say the place, lost item, a small accident.",
+            "zh": "求救、说地点、丢东西、小事故。",
+            "th": "เรียกช่วย บอกที่ ของหาย อุบัติเหตุเล็ก"
+          },
           "lessonIds": [
             "th-emergency-teach-1",
             "th-emergency-words-1",
@@ -3266,6 +4406,12 @@
             "en": "Renting",
             "zh": "租房",
             "th": "เช่าบ้าน"
+          },
+          "goal": {
+            "vi": "Hỏi giá thuê, cọc, hóa đơn điện nước, hợp đồng.",
+            "en": "Ask rent, deposit, utility bills, the contract.",
+            "zh": "问租金、押金、水电、合同。",
+            "th": "ถามค่าเช่า ค่ามัดจำ ค่าน้ำไฟ สัญญา"
           },
           "lessonIds": [
             "th-rent-teach-1",
@@ -3284,6 +4430,12 @@
             "zh": "电影和出门",
             "th": "หนังและการออกไป"
           },
+          "goal": {
+            "vi": "Mua vé phim, chọn giờ, nói thể loại, hẹn đi chơi.",
+            "en": "Buy a ticket, pick a time, name a genre, arrange a night out.",
+            "zh": "买票、选场次、说类型、约出门。",
+            "th": "ซื้อตั๋วหนัง เลือกเวลา บอกแนว นัดออกไป"
+          },
           "lessonIds": [
             "th-cinema-teach-1",
             "th-cinema-words-1",
@@ -3300,6 +4452,12 @@
             "en": "Seasons and climate",
             "zh": "季节气候",
             "th": "ฤดูและอากาศ"
+          },
+          "goal": {
+            "vi": "Nói bốn mùa, mưa nắng, và mặc gì theo mùa.",
+            "en": "Name seasons, rain and sun, and what to wear.",
+            "zh": "说四季、晴雨，以及按季节穿什么。",
+            "th": "พูดสี่ฤดู ฝนแดด และว่าฤดูไหนใส่อะไร"
           },
           "lessonIds": [
             "th-seasons-teach-1",
@@ -3318,6 +4476,12 @@
             "zh": "寻物",
             "th": "ของหาย"
           },
+          "goal": {
+            "vi": "Tả đồ mất, hỏi phòng thất lạc, để lại số điện thoại.",
+            "en": "Describe a lost item, ask at lost and found, leave a number.",
+            "zh": "描述丢失物、问失物处、留电话。",
+            "th": "บรรยายของหาย ถามจุดรับของหาย ฝากเบอร์"
+          },
           "lessonIds": [
             "th-lost-teach-1",
             "th-lost-words-1",
@@ -3334,6 +4498,12 @@
             "en": "Getting around",
             "zh": "出行",
             "th": "การเดินทาง"
+          },
+          "goal": {
+            "vi": "Hỏi đường, mua vé, nói mình trễ.",
+            "en": "Ask the way, buy a ticket, say you are late.",
+            "zh": "问路、买票、说自己晚了。",
+            "th": "ถามทาง ซื้อตั๋ว บอกว่าสาย"
           },
           "lessonIds": [
             "th-travel-teach-1",
@@ -3352,6 +4522,12 @@
             "zh": "在城市里",
             "th": "ในเมือง"
           },
+          "goal": {
+            "vi": "Hỏi chỗ, ngân hàng, hiệu thuốc, nhà vệ sinh.",
+            "en": "Ask for places: bank, pharmacy, toilet.",
+            "zh": "问地方：银行、药店、厕所。",
+            "th": "ถามที่ ธนาคาร ร้านยา ห้องน้ำ"
+          },
           "lessonIds": [
             "th-city-teach-1",
             "th-city-words-1",
@@ -3368,6 +4544,12 @@
             "en": "Body and health",
             "zh": "身体和健康",
             "th": "ร่างกายและสุขภาพ"
+          },
+          "goal": {
+            "vi": "Nói đau ở đâu, xin thuốc, hẹn bác sĩ.",
+            "en": "Say where it hurts, ask for medicine, see a doctor.",
+            "zh": "说哪里疼、要药、看医生。",
+            "th": "บอกจุดที่เจ็บ ขอยา นัดหมอ"
           },
           "lessonIds": [
             "th-body-teach-1",
@@ -3386,6 +4568,12 @@
             "zh": "学习",
             "th": "การเรียน"
           },
+          "goal": {
+            "vi": "Nói về bài học 15 phút, hỏi nghĩa, xin nói chậm.",
+            "en": "Talk about a 15-minute lesson, ask meaning, ask to slow down.",
+            "zh": "说十五分钟的课、问意思、请说慢。",
+            "th": "พูดถึงบท 15 นาที ถามความหมาย ขอพูดช้า"
+          },
           "lessonIds": [
             "th-study-teach-1",
             "th-study-words-1",
@@ -3402,6 +4590,12 @@
             "en": "Gentle complaints",
             "zh": "委婉投诉",
             "th": "การร้องเรียนอย่างสุภาพ"
+          },
+          "goal": {
+            "vi": "Nói sự cố, xin đổi, giữ giọng lịch sự.",
+            "en": "Name the problem, ask for a change, stay polite.",
+            "zh": "说明问题、请求更换，并保持礼貌。",
+            "th": "บอกปัญหา ขอเปลี่ยน และรักษาน้ำเสียงสุภาพ"
           },
           "lessonIds": [
             "th-complaints-teach-1",
@@ -3420,6 +4614,12 @@
             "zh": "给建议",
             "th": "การให้คำแนะนำ"
           },
+          "goal": {
+            "vi": "Đưa ý kiến nhẹ, nêu lý do, không ra lệnh.",
+            "en": "Give soft advice, add a reason, avoid orders.",
+            "zh": "给温和建议、说明理由，不要下命令。",
+            "th": "ให้คำแนะนำเบาๆ บอกเหตุผล ไม่สั่ง"
+          },
           "lessonIds": [
             "th-advice-teach-1",
             "th-advice-words-1",
@@ -3436,6 +4636,12 @@
             "en": "Plans",
             "zh": "计划",
             "th": "แผน"
+          },
+          "goal": {
+            "vi": "Nói ý định, điều kiện, đổi lịch, và phương án B.",
+            "en": "Talk about intentions, conditions, changing plans, and a backup.",
+            "zh": "说打算、条件、改期，以及备选方案。",
+            "th": "พูดความตั้งใจ เงื่อนไข เลื่อนนัด และแผนสำรอง"
           },
           "lessonIds": [
             "th-plans-teach-1",
@@ -3454,6 +4660,12 @@
             "zh": "人际关系",
             "th": "ความสัมพันธ์"
           },
+          "goal": {
+            "vi": "Nói bạn bè, ranh giới, xin lỗi, và giữ hòa khí.",
+            "en": "Talk about friends, boundaries, apologies, and keeping the peace.",
+            "zh": "说朋友、界限、道歉，以及维持和气。",
+            "th": "พูดเรื่องเพื่อน เส้นแบ่ง ขอโทษ และรักษาบรรยากาศ"
+          },
           "lessonIds": [
             "th-relationships-teach-1",
             "th-relationships-words-1",
@@ -3470,6 +4682,12 @@
             "en": "Everyday news",
             "zh": "生活新闻",
             "th": "ข่าวในชีวิต"
+          },
+          "goal": {
+            "vi": "Nói tin ngắn, nguồn, nghi ngờ, và ý kiến nhẹ.",
+            "en": "Talk about a short news item, the source, doubt, and a mild view.",
+            "zh": "说一则短新闻、来源、怀疑，以及温和看法。",
+            "th": "พูดข่าวสั้น แหล่งที่มา ความสงสัย และความเห็นเบาๆ"
           },
           "lessonIds": [
             "th-news-teach-1",
@@ -3488,6 +4706,12 @@
             "zh": "邀请和拒绝",
             "th": "การชวนและการปฏิเสธ"
           },
+          "goal": {
+            "vi": "Mời ai đó, nhận lời, hoặc từ chối nhẹ.",
+            "en": "Invite someone, accept, or decline gently.",
+            "zh": "邀请、接受，或温和拒绝。",
+            "th": "ชวนคน รับคำ หรือปฏิเสธอย่างสุภาพ"
+          },
           "lessonIds": [
             "th-invitations-teach-1",
             "th-invitations-words-1",
@@ -3504,6 +4728,12 @@
             "en": "Giving opinions",
             "zh": "表达观点",
             "th": "การให้ความเห็น"
+          },
+          "goal": {
+            "vi": "Nêu ý, đồng ý, không đồng ý, và đưa một lý do ngắn.",
+            "en": "Give an opinion, agree, disagree, and add one short reason.",
+            "zh": "提出看法、同意、不同意，并给一个短理由。",
+            "th": "ให้ความเห็น เห็นด้วย ไม่เห็นด้วย และให้เหตุผลสั้น"
           },
           "lessonIds": [
             "th-opinion-teach-1",
@@ -3522,6 +4752,12 @@
             "zh": "工作",
             "th": "งาน"
           },
+          "goal": {
+            "vi": "Nói lịch họp, deadline, xin hỗ trợ.",
+            "en": "Talk about meetings, deadlines, and asking for help.",
+            "zh": "说会议、截止日期、请求帮助。",
+            "th": "พูดเรื่องประชุม เดดไลน์ และขอความช่วยเหลือ"
+          },
           "lessonIds": [
             "th-work-teach-1",
             "th-work-words-1",
@@ -3539,6 +4775,12 @@
             "zh": "环境",
             "th": "สิ่งแวดล้อม"
           },
+          "goal": {
+            "vi": "Nói về thành phố, rác, xe, và thói quen nhỏ.",
+            "en": "Talk about cities, waste, transport, and small habits.",
+            "zh": "谈城市、垃圾、交通和小习惯。",
+            "th": "พูดเรื่องเมือง ขยะ การเดินทาง และนิสัยเล็กๆ"
+          },
           "lessonIds": [
             "th-environment-teach-1",
             "th-environment-words-1",
@@ -3555,6 +4797,12 @@
             "en": "Education",
             "zh": "教育",
             "th": "การศึกษา"
+          },
+          "goal": {
+            "vi": "Nói về cách học, kỳ thi, và áp lực.",
+            "en": "Talk about study methods, exams, and pressure.",
+            "zh": "谈学习方法、考试和压力。",
+            "th": "พูดเรื่องวิธีเรียน การสอบ และความกดดัน"
           },
           "lessonIds": [
             "th-education-teach-1",

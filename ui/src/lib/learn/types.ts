@@ -91,7 +91,7 @@ export type CatalogTrack = {
   id: LearnTrack;
   lessonCount: number;
   exerciseCount: number;
-  units: { id: string; level: string; title: I18nText; lessonIds: string[] }[];
+  units: { id: string; level: string; title: I18nText; goal?: I18nText; lessonIds: string[] }[];
 };
 
 export type Catalog = {

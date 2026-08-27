@@ -384,7 +384,13 @@
     "hearFirst": "Bấm loa, rồi chọn đáp án. Chữ hiện sau khi kiểm tra.",
     "right": "Đúng.",
     "wrong": "Chưa đúng. Đáp án: {answer}",
-    "retry": "Thử lại"
+    "retry": "Thử lại",
+    "pathSpine": "52 chương, từ âm tới B2. Mỗi chương năm bước: lý thuyết, từ, nghe, luyện, chơi nhớ.",
+    "stage": "Giai đoạn {level}",
+    "chapterN": "Chương {n}/{total}",
+    "chapterRange": "chương {from}–{to}",
+    "pickChapter": "52 chương theo tên. Bấm một chương để xem mục tiêu và năm bước.",
+    "fiveSteps": "Năm bước của chương này"
   },
   "Footer": {
     "tagline": "Học dịu dàng, nhớ thật lâu.",

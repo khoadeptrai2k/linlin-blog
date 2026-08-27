@@ -714,24 +714,26 @@ export function theoryFor(unitId, level, track) {
   const more = projectUnit(UNIT_THEORY_MORE[unitId], track);
   const structure = unit.structure || more.structure || core.structure;
   const patternMap = new Map();
-  for (const item of [...(frames.patterns || []), ...unit.patterns, ...more.patterns]) {
+  for (const item of [...unit.patterns, ...more.patterns, ...(frames.patterns || [])]) {
     if (item?.form && !patternMap.has(item.form)) patternMap.set(item.form, item);
   }
   const applyMap = new Map();
-  for (const item of [...(frames.apply || []), ...unit.apply, ...more.apply]) {
+  for (const item of [...unit.apply, ...more.apply, ...(frames.apply || [])]) {
     if (item?.sample && !applyMap.has(item.sample)) applyMap.set(item.sample, item);
   }
+  const topicPoints = [...unit.usage, ...more.usage].filter(Boolean);
+  const points = [...new Set([...topicPoints, ...core.points.slice(0, topicPoints.length ? 2 : 6), ...(frames.morePoints || [])])];
   return {
-    levelTitle: core.title,
-    levelNote: core.structure,
-    points: [...core.points, ...(frames.morePoints || [])],
+    levelTitle: structure.split(/[。.!]/)[0].trim() || core.title,
+    levelNote: structure,
+    points: points.slice(0, 8),
     contrasts: extra.contrasts,
     mistakes: extra.mistakes,
     examples: extra.examples,
     applyPrompt: core.applyPrompt,
-    tip: core.tip,
+    tip: unit.patterns[0]?.note || more.patterns[0]?.note || core.tip,
     structure,
-    patterns: [...patternMap.values()],
+    patterns: [...patternMap.values()].slice(0, 8),
     usage: [...core.usage, ...(frames.moreUsage || []), ...unit.usage, ...more.usage],
     apply: [...applyMap.values()],
   };

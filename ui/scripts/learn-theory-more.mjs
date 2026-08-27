@@ -37,6 +37,10 @@ export const UNIT_THEORY_MORE = {
     [
       lang("Chữ bản địa có thể lạ. Loa và phiên âm đi cùng.", "The script may be new. Speaker and reading go together.", "字可能陌生。声音和拼音一起给。", "ตัวอักษรอาจแปลก ลำโพงกับคำอ่านไปด้วยกัน"),
       lang("Phiên âm kiểu Việt chỉ là cầu. Tai mới là chuẩn.", "Vietnamese reading is a bridge. The ear is the model.", "越南读法只是桥。耳朵才是标准。", "คำอ่านแบบเวียดเป็นสะพาน หูคือมาตรฐาน"),
+      lang("Một âm một lần. Đừng ghép cả câu hôm nay.", "One sound at a time. Do not join a full sentence today.", "一个音一次。今天不要连成整句。", "หนึ่งเสียงหนึ่งครั้ง วันนี้ยังไม่ต่อทั้งประโยค"),
+      lang("Thanh / trọng âm đổi nghĩa. Nghe rồi mới nhắc.", "Tone or stress can change meaning. Hear it, then repeat.", "声调或重音会改意思。先听再跟。", "วรรณยุกต์หรือเสียงหนักเปลี่ยนความหมาย ฟังก่อนแล้วพูดตาม"),
+      lang("Mở miệng rõ. Đọc chậm hơn người mẫu.", "Open the mouth clearly. Speak slower than the model.", "嘴巴张开。比示范更慢。", "อ้าปากให้ชัด พูดช้ากว่าตัวอย่าง"),
+      lang("Nếu chưa đọc được chữ, chỉ cần bấm loa.", "If you cannot read yet, just use the speaker.", "还不认识字，就先点喇叭。", "ถ้ายังอ่านไม่ได้ กดลำโพงอย่างเดียวก็ได้"),
     ],
     [
       {

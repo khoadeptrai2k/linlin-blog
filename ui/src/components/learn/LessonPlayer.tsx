@@ -399,8 +399,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         </ol>
       </aside>
 
-      <article className="glass-tile min-w-0 p-0">
-        <div className="px-5 py-5 sm:px-7">
+      <article className="learn-card glass-tile min-w-0 p-0">
+        <div className="shrink-0 px-5 py-4 sm:px-7">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">
             {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
           </p>
@@ -417,7 +417,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           </button>
         </div>
 
-        <div className="px-5 pb-6 sm:px-7">
+        <div className="learn-stage min-h-0 flex-1 overflow-auto px-5 pb-4 sm:px-7">
           {current === "theory" && slide ? (
             <TheorySlideView slide={slide} theory={lesson.theory} t={t} slow={slow} lang={lesson.speechLang} onSay={say} />
           ) : null}
@@ -532,62 +532,70 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                 disabled={checked}
                 onChange={(value) => setAnswers((prev) => ({ ...prev, [drill.id]: value }))}
               />
-              {checked ? (
-                <p className={`mt-3 text-sm font-semibold ${correct ? "text-sky-700" : "text-ink-soft"}`}>
-                  {correct ? t("right") : t("wrong", { answer: Array.isArray(drill.answer) ? drill.answer.join(" ") : drill.answer })}
-                </p>
-              ) : (
-                <p className="mt-3 text-sm text-ink-soft">{t("needAnswer")}</p>
-              )}
+              <p
+                className={`learn-feedback mt-3 text-sm font-semibold ${
+                  checked ? (correct ? "text-sky-700" : "text-ink-soft") : "text-ink-soft"
+                }`}
+              >
+                {checked
+                  ? correct
+                    ? t("right")
+                    : t("wrong", { answer: Array.isArray(drill.answer) ? drill.answer.join(" ") : drill.answer })
+                  : t("needAnswer")}
+              </p>
             </div>
           ) : null}
+        </div>
 
-          {quizDone ? (
-            <div className="mt-5 flex flex-wrap gap-3">
-              <p className="w-full font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
-              <Link href={`/learn/${lesson.track}`} className="btn-ghost">
-                {t("backTrack")}
-              </Link>
-              {nextId ? (
-                <Link href={`/learn/${lesson.track}/${nextId}`} className="btn-primary">
-                  {t("next")}
+        {quizDone ? (
+            <div className="learn-actions">
+              <p className="text-sm font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
+              <div className="learn-actions-right is-end">
+                <Link href={`/learn/${lesson.track}`} className="btn-ghost">
+                  {t("backTrack")}
                 </Link>
-              ) : (
-                <Link href="/learn" className="btn-primary">
-                  {t("allTracks")}
-                </Link>
-              )}
+                {nextId ? (
+                  <Link href={`/learn/${lesson.track}/${nextId}`} className="btn-primary">
+                    {t("next")}
+                  </Link>
+                ) : (
+                  <Link href="/learn" className="btn-primary">
+                    {t("allTracks")}
+                  </Link>
+                )}
+              </div>
             </div>
           ) : (
-            <div className="mt-6 flex flex-wrap justify-between gap-3">
+            <div className="learn-actions">
               <button type="button" className="btn-ghost" disabled={step === 0 && index === 0} onClick={goBack}>
                 {t("back")}
               </button>
-              <div className="flex flex-wrap gap-2">
-                {drill && !checked ? (
-                  <button type="button" className="btn-primary" disabled={!canCheck} onClick={checkNow}>
-                    {t("check")}
-                  </button>
-                ) : null}
-                {drill && checked && !correct ? (
-                  <button
-                    type="button"
-                    className="btn-ghost"
-                    onClick={() => {
-                      setCheckedMap((prev) => ({ ...prev, [drill.id]: false }));
-                      setAnswers((prev) => ({ ...prev, [drill.id]: drill.type === "order" ? [] : "" }));
-                    }}
-                  >
-                    {t("retry")}
-                  </button>
-                ) : null}
+              <div className="learn-actions-right">
+                <button
+                  type="button"
+                  className={`btn-ghost ${drill && checked && !correct ? "" : "invisible"}`}
+                  onClick={() => {
+                    if (!drill) return;
+                    setCheckedMap((prev) => ({ ...prev, [drill.id]: false }));
+                    setAnswers((prev) => ({ ...prev, [drill.id]: drill.type === "order" ? [] : "" }));
+                  }}
+                >
+                  {t("retry")}
+                </button>
+                <button
+                  type="button"
+                  className={`btn-primary ${drill && !checked ? "" : "invisible"}`}
+                  disabled={!canCheck}
+                  onClick={checkNow}
+                >
+                  {t("check")}
+                </button>
                 <button type="button" className="btn-primary" disabled={!canNext} onClick={goNext}>
                   {step === steps.length - 1 && index === totalItems - 1 ? t("finish") : t("nextItem")}
                 </button>
               </div>
             </div>
           )}
-        </div>
       </article>
     </div>
   );

@@ -97,8 +97,10 @@ function tokenize(track, text, dict = []) {
   const cleaned = text.replace(/[.,!?¿¡。？！，、]/g, "").trim();
   if (track === "zh") return Array.from(cleaned).filter((ch) => ch.trim());
   const spaced = cleaned.split(/\s+/).filter(Boolean);
-  if (track !== "th" || spaced.length >= 3) return spaced;
-  return thaiSegment(cleaned, [...THAI_BASE, ...dict]);
+  if (track !== "th") return spaced;
+  if (spaced.length >= 3) return spaced;
+  const segs = thaiSegment(cleaned, [...THAI_BASE, ...dict]);
+  return segs.length >= 2 ? segs : spaced;
 }
 
 function wordOf(row, track) {
@@ -151,11 +153,8 @@ function joinLine(track, tokens) {
 function vocabDict(unit, track) {
   if (track !== "th") return [];
   const words = [];
-  for (const row of [...(unit.vocab || []), ...(unit.sentences || [])]) {
-    const text = `${row.th || ""} ${row.rt || ""}`;
-    text.split(/\s+/).forEach((part) => {
-      if (part) words.push(part);
-    });
+  for (const row of unit.vocab || []) {
+    if (row.th) words.push(row.th);
   }
   return words;
 }
@@ -224,7 +223,11 @@ function buildTheory(unit, track, sentences, vocab, kind) {
 
 function usageOf(row, track, sentences) {
   const word = wordOf(row, track);
-  const hit = sentences.find((item) => sentenceText(item, track).includes(word));
+  if (!word) return "";
+  const hit = sentences.find((item) => {
+    const text = sentenceText(item, track);
+    return text.includes(word) || text.toLocaleLowerCase().includes(word.toLocaleLowerCase());
+  });
   return hit ? sentenceText(hit, track) : "";
 }
 
@@ -273,11 +276,14 @@ function makeOrders(idPrefix, track, sentences, limit, dict) {
 function makeListenChoice(id, track, sentences) {
   const lines = sentences.map((row) => sentenceText(row, track)).filter(Boolean);
   if (lines.length < 2) return [];
-  const first = makeMcq(`${id}-a`, "", lines[0], lines.slice(1, 4), "whichLine");
-  const last = lines[lines.length - 1];
-  const lastDistractors = lines.filter((item) => item !== last).slice(0, 3);
-  const second = lastDistractors.length >= 2 ? makeMcq(`${id}-b`, "", last, lastDistractors, "whichLine") : null;
-  return second ? [first, second] : [first];
+  const indexes = [...new Set([0, 1, Math.floor(lines.length / 2), lines.length - 1])].filter((i) => i < lines.length);
+  const exercises = [];
+  indexes.forEach((index, slot) => {
+    const answer = lines[index];
+    const distractors = pick(lines, 3, answer, `${id}-${slot}`);
+    if (distractors.length >= 2) exercises.push(makeMcq(`${id}-${slot}`, "", answer, distractors, "whichLine"));
+  });
+  return exercises;
 }
 
 function makeWordFit(idPrefix, track, vocab, sentences) {
@@ -464,6 +470,9 @@ function catalogEntry(track, lessons, sourceUnits) {
         title: source
           ? { vi: source.title.vi, en: source.title.en, zh: source.title.zh, th: source.title.th }
           : { vi: lesson.unitId, en: lesson.unitId, zh: lesson.unitId, th: lesson.unitId },
+        goal: source?.goal
+          ? { vi: source.goal.vi, en: source.goal.en, zh: source.goal.zh, th: source.goal.th }
+          : { vi: "", en: "", zh: "", th: "" },
         lessonIds: [],
       };
       units.push(unit);

@@ -384,7 +384,13 @@
     "hearFirst": "Tap the speaker, then choose. The text appears after Check.",
     "right": "Correct.",
     "wrong": "Not yet. Answer: {answer}",
-    "retry": "Try again"
+    "retry": "Try again",
+    "pathSpine": "52 chapters, from sound to B2. Each chapter has five steps: theory, words, listen, practice, memory play.",
+    "stage": "Stage {level}",
+    "chapterN": "Chapter {n}/{total}",
+    "chapterRange": "chapters {from}–{to}",
+    "pickChapter": "52 named chapters. Tap one to see its goal and five steps.",
+    "fiveSteps": "Five steps in this chapter"
   },
   "Footer": {
     "tagline": "Learn gently. Remember longer.",

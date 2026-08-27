@@ -385,7 +385,13 @@
     "hearFirst": "先点喇叭，再选。核对后才显示文字。",
     "right": "对。",
     "wrong": "还不对。答案：{answer}",
-    "retry": "再试"
+    "retry": "再试",
+    "pathSpine": "52 章，从语音到 B2。每章五步：讲解、词、听、练、记一记。",
+    "stage": "{level} 阶段",
+    "chapterN": "第 {n}/{total} 章",
+    "chapterRange": "第 {from}–{to} 章",
+    "pickChapter": "52 章都有名字。点一章看目标和五步。",
+    "fiveSteps": "这一章的五步"
   },
   "Footer": {
     "tagline": "温柔地学，长久地记。",
