@@ -20,8 +20,9 @@ export default async function LessonPage({
   const t = await getTranslations("Learn");
 
   return (
-    <section className="px-4 py-10 sm:px-6">
-      <div className="mx-auto mb-6 max-w-3xl">
+    <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6">
+      <div className="learn-blob -left-10 top-6 h-32 w-32 rounded-[58%_42%_50%_50%] bg-sky-200/40" />
+      <div className="relative mx-auto mb-8 max-w-6xl">
         <Link href={`/learn/${track}`} className="text-sm font-semibold text-sky-700">
           ← {t("backTrack")}
         </Link>

@@ -1,12 +1,29 @@
 {
-  "generatedAt": "2026-08-26T10:20:50.029Z",
-  "note": "Original Linlin path. One language per classroom. Not official exam papers.",
+  "generatedAt": "2026-08-27T01:57:54.458Z",
+  "note": "Original Linlin path. Sounds first. Five steps per topic. Not official exam papers.",
   "tracks": [
     {
       "id": "vi",
-      "lessonCount": 612,
-      "exerciseCount": 25632,
+      "lessonCount": 260,
+      "exerciseCount": 2872,
       "units": [
+        {
+          "id": "sounds",
+          "level": "A1",
+          "title": {
+            "vi": "Âm và cách đọc",
+            "en": "Sounds and reading",
+            "zh": "读音",
+            "th": "เสียงและการอ่าน"
+          },
+          "lessonIds": [
+            "vi-sounds-teach-1",
+            "vi-sounds-words-1",
+            "vi-sounds-listen-1",
+            "vi-sounds-practice-1",
+            "vi-sounds-play-1"
+          ]
+        },
         {
           "id": "greet",
           "level": "A1",
@@ -19,16 +36,9 @@
           "lessonIds": [
             "vi-greet-teach-1",
             "vi-greet-words-1",
-            "vi-greet-words-2",
-            "vi-greet-words-3",
-            "vi-greet-words-4",
-            "vi-greet-review-1",
-            "vi-greet-review-2",
             "vi-greet-listen-1",
-            "vi-greet-listen-2",
-            "vi-greet-drill-1",
             "vi-greet-practice-1",
-            "vi-greet-practice-2"
+            "vi-greet-play-1"
           ]
         },
         {
@@ -43,16 +53,9 @@
           "lessonIds": [
             "vi-numbers-teach-1",
             "vi-numbers-words-1",
-            "vi-numbers-words-2",
-            "vi-numbers-words-3",
-            "vi-numbers-words-4",
-            "vi-numbers-review-1",
-            "vi-numbers-review-2",
             "vi-numbers-listen-1",
-            "vi-numbers-listen-2",
-            "vi-numbers-drill-1",
             "vi-numbers-practice-1",
-            "vi-numbers-practice-2"
+            "vi-numbers-play-1"
           ]
         },
         {
@@ -67,16 +70,9 @@
           "lessonIds": [
             "vi-time-teach-1",
             "vi-time-words-1",
-            "vi-time-words-2",
-            "vi-time-words-3",
-            "vi-time-words-4",
-            "vi-time-review-1",
-            "vi-time-review-2",
             "vi-time-listen-1",
-            "vi-time-listen-2",
-            "vi-time-drill-1",
             "vi-time-practice-1",
-            "vi-time-practice-2"
+            "vi-time-play-1"
           ]
         },
         {
@@ -91,16 +87,9 @@
           "lessonIds": [
             "vi-cafe-teach-1",
             "vi-cafe-words-1",
-            "vi-cafe-words-2",
-            "vi-cafe-words-3",
-            "vi-cafe-words-4",
-            "vi-cafe-review-1",
-            "vi-cafe-review-2",
             "vi-cafe-listen-1",
-            "vi-cafe-listen-2",
-            "vi-cafe-drill-1",
             "vi-cafe-practice-1",
-            "vi-cafe-practice-2"
+            "vi-cafe-play-1"
           ]
         },
         {
@@ -115,16 +104,9 @@
           "lessonIds": [
             "vi-food-teach-1",
             "vi-food-words-1",
-            "vi-food-words-2",
-            "vi-food-words-3",
-            "vi-food-words-4",
-            "vi-food-review-1",
-            "vi-food-review-2",
             "vi-food-listen-1",
-            "vi-food-listen-2",
-            "vi-food-drill-1",
             "vi-food-practice-1",
-            "vi-food-practice-2"
+            "vi-food-play-1"
           ]
         },
         {
@@ -139,16 +121,9 @@
           "lessonIds": [
             "vi-market-teach-1",
             "vi-market-words-1",
-            "vi-market-words-2",
-            "vi-market-words-3",
-            "vi-market-words-4",
-            "vi-market-review-1",
-            "vi-market-review-2",
             "vi-market-listen-1",
-            "vi-market-listen-2",
-            "vi-market-drill-1",
             "vi-market-practice-1",
-            "vi-market-practice-2"
+            "vi-market-play-1"
           ]
         },
         {
@@ -163,16 +138,9 @@
           "lessonIds": [
             "vi-home-teach-1",
             "vi-home-words-1",
-            "vi-home-words-2",
-            "vi-home-words-3",
-            "vi-home-words-4",
-            "vi-home-review-1",
-            "vi-home-review-2",
             "vi-home-listen-1",
-            "vi-home-listen-2",
-            "vi-home-drill-1",
             "vi-home-practice-1",
-            "vi-home-practice-2"
+            "vi-home-play-1"
           ]
         },
         {
@@ -187,16 +155,9 @@
           "lessonIds": [
             "vi-messages-teach-1",
             "vi-messages-words-1",
-            "vi-messages-words-2",
-            "vi-messages-words-3",
-            "vi-messages-words-4",
-            "vi-messages-review-1",
-            "vi-messages-review-2",
             "vi-messages-listen-1",
-            "vi-messages-listen-2",
-            "vi-messages-drill-1",
             "vi-messages-practice-1",
-            "vi-messages-practice-2"
+            "vi-messages-play-1"
           ]
         },
         {
@@ -211,16 +172,9 @@
           "lessonIds": [
             "vi-family-teach-1",
             "vi-family-words-1",
-            "vi-family-words-2",
-            "vi-family-words-3",
-            "vi-family-words-4",
-            "vi-family-review-1",
-            "vi-family-review-2",
             "vi-family-listen-1",
-            "vi-family-listen-2",
-            "vi-family-drill-1",
             "vi-family-practice-1",
-            "vi-family-practice-2"
+            "vi-family-play-1"
           ]
         },
         {
@@ -235,16 +189,9 @@
           "lessonIds": [
             "vi-clothes-teach-1",
             "vi-clothes-words-1",
-            "vi-clothes-words-2",
-            "vi-clothes-words-3",
-            "vi-clothes-words-4",
-            "vi-clothes-review-1",
-            "vi-clothes-review-2",
             "vi-clothes-listen-1",
-            "vi-clothes-listen-2",
-            "vi-clothes-drill-1",
             "vi-clothes-practice-1",
-            "vi-clothes-practice-2"
+            "vi-clothes-play-1"
           ]
         },
         {
@@ -259,16 +206,9 @@
           "lessonIds": [
             "vi-weather-teach-1",
             "vi-weather-words-1",
-            "vi-weather-words-2",
-            "vi-weather-words-3",
-            "vi-weather-words-4",
-            "vi-weather-review-1",
-            "vi-weather-review-2",
             "vi-weather-listen-1",
-            "vi-weather-listen-2",
-            "vi-weather-drill-1",
             "vi-weather-practice-1",
-            "vi-weather-practice-2"
+            "vi-weather-play-1"
           ]
         },
         {
@@ -283,16 +223,9 @@
           "lessonIds": [
             "vi-feelings-teach-1",
             "vi-feelings-words-1",
-            "vi-feelings-words-2",
-            "vi-feelings-words-3",
-            "vi-feelings-words-4",
-            "vi-feelings-review-1",
-            "vi-feelings-review-2",
             "vi-feelings-listen-1",
-            "vi-feelings-listen-2",
-            "vi-feelings-drill-1",
             "vi-feelings-practice-1",
-            "vi-feelings-practice-2"
+            "vi-feelings-play-1"
           ]
         },
         {
@@ -307,16 +240,9 @@
           "lessonIds": [
             "vi-colors-teach-1",
             "vi-colors-words-1",
-            "vi-colors-words-2",
-            "vi-colors-words-3",
-            "vi-colors-words-4",
-            "vi-colors-review-1",
-            "vi-colors-review-2",
             "vi-colors-listen-1",
-            "vi-colors-listen-2",
-            "vi-colors-drill-1",
             "vi-colors-practice-1",
-            "vi-colors-practice-2"
+            "vi-colors-play-1"
           ]
         },
         {
@@ -331,16 +257,9 @@
           "lessonIds": [
             "vi-daily-teach-1",
             "vi-daily-words-1",
-            "vi-daily-words-2",
-            "vi-daily-words-3",
-            "vi-daily-words-4",
-            "vi-daily-review-1",
-            "vi-daily-review-2",
             "vi-daily-listen-1",
-            "vi-daily-listen-2",
-            "vi-daily-drill-1",
             "vi-daily-practice-1",
-            "vi-daily-practice-2"
+            "vi-daily-play-1"
           ]
         },
         {
@@ -355,16 +274,9 @@
           "lessonIds": [
             "vi-shopping-teach-1",
             "vi-shopping-words-1",
-            "vi-shopping-words-2",
-            "vi-shopping-words-3",
-            "vi-shopping-words-4",
-            "vi-shopping-review-1",
-            "vi-shopping-review-2",
             "vi-shopping-listen-1",
-            "vi-shopping-listen-2",
-            "vi-shopping-drill-1",
             "vi-shopping-practice-1",
-            "vi-shopping-practice-2"
+            "vi-shopping-play-1"
           ]
         },
         {
@@ -379,16 +291,9 @@
           "lessonIds": [
             "vi-restaurant-teach-1",
             "vi-restaurant-words-1",
-            "vi-restaurant-words-2",
-            "vi-restaurant-words-3",
-            "vi-restaurant-words-4",
-            "vi-restaurant-review-1",
-            "vi-restaurant-review-2",
             "vi-restaurant-listen-1",
-            "vi-restaurant-listen-2",
-            "vi-restaurant-drill-1",
             "vi-restaurant-practice-1",
-            "vi-restaurant-practice-2"
+            "vi-restaurant-play-1"
           ]
         },
         {
@@ -403,16 +308,9 @@
           "lessonIds": [
             "vi-hotel-teach-1",
             "vi-hotel-words-1",
-            "vi-hotel-words-2",
-            "vi-hotel-words-3",
-            "vi-hotel-words-4",
-            "vi-hotel-review-1",
-            "vi-hotel-review-2",
             "vi-hotel-listen-1",
-            "vi-hotel-listen-2",
-            "vi-hotel-drill-1",
             "vi-hotel-practice-1",
-            "vi-hotel-practice-2"
+            "vi-hotel-play-1"
           ]
         },
         {
@@ -427,16 +325,9 @@
           "lessonIds": [
             "vi-phone-teach-1",
             "vi-phone-words-1",
-            "vi-phone-words-2",
-            "vi-phone-words-3",
-            "vi-phone-words-4",
-            "vi-phone-review-1",
-            "vi-phone-review-2",
             "vi-phone-listen-1",
-            "vi-phone-listen-2",
-            "vi-phone-drill-1",
             "vi-phone-practice-1",
-            "vi-phone-practice-2"
+            "vi-phone-play-1"
           ]
         },
         {
@@ -451,16 +342,9 @@
           "lessonIds": [
             "vi-hobbies-teach-1",
             "vi-hobbies-words-1",
-            "vi-hobbies-words-2",
-            "vi-hobbies-words-3",
-            "vi-hobbies-words-4",
-            "vi-hobbies-review-1",
-            "vi-hobbies-review-2",
             "vi-hobbies-listen-1",
-            "vi-hobbies-listen-2",
-            "vi-hobbies-drill-1",
             "vi-hobbies-practice-1",
-            "vi-hobbies-practice-2"
+            "vi-hobbies-play-1"
           ]
         },
         {
@@ -475,16 +359,9 @@
           "lessonIds": [
             "vi-sports-teach-1",
             "vi-sports-words-1",
-            "vi-sports-words-2",
-            "vi-sports-words-3",
-            "vi-sports-words-4",
-            "vi-sports-review-1",
-            "vi-sports-review-2",
             "vi-sports-listen-1",
-            "vi-sports-listen-2",
-            "vi-sports-drill-1",
             "vi-sports-practice-1",
-            "vi-sports-practice-2"
+            "vi-sports-play-1"
           ]
         },
         {
@@ -499,16 +376,9 @@
           "lessonIds": [
             "vi-money-teach-1",
             "vi-money-words-1",
-            "vi-money-words-2",
-            "vi-money-words-3",
-            "vi-money-words-4",
-            "vi-money-review-1",
-            "vi-money-review-2",
             "vi-money-listen-1",
-            "vi-money-listen-2",
-            "vi-money-drill-1",
             "vi-money-practice-1",
-            "vi-money-practice-2"
+            "vi-money-play-1"
           ]
         },
         {
@@ -523,16 +393,9 @@
           "lessonIds": [
             "vi-cooking-teach-1",
             "vi-cooking-words-1",
-            "vi-cooking-words-2",
-            "vi-cooking-words-3",
-            "vi-cooking-words-4",
-            "vi-cooking-review-1",
-            "vi-cooking-review-2",
             "vi-cooking-listen-1",
-            "vi-cooking-listen-2",
-            "vi-cooking-drill-1",
             "vi-cooking-practice-1",
-            "vi-cooking-practice-2"
+            "vi-cooking-play-1"
           ]
         },
         {
@@ -547,16 +410,9 @@
           "lessonIds": [
             "vi-cleaning-teach-1",
             "vi-cleaning-words-1",
-            "vi-cleaning-words-2",
-            "vi-cleaning-words-3",
-            "vi-cleaning-words-4",
-            "vi-cleaning-review-1",
-            "vi-cleaning-review-2",
             "vi-cleaning-listen-1",
-            "vi-cleaning-listen-2",
-            "vi-cleaning-drill-1",
             "vi-cleaning-practice-1",
-            "vi-cleaning-practice-2"
+            "vi-cleaning-play-1"
           ]
         },
         {
@@ -571,16 +427,9 @@
           "lessonIds": [
             "vi-pets-teach-1",
             "vi-pets-words-1",
-            "vi-pets-words-2",
-            "vi-pets-words-3",
-            "vi-pets-words-4",
-            "vi-pets-review-1",
-            "vi-pets-review-2",
             "vi-pets-listen-1",
-            "vi-pets-listen-2",
-            "vi-pets-drill-1",
             "vi-pets-practice-1",
-            "vi-pets-practice-2"
+            "vi-pets-play-1"
           ]
         },
         {
@@ -595,16 +444,9 @@
           "lessonIds": [
             "vi-holidays-teach-1",
             "vi-holidays-words-1",
-            "vi-holidays-words-2",
-            "vi-holidays-words-3",
-            "vi-holidays-words-4",
-            "vi-holidays-review-1",
-            "vi-holidays-review-2",
             "vi-holidays-listen-1",
-            "vi-holidays-listen-2",
-            "vi-holidays-drill-1",
             "vi-holidays-practice-1",
-            "vi-holidays-practice-2"
+            "vi-holidays-play-1"
           ]
         },
         {
@@ -619,16 +461,9 @@
           "lessonIds": [
             "vi-neighbors-teach-1",
             "vi-neighbors-words-1",
-            "vi-neighbors-words-2",
-            "vi-neighbors-words-3",
-            "vi-neighbors-words-4",
-            "vi-neighbors-review-1",
-            "vi-neighbors-review-2",
             "vi-neighbors-listen-1",
-            "vi-neighbors-listen-2",
-            "vi-neighbors-drill-1",
             "vi-neighbors-practice-1",
-            "vi-neighbors-practice-2"
+            "vi-neighbors-play-1"
           ]
         },
         {
@@ -643,16 +478,9 @@
           "lessonIds": [
             "vi-internet-teach-1",
             "vi-internet-words-1",
-            "vi-internet-words-2",
-            "vi-internet-words-3",
-            "vi-internet-words-4",
-            "vi-internet-review-1",
-            "vi-internet-review-2",
             "vi-internet-listen-1",
-            "vi-internet-listen-2",
-            "vi-internet-drill-1",
             "vi-internet-practice-1",
-            "vi-internet-practice-2"
+            "vi-internet-play-1"
           ]
         },
         {
@@ -667,16 +495,9 @@
           "lessonIds": [
             "vi-school-teach-1",
             "vi-school-words-1",
-            "vi-school-words-2",
-            "vi-school-words-3",
-            "vi-school-words-4",
-            "vi-school-review-1",
-            "vi-school-review-2",
             "vi-school-listen-1",
-            "vi-school-listen-2",
-            "vi-school-drill-1",
             "vi-school-practice-1",
-            "vi-school-practice-2"
+            "vi-school-play-1"
           ]
         },
         {
@@ -691,16 +512,9 @@
           "lessonIds": [
             "vi-appearance-teach-1",
             "vi-appearance-words-1",
-            "vi-appearance-words-2",
-            "vi-appearance-words-3",
-            "vi-appearance-words-4",
-            "vi-appearance-review-1",
-            "vi-appearance-review-2",
             "vi-appearance-listen-1",
-            "vi-appearance-listen-2",
-            "vi-appearance-drill-1",
             "vi-appearance-practice-1",
-            "vi-appearance-practice-2"
+            "vi-appearance-play-1"
           ]
         },
         {
@@ -715,16 +529,9 @@
           "lessonIds": [
             "vi-forms-teach-1",
             "vi-forms-words-1",
-            "vi-forms-words-2",
-            "vi-forms-words-3",
-            "vi-forms-words-4",
-            "vi-forms-review-1",
-            "vi-forms-review-2",
             "vi-forms-listen-1",
-            "vi-forms-listen-2",
-            "vi-forms-drill-1",
             "vi-forms-practice-1",
-            "vi-forms-practice-2"
+            "vi-forms-play-1"
           ]
         },
         {
@@ -739,16 +546,9 @@
           "lessonIds": [
             "vi-taxi-teach-1",
             "vi-taxi-words-1",
-            "vi-taxi-words-2",
-            "vi-taxi-words-3",
-            "vi-taxi-words-4",
-            "vi-taxi-review-1",
-            "vi-taxi-review-2",
             "vi-taxi-listen-1",
-            "vi-taxi-listen-2",
-            "vi-taxi-drill-1",
             "vi-taxi-practice-1",
-            "vi-taxi-practice-2"
+            "vi-taxi-play-1"
           ]
         },
         {
@@ -763,16 +563,9 @@
           "lessonIds": [
             "vi-airport-teach-1",
             "vi-airport-words-1",
-            "vi-airport-words-2",
-            "vi-airport-words-3",
-            "vi-airport-words-4",
-            "vi-airport-review-1",
-            "vi-airport-review-2",
             "vi-airport-listen-1",
-            "vi-airport-listen-2",
-            "vi-airport-drill-1",
             "vi-airport-practice-1",
-            "vi-airport-practice-2"
+            "vi-airport-play-1"
           ]
         },
         {
@@ -787,16 +580,9 @@
           "lessonIds": [
             "vi-emergency-teach-1",
             "vi-emergency-words-1",
-            "vi-emergency-words-2",
-            "vi-emergency-words-3",
-            "vi-emergency-words-4",
-            "vi-emergency-review-1",
-            "vi-emergency-review-2",
             "vi-emergency-listen-1",
-            "vi-emergency-listen-2",
-            "vi-emergency-drill-1",
             "vi-emergency-practice-1",
-            "vi-emergency-practice-2"
+            "vi-emergency-play-1"
           ]
         },
         {
@@ -811,16 +597,9 @@
           "lessonIds": [
             "vi-rent-teach-1",
             "vi-rent-words-1",
-            "vi-rent-words-2",
-            "vi-rent-words-3",
-            "vi-rent-words-4",
-            "vi-rent-review-1",
-            "vi-rent-review-2",
             "vi-rent-listen-1",
-            "vi-rent-listen-2",
-            "vi-rent-drill-1",
             "vi-rent-practice-1",
-            "vi-rent-practice-2"
+            "vi-rent-play-1"
           ]
         },
         {
@@ -835,16 +614,9 @@
           "lessonIds": [
             "vi-cinema-teach-1",
             "vi-cinema-words-1",
-            "vi-cinema-words-2",
-            "vi-cinema-words-3",
-            "vi-cinema-words-4",
-            "vi-cinema-review-1",
-            "vi-cinema-review-2",
             "vi-cinema-listen-1",
-            "vi-cinema-listen-2",
-            "vi-cinema-drill-1",
             "vi-cinema-practice-1",
-            "vi-cinema-practice-2"
+            "vi-cinema-play-1"
           ]
         },
         {
@@ -859,16 +631,9 @@
           "lessonIds": [
             "vi-seasons-teach-1",
             "vi-seasons-words-1",
-            "vi-seasons-words-2",
-            "vi-seasons-words-3",
-            "vi-seasons-words-4",
-            "vi-seasons-review-1",
-            "vi-seasons-review-2",
             "vi-seasons-listen-1",
-            "vi-seasons-listen-2",
-            "vi-seasons-drill-1",
             "vi-seasons-practice-1",
-            "vi-seasons-practice-2"
+            "vi-seasons-play-1"
           ]
         },
         {
@@ -883,16 +648,9 @@
           "lessonIds": [
             "vi-lost-teach-1",
             "vi-lost-words-1",
-            "vi-lost-words-2",
-            "vi-lost-words-3",
-            "vi-lost-words-4",
-            "vi-lost-review-1",
-            "vi-lost-review-2",
             "vi-lost-listen-1",
-            "vi-lost-listen-2",
-            "vi-lost-drill-1",
             "vi-lost-practice-1",
-            "vi-lost-practice-2"
+            "vi-lost-play-1"
           ]
         },
         {
@@ -907,16 +665,9 @@
           "lessonIds": [
             "vi-travel-teach-1",
             "vi-travel-words-1",
-            "vi-travel-words-2",
-            "vi-travel-words-3",
-            "vi-travel-words-4",
-            "vi-travel-review-1",
-            "vi-travel-review-2",
             "vi-travel-listen-1",
-            "vi-travel-listen-2",
-            "vi-travel-drill-1",
             "vi-travel-practice-1",
-            "vi-travel-practice-2"
+            "vi-travel-play-1"
           ]
         },
         {
@@ -931,16 +682,9 @@
           "lessonIds": [
             "vi-city-teach-1",
             "vi-city-words-1",
-            "vi-city-words-2",
-            "vi-city-words-3",
-            "vi-city-words-4",
-            "vi-city-review-1",
-            "vi-city-review-2",
             "vi-city-listen-1",
-            "vi-city-listen-2",
-            "vi-city-drill-1",
             "vi-city-practice-1",
-            "vi-city-practice-2"
+            "vi-city-play-1"
           ]
         },
         {
@@ -955,16 +699,9 @@
           "lessonIds": [
             "vi-body-teach-1",
             "vi-body-words-1",
-            "vi-body-words-2",
-            "vi-body-words-3",
-            "vi-body-words-4",
-            "vi-body-review-1",
-            "vi-body-review-2",
             "vi-body-listen-1",
-            "vi-body-listen-2",
-            "vi-body-drill-1",
             "vi-body-practice-1",
-            "vi-body-practice-2"
+            "vi-body-play-1"
           ]
         },
         {
@@ -979,16 +716,9 @@
           "lessonIds": [
             "vi-study-teach-1",
             "vi-study-words-1",
-            "vi-study-words-2",
-            "vi-study-words-3",
-            "vi-study-words-4",
-            "vi-study-review-1",
-            "vi-study-review-2",
             "vi-study-listen-1",
-            "vi-study-listen-2",
-            "vi-study-drill-1",
             "vi-study-practice-1",
-            "vi-study-practice-2"
+            "vi-study-play-1"
           ]
         },
         {
@@ -1003,16 +733,9 @@
           "lessonIds": [
             "vi-complaints-teach-1",
             "vi-complaints-words-1",
-            "vi-complaints-words-2",
-            "vi-complaints-words-3",
-            "vi-complaints-words-4",
-            "vi-complaints-review-1",
-            "vi-complaints-review-2",
             "vi-complaints-listen-1",
-            "vi-complaints-listen-2",
-            "vi-complaints-drill-1",
             "vi-complaints-practice-1",
-            "vi-complaints-practice-2"
+            "vi-complaints-play-1"
           ]
         },
         {
@@ -1027,16 +750,9 @@
           "lessonIds": [
             "vi-advice-teach-1",
             "vi-advice-words-1",
-            "vi-advice-words-2",
-            "vi-advice-words-3",
-            "vi-advice-words-4",
-            "vi-advice-review-1",
-            "vi-advice-review-2",
             "vi-advice-listen-1",
-            "vi-advice-listen-2",
-            "vi-advice-drill-1",
             "vi-advice-practice-1",
-            "vi-advice-practice-2"
+            "vi-advice-play-1"
           ]
         },
         {
@@ -1051,16 +767,9 @@
           "lessonIds": [
             "vi-plans-teach-1",
             "vi-plans-words-1",
-            "vi-plans-words-2",
-            "vi-plans-words-3",
-            "vi-plans-words-4",
-            "vi-plans-review-1",
-            "vi-plans-review-2",
             "vi-plans-listen-1",
-            "vi-plans-listen-2",
-            "vi-plans-drill-1",
             "vi-plans-practice-1",
-            "vi-plans-practice-2"
+            "vi-plans-play-1"
           ]
         },
         {
@@ -1075,16 +784,9 @@
           "lessonIds": [
             "vi-relationships-teach-1",
             "vi-relationships-words-1",
-            "vi-relationships-words-2",
-            "vi-relationships-words-3",
-            "vi-relationships-words-4",
-            "vi-relationships-review-1",
-            "vi-relationships-review-2",
             "vi-relationships-listen-1",
-            "vi-relationships-listen-2",
-            "vi-relationships-drill-1",
             "vi-relationships-practice-1",
-            "vi-relationships-practice-2"
+            "vi-relationships-play-1"
           ]
         },
         {
@@ -1099,16 +801,9 @@
           "lessonIds": [
             "vi-news-teach-1",
             "vi-news-words-1",
-            "vi-news-words-2",
-            "vi-news-words-3",
-            "vi-news-words-4",
-            "vi-news-review-1",
-            "vi-news-review-2",
             "vi-news-listen-1",
-            "vi-news-listen-2",
-            "vi-news-drill-1",
             "vi-news-practice-1",
-            "vi-news-practice-2"
+            "vi-news-play-1"
           ]
         },
         {
@@ -1123,16 +818,9 @@
           "lessonIds": [
             "vi-invitations-teach-1",
             "vi-invitations-words-1",
-            "vi-invitations-words-2",
-            "vi-invitations-words-3",
-            "vi-invitations-words-4",
-            "vi-invitations-review-1",
-            "vi-invitations-review-2",
             "vi-invitations-listen-1",
-            "vi-invitations-listen-2",
-            "vi-invitations-drill-1",
             "vi-invitations-practice-1",
-            "vi-invitations-practice-2"
+            "vi-invitations-play-1"
           ]
         },
         {
@@ -1147,16 +835,9 @@
           "lessonIds": [
             "vi-opinion-teach-1",
             "vi-opinion-words-1",
-            "vi-opinion-words-2",
-            "vi-opinion-words-3",
-            "vi-opinion-words-4",
-            "vi-opinion-review-1",
-            "vi-opinion-review-2",
             "vi-opinion-listen-1",
-            "vi-opinion-listen-2",
-            "vi-opinion-drill-1",
             "vi-opinion-practice-1",
-            "vi-opinion-practice-2"
+            "vi-opinion-play-1"
           ]
         },
         {
@@ -1171,16 +852,9 @@
           "lessonIds": [
             "vi-work-teach-1",
             "vi-work-words-1",
-            "vi-work-words-2",
-            "vi-work-words-3",
-            "vi-work-words-4",
-            "vi-work-review-1",
-            "vi-work-review-2",
             "vi-work-listen-1",
-            "vi-work-listen-2",
-            "vi-work-drill-1",
             "vi-work-practice-1",
-            "vi-work-practice-2"
+            "vi-work-play-1"
           ]
         },
         {
@@ -1195,16 +869,9 @@
           "lessonIds": [
             "vi-environment-teach-1",
             "vi-environment-words-1",
-            "vi-environment-words-2",
-            "vi-environment-words-3",
-            "vi-environment-words-4",
-            "vi-environment-review-1",
-            "vi-environment-review-2",
             "vi-environment-listen-1",
-            "vi-environment-listen-2",
-            "vi-environment-drill-1",
             "vi-environment-practice-1",
-            "vi-environment-practice-2"
+            "vi-environment-play-1"
           ]
         },
         {
@@ -1219,25 +886,35 @@
           "lessonIds": [
             "vi-education-teach-1",
             "vi-education-words-1",
-            "vi-education-words-2",
-            "vi-education-words-3",
-            "vi-education-words-4",
-            "vi-education-review-1",
-            "vi-education-review-2",
             "vi-education-listen-1",
-            "vi-education-listen-2",
-            "vi-education-drill-1",
             "vi-education-practice-1",
-            "vi-education-practice-2"
+            "vi-education-play-1"
           ]
         }
       ]
     },
     {
       "id": "en",
-      "lessonCount": 612,
-      "exerciseCount": 25980,
+      "lessonCount": 260,
+      "exerciseCount": 2846,
       "units": [
+        {
+          "id": "sounds",
+          "level": "A1",
+          "title": {
+            "vi": "Âm và cách đọc",
+            "en": "Sounds and reading",
+            "zh": "读音",
+            "th": "เสียงและการอ่าน"
+          },
+          "lessonIds": [
+            "en-sounds-teach-1",
+            "en-sounds-words-1",
+            "en-sounds-listen-1",
+            "en-sounds-practice-1",
+            "en-sounds-play-1"
+          ]
+        },
         {
           "id": "greet",
           "level": "A1",
@@ -1250,16 +927,9 @@
           "lessonIds": [
             "en-greet-teach-1",
             "en-greet-words-1",
-            "en-greet-words-2",
-            "en-greet-words-3",
-            "en-greet-words-4",
-            "en-greet-review-1",
-            "en-greet-review-2",
             "en-greet-listen-1",
-            "en-greet-listen-2",
-            "en-greet-drill-1",
             "en-greet-practice-1",
-            "en-greet-practice-2"
+            "en-greet-play-1"
           ]
         },
         {
@@ -1274,16 +944,9 @@
           "lessonIds": [
             "en-numbers-teach-1",
             "en-numbers-words-1",
-            "en-numbers-words-2",
-            "en-numbers-words-3",
-            "en-numbers-words-4",
-            "en-numbers-review-1",
-            "en-numbers-review-2",
             "en-numbers-listen-1",
-            "en-numbers-listen-2",
-            "en-numbers-drill-1",
             "en-numbers-practice-1",
-            "en-numbers-practice-2"
+            "en-numbers-play-1"
           ]
         },
         {
@@ -1298,16 +961,9 @@
           "lessonIds": [
             "en-time-teach-1",
             "en-time-words-1",
-            "en-time-words-2",
-            "en-time-words-3",
-            "en-time-words-4",
-            "en-time-review-1",
-            "en-time-review-2",
             "en-time-listen-1",
-            "en-time-listen-2",
-            "en-time-drill-1",
             "en-time-practice-1",
-            "en-time-practice-2"
+            "en-time-play-1"
           ]
         },
         {
@@ -1322,16 +978,9 @@
           "lessonIds": [
             "en-cafe-teach-1",
             "en-cafe-words-1",
-            "en-cafe-words-2",
-            "en-cafe-words-3",
-            "en-cafe-words-4",
-            "en-cafe-review-1",
-            "en-cafe-review-2",
             "en-cafe-listen-1",
-            "en-cafe-listen-2",
-            "en-cafe-drill-1",
             "en-cafe-practice-1",
-            "en-cafe-practice-2"
+            "en-cafe-play-1"
           ]
         },
         {
@@ -1346,16 +995,9 @@
           "lessonIds": [
             "en-food-teach-1",
             "en-food-words-1",
-            "en-food-words-2",
-            "en-food-words-3",
-            "en-food-words-4",
-            "en-food-review-1",
-            "en-food-review-2",
             "en-food-listen-1",
-            "en-food-listen-2",
-            "en-food-drill-1",
             "en-food-practice-1",
-            "en-food-practice-2"
+            "en-food-play-1"
           ]
         },
         {
@@ -1370,16 +1012,9 @@
           "lessonIds": [
             "en-market-teach-1",
             "en-market-words-1",
-            "en-market-words-2",
-            "en-market-words-3",
-            "en-market-words-4",
-            "en-market-review-1",
-            "en-market-review-2",
             "en-market-listen-1",
-            "en-market-listen-2",
-            "en-market-drill-1",
             "en-market-practice-1",
-            "en-market-practice-2"
+            "en-market-play-1"
           ]
         },
         {
@@ -1394,16 +1029,9 @@
           "lessonIds": [
             "en-home-teach-1",
             "en-home-words-1",
-            "en-home-words-2",
-            "en-home-words-3",
-            "en-home-words-4",
-            "en-home-review-1",
-            "en-home-review-2",
             "en-home-listen-1",
-            "en-home-listen-2",
-            "en-home-drill-1",
             "en-home-practice-1",
-            "en-home-practice-2"
+            "en-home-play-1"
           ]
         },
         {
@@ -1418,16 +1046,9 @@
           "lessonIds": [
             "en-messages-teach-1",
             "en-messages-words-1",
-            "en-messages-words-2",
-            "en-messages-words-3",
-            "en-messages-words-4",
-            "en-messages-review-1",
-            "en-messages-review-2",
             "en-messages-listen-1",
-            "en-messages-listen-2",
-            "en-messages-drill-1",
             "en-messages-practice-1",
-            "en-messages-practice-2"
+            "en-messages-play-1"
           ]
         },
         {
@@ -1442,16 +1063,9 @@
           "lessonIds": [
             "en-family-teach-1",
             "en-family-words-1",
-            "en-family-words-2",
-            "en-family-words-3",
-            "en-family-words-4",
-            "en-family-review-1",
-            "en-family-review-2",
             "en-family-listen-1",
-            "en-family-listen-2",
-            "en-family-drill-1",
             "en-family-practice-1",
-            "en-family-practice-2"
+            "en-family-play-1"
           ]
         },
         {
@@ -1466,16 +1080,9 @@
           "lessonIds": [
             "en-clothes-teach-1",
             "en-clothes-words-1",
-            "en-clothes-words-2",
-            "en-clothes-words-3",
-            "en-clothes-words-4",
-            "en-clothes-review-1",
-            "en-clothes-review-2",
             "en-clothes-listen-1",
-            "en-clothes-listen-2",
-            "en-clothes-drill-1",
             "en-clothes-practice-1",
-            "en-clothes-practice-2"
+            "en-clothes-play-1"
           ]
         },
         {
@@ -1490,16 +1097,9 @@
           "lessonIds": [
             "en-weather-teach-1",
             "en-weather-words-1",
-            "en-weather-words-2",
-            "en-weather-words-3",
-            "en-weather-words-4",
-            "en-weather-review-1",
-            "en-weather-review-2",
             "en-weather-listen-1",
-            "en-weather-listen-2",
-            "en-weather-drill-1",
             "en-weather-practice-1",
-            "en-weather-practice-2"
+            "en-weather-play-1"
           ]
         },
         {
@@ -1514,16 +1114,9 @@
           "lessonIds": [
             "en-feelings-teach-1",
             "en-feelings-words-1",
-            "en-feelings-words-2",
-            "en-feelings-words-3",
-            "en-feelings-words-4",
-            "en-feelings-review-1",
-            "en-feelings-review-2",
             "en-feelings-listen-1",
-            "en-feelings-listen-2",
-            "en-feelings-drill-1",
             "en-feelings-practice-1",
-            "en-feelings-practice-2"
+            "en-feelings-play-1"
           ]
         },
         {
@@ -1538,16 +1131,9 @@
           "lessonIds": [
             "en-colors-teach-1",
             "en-colors-words-1",
-            "en-colors-words-2",
-            "en-colors-words-3",
-            "en-colors-words-4",
-            "en-colors-review-1",
-            "en-colors-review-2",
             "en-colors-listen-1",
-            "en-colors-listen-2",
-            "en-colors-drill-1",
             "en-colors-practice-1",
-            "en-colors-practice-2"
+            "en-colors-play-1"
           ]
         },
         {
@@ -1562,16 +1148,9 @@
           "lessonIds": [
             "en-daily-teach-1",
             "en-daily-words-1",
-            "en-daily-words-2",
-            "en-daily-words-3",
-            "en-daily-words-4",
-            "en-daily-review-1",
-            "en-daily-review-2",
             "en-daily-listen-1",
-            "en-daily-listen-2",
-            "en-daily-drill-1",
             "en-daily-practice-1",
-            "en-daily-practice-2"
+            "en-daily-play-1"
           ]
         },
         {
@@ -1586,16 +1165,9 @@
           "lessonIds": [
             "en-shopping-teach-1",
             "en-shopping-words-1",
-            "en-shopping-words-2",
-            "en-shopping-words-3",
-            "en-shopping-words-4",
-            "en-shopping-review-1",
-            "en-shopping-review-2",
             "en-shopping-listen-1",
-            "en-shopping-listen-2",
-            "en-shopping-drill-1",
             "en-shopping-practice-1",
-            "en-shopping-practice-2"
+            "en-shopping-play-1"
           ]
         },
         {
@@ -1610,16 +1182,9 @@
           "lessonIds": [
             "en-restaurant-teach-1",
             "en-restaurant-words-1",
-            "en-restaurant-words-2",
-            "en-restaurant-words-3",
-            "en-restaurant-words-4",
-            "en-restaurant-review-1",
-            "en-restaurant-review-2",
             "en-restaurant-listen-1",
-            "en-restaurant-listen-2",
-            "en-restaurant-drill-1",
             "en-restaurant-practice-1",
-            "en-restaurant-practice-2"
+            "en-restaurant-play-1"
           ]
         },
         {
@@ -1634,16 +1199,9 @@
           "lessonIds": [
             "en-hotel-teach-1",
             "en-hotel-words-1",
-            "en-hotel-words-2",
-            "en-hotel-words-3",
-            "en-hotel-words-4",
-            "en-hotel-review-1",
-            "en-hotel-review-2",
             "en-hotel-listen-1",
-            "en-hotel-listen-2",
-            "en-hotel-drill-1",
             "en-hotel-practice-1",
-            "en-hotel-practice-2"
+            "en-hotel-play-1"
           ]
         },
         {
@@ -1658,16 +1216,9 @@
           "lessonIds": [
             "en-phone-teach-1",
             "en-phone-words-1",
-            "en-phone-words-2",
-            "en-phone-words-3",
-            "en-phone-words-4",
-            "en-phone-review-1",
-            "en-phone-review-2",
             "en-phone-listen-1",
-            "en-phone-listen-2",
-            "en-phone-drill-1",
             "en-phone-practice-1",
-            "en-phone-practice-2"
+            "en-phone-play-1"
           ]
         },
         {
@@ -1682,16 +1233,9 @@
           "lessonIds": [
             "en-hobbies-teach-1",
             "en-hobbies-words-1",
-            "en-hobbies-words-2",
-            "en-hobbies-words-3",
-            "en-hobbies-words-4",
-            "en-hobbies-review-1",
-            "en-hobbies-review-2",
             "en-hobbies-listen-1",
-            "en-hobbies-listen-2",
-            "en-hobbies-drill-1",
             "en-hobbies-practice-1",
-            "en-hobbies-practice-2"
+            "en-hobbies-play-1"
           ]
         },
         {
@@ -1706,16 +1250,9 @@
           "lessonIds": [
             "en-sports-teach-1",
             "en-sports-words-1",
-            "en-sports-words-2",
-            "en-sports-words-3",
-            "en-sports-words-4",
-            "en-sports-review-1",
-            "en-sports-review-2",
             "en-sports-listen-1",
-            "en-sports-listen-2",
-            "en-sports-drill-1",
             "en-sports-practice-1",
-            "en-sports-practice-2"
+            "en-sports-play-1"
           ]
         },
         {
@@ -1730,16 +1267,9 @@
           "lessonIds": [
             "en-money-teach-1",
             "en-money-words-1",
-            "en-money-words-2",
-            "en-money-words-3",
-            "en-money-words-4",
-            "en-money-review-1",
-            "en-money-review-2",
             "en-money-listen-1",
-            "en-money-listen-2",
-            "en-money-drill-1",
             "en-money-practice-1",
-            "en-money-practice-2"
+            "en-money-play-1"
           ]
         },
         {
@@ -1754,16 +1284,9 @@
           "lessonIds": [
             "en-cooking-teach-1",
             "en-cooking-words-1",
-            "en-cooking-words-2",
-            "en-cooking-words-3",
-            "en-cooking-words-4",
-            "en-cooking-review-1",
-            "en-cooking-review-2",
             "en-cooking-listen-1",
-            "en-cooking-listen-2",
-            "en-cooking-drill-1",
             "en-cooking-practice-1",
-            "en-cooking-practice-2"
+            "en-cooking-play-1"
           ]
         },
         {
@@ -1778,16 +1301,9 @@
           "lessonIds": [
             "en-cleaning-teach-1",
             "en-cleaning-words-1",
-            "en-cleaning-words-2",
-            "en-cleaning-words-3",
-            "en-cleaning-words-4",
-            "en-cleaning-review-1",
-            "en-cleaning-review-2",
             "en-cleaning-listen-1",
-            "en-cleaning-listen-2",
-            "en-cleaning-drill-1",
             "en-cleaning-practice-1",
-            "en-cleaning-practice-2"
+            "en-cleaning-play-1"
           ]
         },
         {
@@ -1802,16 +1318,9 @@
           "lessonIds": [
             "en-pets-teach-1",
             "en-pets-words-1",
-            "en-pets-words-2",
-            "en-pets-words-3",
-            "en-pets-words-4",
-            "en-pets-review-1",
-            "en-pets-review-2",
             "en-pets-listen-1",
-            "en-pets-listen-2",
-            "en-pets-drill-1",
             "en-pets-practice-1",
-            "en-pets-practice-2"
+            "en-pets-play-1"
           ]
         },
         {
@@ -1826,16 +1335,9 @@
           "lessonIds": [
             "en-holidays-teach-1",
             "en-holidays-words-1",
-            "en-holidays-words-2",
-            "en-holidays-words-3",
-            "en-holidays-words-4",
-            "en-holidays-review-1",
-            "en-holidays-review-2",
             "en-holidays-listen-1",
-            "en-holidays-listen-2",
-            "en-holidays-drill-1",
             "en-holidays-practice-1",
-            "en-holidays-practice-2"
+            "en-holidays-play-1"
           ]
         },
         {
@@ -1850,16 +1352,9 @@
           "lessonIds": [
             "en-neighbors-teach-1",
             "en-neighbors-words-1",
-            "en-neighbors-words-2",
-            "en-neighbors-words-3",
-            "en-neighbors-words-4",
-            "en-neighbors-review-1",
-            "en-neighbors-review-2",
             "en-neighbors-listen-1",
-            "en-neighbors-listen-2",
-            "en-neighbors-drill-1",
             "en-neighbors-practice-1",
-            "en-neighbors-practice-2"
+            "en-neighbors-play-1"
           ]
         },
         {
@@ -1874,16 +1369,9 @@
           "lessonIds": [
             "en-internet-teach-1",
             "en-internet-words-1",
-            "en-internet-words-2",
-            "en-internet-words-3",
-            "en-internet-words-4",
-            "en-internet-review-1",
-            "en-internet-review-2",
             "en-internet-listen-1",
-            "en-internet-listen-2",
-            "en-internet-drill-1",
             "en-internet-practice-1",
-            "en-internet-practice-2"
+            "en-internet-play-1"
           ]
         },
         {
@@ -1898,16 +1386,9 @@
           "lessonIds": [
             "en-school-teach-1",
             "en-school-words-1",
-            "en-school-words-2",
-            "en-school-words-3",
-            "en-school-words-4",
-            "en-school-review-1",
-            "en-school-review-2",
             "en-school-listen-1",
-            "en-school-listen-2",
-            "en-school-drill-1",
             "en-school-practice-1",
-            "en-school-practice-2"
+            "en-school-play-1"
           ]
         },
         {
@@ -1922,16 +1403,9 @@
           "lessonIds": [
             "en-appearance-teach-1",
             "en-appearance-words-1",
-            "en-appearance-words-2",
-            "en-appearance-words-3",
-            "en-appearance-words-4",
-            "en-appearance-review-1",
-            "en-appearance-review-2",
             "en-appearance-listen-1",
-            "en-appearance-listen-2",
-            "en-appearance-drill-1",
             "en-appearance-practice-1",
-            "en-appearance-practice-2"
+            "en-appearance-play-1"
           ]
         },
         {
@@ -1946,16 +1420,9 @@
           "lessonIds": [
             "en-forms-teach-1",
             "en-forms-words-1",
-            "en-forms-words-2",
-            "en-forms-words-3",
-            "en-forms-words-4",
-            "en-forms-review-1",
-            "en-forms-review-2",
             "en-forms-listen-1",
-            "en-forms-listen-2",
-            "en-forms-drill-1",
             "en-forms-practice-1",
-            "en-forms-practice-2"
+            "en-forms-play-1"
           ]
         },
         {
@@ -1970,16 +1437,9 @@
           "lessonIds": [
             "en-taxi-teach-1",
             "en-taxi-words-1",
-            "en-taxi-words-2",
-            "en-taxi-words-3",
-            "en-taxi-words-4",
-            "en-taxi-review-1",
-            "en-taxi-review-2",
             "en-taxi-listen-1",
-            "en-taxi-listen-2",
-            "en-taxi-drill-1",
             "en-taxi-practice-1",
-            "en-taxi-practice-2"
+            "en-taxi-play-1"
           ]
         },
         {
@@ -1994,16 +1454,9 @@
           "lessonIds": [
             "en-airport-teach-1",
             "en-airport-words-1",
-            "en-airport-words-2",
-            "en-airport-words-3",
-            "en-airport-words-4",
-            "en-airport-review-1",
-            "en-airport-review-2",
             "en-airport-listen-1",
-            "en-airport-listen-2",
-            "en-airport-drill-1",
             "en-airport-practice-1",
-            "en-airport-practice-2"
+            "en-airport-play-1"
           ]
         },
         {
@@ -2018,16 +1471,9 @@
           "lessonIds": [
             "en-emergency-teach-1",
             "en-emergency-words-1",
-            "en-emergency-words-2",
-            "en-emergency-words-3",
-            "en-emergency-words-4",
-            "en-emergency-review-1",
-            "en-emergency-review-2",
             "en-emergency-listen-1",
-            "en-emergency-listen-2",
-            "en-emergency-drill-1",
             "en-emergency-practice-1",
-            "en-emergency-practice-2"
+            "en-emergency-play-1"
           ]
         },
         {
@@ -2042,16 +1488,9 @@
           "lessonIds": [
             "en-rent-teach-1",
             "en-rent-words-1",
-            "en-rent-words-2",
-            "en-rent-words-3",
-            "en-rent-words-4",
-            "en-rent-review-1",
-            "en-rent-review-2",
             "en-rent-listen-1",
-            "en-rent-listen-2",
-            "en-rent-drill-1",
             "en-rent-practice-1",
-            "en-rent-practice-2"
+            "en-rent-play-1"
           ]
         },
         {
@@ -2066,16 +1505,9 @@
           "lessonIds": [
             "en-cinema-teach-1",
             "en-cinema-words-1",
-            "en-cinema-words-2",
-            "en-cinema-words-3",
-            "en-cinema-words-4",
-            "en-cinema-review-1",
-            "en-cinema-review-2",
             "en-cinema-listen-1",
-            "en-cinema-listen-2",
-            "en-cinema-drill-1",
             "en-cinema-practice-1",
-            "en-cinema-practice-2"
+            "en-cinema-play-1"
           ]
         },
         {
@@ -2090,16 +1522,9 @@
           "lessonIds": [
             "en-seasons-teach-1",
             "en-seasons-words-1",
-            "en-seasons-words-2",
-            "en-seasons-words-3",
-            "en-seasons-words-4",
-            "en-seasons-review-1",
-            "en-seasons-review-2",
             "en-seasons-listen-1",
-            "en-seasons-listen-2",
-            "en-seasons-drill-1",
             "en-seasons-practice-1",
-            "en-seasons-practice-2"
+            "en-seasons-play-1"
           ]
         },
         {
@@ -2114,16 +1539,9 @@
           "lessonIds": [
             "en-lost-teach-1",
             "en-lost-words-1",
-            "en-lost-words-2",
-            "en-lost-words-3",
-            "en-lost-words-4",
-            "en-lost-review-1",
-            "en-lost-review-2",
             "en-lost-listen-1",
-            "en-lost-listen-2",
-            "en-lost-drill-1",
             "en-lost-practice-1",
-            "en-lost-practice-2"
+            "en-lost-play-1"
           ]
         },
         {
@@ -2138,16 +1556,9 @@
           "lessonIds": [
             "en-travel-teach-1",
             "en-travel-words-1",
-            "en-travel-words-2",
-            "en-travel-words-3",
-            "en-travel-words-4",
-            "en-travel-review-1",
-            "en-travel-review-2",
             "en-travel-listen-1",
-            "en-travel-listen-2",
-            "en-travel-drill-1",
             "en-travel-practice-1",
-            "en-travel-practice-2"
+            "en-travel-play-1"
           ]
         },
         {
@@ -2162,16 +1573,9 @@
           "lessonIds": [
             "en-city-teach-1",
             "en-city-words-1",
-            "en-city-words-2",
-            "en-city-words-3",
-            "en-city-words-4",
-            "en-city-review-1",
-            "en-city-review-2",
             "en-city-listen-1",
-            "en-city-listen-2",
-            "en-city-drill-1",
             "en-city-practice-1",
-            "en-city-practice-2"
+            "en-city-play-1"
           ]
         },
         {
@@ -2186,16 +1590,9 @@
           "lessonIds": [
             "en-body-teach-1",
             "en-body-words-1",
-            "en-body-words-2",
-            "en-body-words-3",
-            "en-body-words-4",
-            "en-body-review-1",
-            "en-body-review-2",
             "en-body-listen-1",
-            "en-body-listen-2",
-            "en-body-drill-1",
             "en-body-practice-1",
-            "en-body-practice-2"
+            "en-body-play-1"
           ]
         },
         {
@@ -2210,16 +1607,9 @@
           "lessonIds": [
             "en-study-teach-1",
             "en-study-words-1",
-            "en-study-words-2",
-            "en-study-words-3",
-            "en-study-words-4",
-            "en-study-review-1",
-            "en-study-review-2",
             "en-study-listen-1",
-            "en-study-listen-2",
-            "en-study-drill-1",
             "en-study-practice-1",
-            "en-study-practice-2"
+            "en-study-play-1"
           ]
         },
         {
@@ -2234,16 +1624,9 @@
           "lessonIds": [
             "en-complaints-teach-1",
             "en-complaints-words-1",
-            "en-complaints-words-2",
-            "en-complaints-words-3",
-            "en-complaints-words-4",
-            "en-complaints-review-1",
-            "en-complaints-review-2",
             "en-complaints-listen-1",
-            "en-complaints-listen-2",
-            "en-complaints-drill-1",
             "en-complaints-practice-1",
-            "en-complaints-practice-2"
+            "en-complaints-play-1"
           ]
         },
         {
@@ -2258,16 +1641,9 @@
           "lessonIds": [
             "en-advice-teach-1",
             "en-advice-words-1",
-            "en-advice-words-2",
-            "en-advice-words-3",
-            "en-advice-words-4",
-            "en-advice-review-1",
-            "en-advice-review-2",
             "en-advice-listen-1",
-            "en-advice-listen-2",
-            "en-advice-drill-1",
             "en-advice-practice-1",
-            "en-advice-practice-2"
+            "en-advice-play-1"
           ]
         },
         {
@@ -2282,16 +1658,9 @@
           "lessonIds": [
             "en-plans-teach-1",
             "en-plans-words-1",
-            "en-plans-words-2",
-            "en-plans-words-3",
-            "en-plans-words-4",
-            "en-plans-review-1",
-            "en-plans-review-2",
             "en-plans-listen-1",
-            "en-plans-listen-2",
-            "en-plans-drill-1",
             "en-plans-practice-1",
-            "en-plans-practice-2"
+            "en-plans-play-1"
           ]
         },
         {
@@ -2306,16 +1675,9 @@
           "lessonIds": [
             "en-relationships-teach-1",
             "en-relationships-words-1",
-            "en-relationships-words-2",
-            "en-relationships-words-3",
-            "en-relationships-words-4",
-            "en-relationships-review-1",
-            "en-relationships-review-2",
             "en-relationships-listen-1",
-            "en-relationships-listen-2",
-            "en-relationships-drill-1",
             "en-relationships-practice-1",
-            "en-relationships-practice-2"
+            "en-relationships-play-1"
           ]
         },
         {
@@ -2330,16 +1692,9 @@
           "lessonIds": [
             "en-news-teach-1",
             "en-news-words-1",
-            "en-news-words-2",
-            "en-news-words-3",
-            "en-news-words-4",
-            "en-news-review-1",
-            "en-news-review-2",
             "en-news-listen-1",
-            "en-news-listen-2",
-            "en-news-drill-1",
             "en-news-practice-1",
-            "en-news-practice-2"
+            "en-news-play-1"
           ]
         },
         {
@@ -2354,16 +1709,9 @@
           "lessonIds": [
             "en-invitations-teach-1",
             "en-invitations-words-1",
-            "en-invitations-words-2",
-            "en-invitations-words-3",
-            "en-invitations-words-4",
-            "en-invitations-review-1",
-            "en-invitations-review-2",
             "en-invitations-listen-1",
-            "en-invitations-listen-2",
-            "en-invitations-drill-1",
             "en-invitations-practice-1",
-            "en-invitations-practice-2"
+            "en-invitations-play-1"
           ]
         },
         {
@@ -2378,16 +1726,9 @@
           "lessonIds": [
             "en-opinion-teach-1",
             "en-opinion-words-1",
-            "en-opinion-words-2",
-            "en-opinion-words-3",
-            "en-opinion-words-4",
-            "en-opinion-review-1",
-            "en-opinion-review-2",
             "en-opinion-listen-1",
-            "en-opinion-listen-2",
-            "en-opinion-drill-1",
             "en-opinion-practice-1",
-            "en-opinion-practice-2"
+            "en-opinion-play-1"
           ]
         },
         {
@@ -2402,16 +1743,9 @@
           "lessonIds": [
             "en-work-teach-1",
             "en-work-words-1",
-            "en-work-words-2",
-            "en-work-words-3",
-            "en-work-words-4",
-            "en-work-review-1",
-            "en-work-review-2",
             "en-work-listen-1",
-            "en-work-listen-2",
-            "en-work-drill-1",
             "en-work-practice-1",
-            "en-work-practice-2"
+            "en-work-play-1"
           ]
         },
         {
@@ -2426,16 +1760,9 @@
           "lessonIds": [
             "en-environment-teach-1",
             "en-environment-words-1",
-            "en-environment-words-2",
-            "en-environment-words-3",
-            "en-environment-words-4",
-            "en-environment-review-1",
-            "en-environment-review-2",
             "en-environment-listen-1",
-            "en-environment-listen-2",
-            "en-environment-drill-1",
             "en-environment-practice-1",
-            "en-environment-practice-2"
+            "en-environment-play-1"
           ]
         },
         {
@@ -2450,25 +1777,35 @@
           "lessonIds": [
             "en-education-teach-1",
             "en-education-words-1",
-            "en-education-words-2",
-            "en-education-words-3",
-            "en-education-words-4",
-            "en-education-review-1",
-            "en-education-review-2",
             "en-education-listen-1",
-            "en-education-listen-2",
-            "en-education-drill-1",
             "en-education-practice-1",
-            "en-education-practice-2"
+            "en-education-play-1"
           ]
         }
       ]
     },
     {
       "id": "zh",
-      "lessonCount": 612,
-      "exerciseCount": 27903,
+      "lessonCount": 260,
+      "exerciseCount": 3118,
       "units": [
+        {
+          "id": "sounds",
+          "level": "A1",
+          "title": {
+            "vi": "Âm và cách đọc",
+            "en": "Sounds and reading",
+            "zh": "读音",
+            "th": "เสียงและการอ่าน"
+          },
+          "lessonIds": [
+            "zh-sounds-teach-1",
+            "zh-sounds-words-1",
+            "zh-sounds-listen-1",
+            "zh-sounds-practice-1",
+            "zh-sounds-play-1"
+          ]
+        },
         {
           "id": "greet",
           "level": "A1",
@@ -2481,16 +1818,9 @@
           "lessonIds": [
             "zh-greet-teach-1",
             "zh-greet-words-1",
-            "zh-greet-words-2",
-            "zh-greet-words-3",
-            "zh-greet-words-4",
-            "zh-greet-review-1",
-            "zh-greet-review-2",
             "zh-greet-listen-1",
-            "zh-greet-listen-2",
-            "zh-greet-drill-1",
             "zh-greet-practice-1",
-            "zh-greet-practice-2"
+            "zh-greet-play-1"
           ]
         },
         {
@@ -2505,16 +1835,9 @@
           "lessonIds": [
             "zh-numbers-teach-1",
             "zh-numbers-words-1",
-            "zh-numbers-words-2",
-            "zh-numbers-words-3",
-            "zh-numbers-words-4",
-            "zh-numbers-review-1",
-            "zh-numbers-review-2",
             "zh-numbers-listen-1",
-            "zh-numbers-listen-2",
-            "zh-numbers-drill-1",
             "zh-numbers-practice-1",
-            "zh-numbers-practice-2"
+            "zh-numbers-play-1"
           ]
         },
         {
@@ -2529,16 +1852,9 @@
           "lessonIds": [
             "zh-time-teach-1",
             "zh-time-words-1",
-            "zh-time-words-2",
-            "zh-time-words-3",
-            "zh-time-words-4",
-            "zh-time-review-1",
-            "zh-time-review-2",
             "zh-time-listen-1",
-            "zh-time-listen-2",
-            "zh-time-drill-1",
             "zh-time-practice-1",
-            "zh-time-practice-2"
+            "zh-time-play-1"
           ]
         },
         {
@@ -2553,16 +1869,9 @@
           "lessonIds": [
             "zh-cafe-teach-1",
             "zh-cafe-words-1",
-            "zh-cafe-words-2",
-            "zh-cafe-words-3",
-            "zh-cafe-words-4",
-            "zh-cafe-review-1",
-            "zh-cafe-review-2",
             "zh-cafe-listen-1",
-            "zh-cafe-listen-2",
-            "zh-cafe-drill-1",
             "zh-cafe-practice-1",
-            "zh-cafe-practice-2"
+            "zh-cafe-play-1"
           ]
         },
         {
@@ -2577,16 +1886,9 @@
           "lessonIds": [
             "zh-food-teach-1",
             "zh-food-words-1",
-            "zh-food-words-2",
-            "zh-food-words-3",
-            "zh-food-words-4",
-            "zh-food-review-1",
-            "zh-food-review-2",
             "zh-food-listen-1",
-            "zh-food-listen-2",
-            "zh-food-drill-1",
             "zh-food-practice-1",
-            "zh-food-practice-2"
+            "zh-food-play-1"
           ]
         },
         {
@@ -2601,16 +1903,9 @@
           "lessonIds": [
             "zh-market-teach-1",
             "zh-market-words-1",
-            "zh-market-words-2",
-            "zh-market-words-3",
-            "zh-market-words-4",
-            "zh-market-review-1",
-            "zh-market-review-2",
             "zh-market-listen-1",
-            "zh-market-listen-2",
-            "zh-market-drill-1",
             "zh-market-practice-1",
-            "zh-market-practice-2"
+            "zh-market-play-1"
           ]
         },
         {
@@ -2625,16 +1920,9 @@
           "lessonIds": [
             "zh-home-teach-1",
             "zh-home-words-1",
-            "zh-home-words-2",
-            "zh-home-words-3",
-            "zh-home-words-4",
-            "zh-home-review-1",
-            "zh-home-review-2",
             "zh-home-listen-1",
-            "zh-home-listen-2",
-            "zh-home-drill-1",
             "zh-home-practice-1",
-            "zh-home-practice-2"
+            "zh-home-play-1"
           ]
         },
         {
@@ -2649,16 +1937,9 @@
           "lessonIds": [
             "zh-messages-teach-1",
             "zh-messages-words-1",
-            "zh-messages-words-2",
-            "zh-messages-words-3",
-            "zh-messages-words-4",
-            "zh-messages-review-1",
-            "zh-messages-review-2",
             "zh-messages-listen-1",
-            "zh-messages-listen-2",
-            "zh-messages-drill-1",
             "zh-messages-practice-1",
-            "zh-messages-practice-2"
+            "zh-messages-play-1"
           ]
         },
         {
@@ -2673,16 +1954,9 @@
           "lessonIds": [
             "zh-family-teach-1",
             "zh-family-words-1",
-            "zh-family-words-2",
-            "zh-family-words-3",
-            "zh-family-words-4",
-            "zh-family-review-1",
-            "zh-family-review-2",
             "zh-family-listen-1",
-            "zh-family-listen-2",
-            "zh-family-drill-1",
             "zh-family-practice-1",
-            "zh-family-practice-2"
+            "zh-family-play-1"
           ]
         },
         {
@@ -2697,16 +1971,9 @@
           "lessonIds": [
             "zh-clothes-teach-1",
             "zh-clothes-words-1",
-            "zh-clothes-words-2",
-            "zh-clothes-words-3",
-            "zh-clothes-words-4",
-            "zh-clothes-review-1",
-            "zh-clothes-review-2",
             "zh-clothes-listen-1",
-            "zh-clothes-listen-2",
-            "zh-clothes-drill-1",
             "zh-clothes-practice-1",
-            "zh-clothes-practice-2"
+            "zh-clothes-play-1"
           ]
         },
         {
@@ -2721,16 +1988,9 @@
           "lessonIds": [
             "zh-weather-teach-1",
             "zh-weather-words-1",
-            "zh-weather-words-2",
-            "zh-weather-words-3",
-            "zh-weather-words-4",
-            "zh-weather-review-1",
-            "zh-weather-review-2",
             "zh-weather-listen-1",
-            "zh-weather-listen-2",
-            "zh-weather-drill-1",
             "zh-weather-practice-1",
-            "zh-weather-practice-2"
+            "zh-weather-play-1"
           ]
         },
         {
@@ -2745,16 +2005,9 @@
           "lessonIds": [
             "zh-feelings-teach-1",
             "zh-feelings-words-1",
-            "zh-feelings-words-2",
-            "zh-feelings-words-3",
-            "zh-feelings-words-4",
-            "zh-feelings-review-1",
-            "zh-feelings-review-2",
             "zh-feelings-listen-1",
-            "zh-feelings-listen-2",
-            "zh-feelings-drill-1",
             "zh-feelings-practice-1",
-            "zh-feelings-practice-2"
+            "zh-feelings-play-1"
           ]
         },
         {
@@ -2769,16 +2022,9 @@
           "lessonIds": [
             "zh-colors-teach-1",
             "zh-colors-words-1",
-            "zh-colors-words-2",
-            "zh-colors-words-3",
-            "zh-colors-words-4",
-            "zh-colors-review-1",
-            "zh-colors-review-2",
             "zh-colors-listen-1",
-            "zh-colors-listen-2",
-            "zh-colors-drill-1",
             "zh-colors-practice-1",
-            "zh-colors-practice-2"
+            "zh-colors-play-1"
           ]
         },
         {
@@ -2793,16 +2039,9 @@
           "lessonIds": [
             "zh-daily-teach-1",
             "zh-daily-words-1",
-            "zh-daily-words-2",
-            "zh-daily-words-3",
-            "zh-daily-words-4",
-            "zh-daily-review-1",
-            "zh-daily-review-2",
             "zh-daily-listen-1",
-            "zh-daily-listen-2",
-            "zh-daily-drill-1",
             "zh-daily-practice-1",
-            "zh-daily-practice-2"
+            "zh-daily-play-1"
           ]
         },
         {
@@ -2817,16 +2056,9 @@
           "lessonIds": [
             "zh-shopping-teach-1",
             "zh-shopping-words-1",
-            "zh-shopping-words-2",
-            "zh-shopping-words-3",
-            "zh-shopping-words-4",
-            "zh-shopping-review-1",
-            "zh-shopping-review-2",
             "zh-shopping-listen-1",
-            "zh-shopping-listen-2",
-            "zh-shopping-drill-1",
             "zh-shopping-practice-1",
-            "zh-shopping-practice-2"
+            "zh-shopping-play-1"
           ]
         },
         {
@@ -2841,16 +2073,9 @@
           "lessonIds": [
             "zh-restaurant-teach-1",
             "zh-restaurant-words-1",
-            "zh-restaurant-words-2",
-            "zh-restaurant-words-3",
-            "zh-restaurant-words-4",
-            "zh-restaurant-review-1",
-            "zh-restaurant-review-2",
             "zh-restaurant-listen-1",
-            "zh-restaurant-listen-2",
-            "zh-restaurant-drill-1",
             "zh-restaurant-practice-1",
-            "zh-restaurant-practice-2"
+            "zh-restaurant-play-1"
           ]
         },
         {
@@ -2865,16 +2090,9 @@
           "lessonIds": [
             "zh-hotel-teach-1",
             "zh-hotel-words-1",
-            "zh-hotel-words-2",
-            "zh-hotel-words-3",
-            "zh-hotel-words-4",
-            "zh-hotel-review-1",
-            "zh-hotel-review-2",
             "zh-hotel-listen-1",
-            "zh-hotel-listen-2",
-            "zh-hotel-drill-1",
             "zh-hotel-practice-1",
-            "zh-hotel-practice-2"
+            "zh-hotel-play-1"
           ]
         },
         {
@@ -2889,16 +2107,9 @@
           "lessonIds": [
             "zh-phone-teach-1",
             "zh-phone-words-1",
-            "zh-phone-words-2",
-            "zh-phone-words-3",
-            "zh-phone-words-4",
-            "zh-phone-review-1",
-            "zh-phone-review-2",
             "zh-phone-listen-1",
-            "zh-phone-listen-2",
-            "zh-phone-drill-1",
             "zh-phone-practice-1",
-            "zh-phone-practice-2"
+            "zh-phone-play-1"
           ]
         },
         {
@@ -2913,16 +2124,9 @@
           "lessonIds": [
             "zh-hobbies-teach-1",
             "zh-hobbies-words-1",
-            "zh-hobbies-words-2",
-            "zh-hobbies-words-3",
-            "zh-hobbies-words-4",
-            "zh-hobbies-review-1",
-            "zh-hobbies-review-2",
             "zh-hobbies-listen-1",
-            "zh-hobbies-listen-2",
-            "zh-hobbies-drill-1",
             "zh-hobbies-practice-1",
-            "zh-hobbies-practice-2"
+            "zh-hobbies-play-1"
           ]
         },
         {
@@ -2937,16 +2141,9 @@
           "lessonIds": [
             "zh-sports-teach-1",
             "zh-sports-words-1",
-            "zh-sports-words-2",
-            "zh-sports-words-3",
-            "zh-sports-words-4",
-            "zh-sports-review-1",
-            "zh-sports-review-2",
             "zh-sports-listen-1",
-            "zh-sports-listen-2",
-            "zh-sports-drill-1",
             "zh-sports-practice-1",
-            "zh-sports-practice-2"
+            "zh-sports-play-1"
           ]
         },
         {
@@ -2961,16 +2158,9 @@
           "lessonIds": [
             "zh-money-teach-1",
             "zh-money-words-1",
-            "zh-money-words-2",
-            "zh-money-words-3",
-            "zh-money-words-4",
-            "zh-money-review-1",
-            "zh-money-review-2",
             "zh-money-listen-1",
-            "zh-money-listen-2",
-            "zh-money-drill-1",
             "zh-money-practice-1",
-            "zh-money-practice-2"
+            "zh-money-play-1"
           ]
         },
         {
@@ -2985,16 +2175,9 @@
           "lessonIds": [
             "zh-cooking-teach-1",
             "zh-cooking-words-1",
-            "zh-cooking-words-2",
-            "zh-cooking-words-3",
-            "zh-cooking-words-4",
-            "zh-cooking-review-1",
-            "zh-cooking-review-2",
             "zh-cooking-listen-1",
-            "zh-cooking-listen-2",
-            "zh-cooking-drill-1",
             "zh-cooking-practice-1",
-            "zh-cooking-practice-2"
+            "zh-cooking-play-1"
           ]
         },
         {
@@ -3009,16 +2192,9 @@
           "lessonIds": [
             "zh-cleaning-teach-1",
             "zh-cleaning-words-1",
-            "zh-cleaning-words-2",
-            "zh-cleaning-words-3",
-            "zh-cleaning-words-4",
-            "zh-cleaning-review-1",
-            "zh-cleaning-review-2",
             "zh-cleaning-listen-1",
-            "zh-cleaning-listen-2",
-            "zh-cleaning-drill-1",
             "zh-cleaning-practice-1",
-            "zh-cleaning-practice-2"
+            "zh-cleaning-play-1"
           ]
         },
         {
@@ -3033,16 +2209,9 @@
           "lessonIds": [
             "zh-pets-teach-1",
             "zh-pets-words-1",
-            "zh-pets-words-2",
-            "zh-pets-words-3",
-            "zh-pets-words-4",
-            "zh-pets-review-1",
-            "zh-pets-review-2",
             "zh-pets-listen-1",
-            "zh-pets-listen-2",
-            "zh-pets-drill-1",
             "zh-pets-practice-1",
-            "zh-pets-practice-2"
+            "zh-pets-play-1"
           ]
         },
         {
@@ -3057,16 +2226,9 @@
           "lessonIds": [
             "zh-holidays-teach-1",
             "zh-holidays-words-1",
-            "zh-holidays-words-2",
-            "zh-holidays-words-3",
-            "zh-holidays-words-4",
-            "zh-holidays-review-1",
-            "zh-holidays-review-2",
             "zh-holidays-listen-1",
-            "zh-holidays-listen-2",
-            "zh-holidays-drill-1",
             "zh-holidays-practice-1",
-            "zh-holidays-practice-2"
+            "zh-holidays-play-1"
           ]
         },
         {
@@ -3081,16 +2243,9 @@
           "lessonIds": [
             "zh-neighbors-teach-1",
             "zh-neighbors-words-1",
-            "zh-neighbors-words-2",
-            "zh-neighbors-words-3",
-            "zh-neighbors-words-4",
-            "zh-neighbors-review-1",
-            "zh-neighbors-review-2",
             "zh-neighbors-listen-1",
-            "zh-neighbors-listen-2",
-            "zh-neighbors-drill-1",
             "zh-neighbors-practice-1",
-            "zh-neighbors-practice-2"
+            "zh-neighbors-play-1"
           ]
         },
         {
@@ -3105,16 +2260,9 @@
           "lessonIds": [
             "zh-internet-teach-1",
             "zh-internet-words-1",
-            "zh-internet-words-2",
-            "zh-internet-words-3",
-            "zh-internet-words-4",
-            "zh-internet-review-1",
-            "zh-internet-review-2",
             "zh-internet-listen-1",
-            "zh-internet-listen-2",
-            "zh-internet-drill-1",
             "zh-internet-practice-1",
-            "zh-internet-practice-2"
+            "zh-internet-play-1"
           ]
         },
         {
@@ -3129,16 +2277,9 @@
           "lessonIds": [
             "zh-school-teach-1",
             "zh-school-words-1",
-            "zh-school-words-2",
-            "zh-school-words-3",
-            "zh-school-words-4",
-            "zh-school-review-1",
-            "zh-school-review-2",
             "zh-school-listen-1",
-            "zh-school-listen-2",
-            "zh-school-drill-1",
             "zh-school-practice-1",
-            "zh-school-practice-2"
+            "zh-school-play-1"
           ]
         },
         {
@@ -3153,16 +2294,9 @@
           "lessonIds": [
             "zh-appearance-teach-1",
             "zh-appearance-words-1",
-            "zh-appearance-words-2",
-            "zh-appearance-words-3",
-            "zh-appearance-words-4",
-            "zh-appearance-review-1",
-            "zh-appearance-review-2",
             "zh-appearance-listen-1",
-            "zh-appearance-listen-2",
-            "zh-appearance-drill-1",
             "zh-appearance-practice-1",
-            "zh-appearance-practice-2"
+            "zh-appearance-play-1"
           ]
         },
         {
@@ -3177,16 +2311,9 @@
           "lessonIds": [
             "zh-forms-teach-1",
             "zh-forms-words-1",
-            "zh-forms-words-2",
-            "zh-forms-words-3",
-            "zh-forms-words-4",
-            "zh-forms-review-1",
-            "zh-forms-review-2",
             "zh-forms-listen-1",
-            "zh-forms-listen-2",
-            "zh-forms-drill-1",
             "zh-forms-practice-1",
-            "zh-forms-practice-2"
+            "zh-forms-play-1"
           ]
         },
         {
@@ -3201,16 +2328,9 @@
           "lessonIds": [
             "zh-taxi-teach-1",
             "zh-taxi-words-1",
-            "zh-taxi-words-2",
-            "zh-taxi-words-3",
-            "zh-taxi-words-4",
-            "zh-taxi-review-1",
-            "zh-taxi-review-2",
             "zh-taxi-listen-1",
-            "zh-taxi-listen-2",
-            "zh-taxi-drill-1",
             "zh-taxi-practice-1",
-            "zh-taxi-practice-2"
+            "zh-taxi-play-1"
           ]
         },
         {
@@ -3225,16 +2345,9 @@
           "lessonIds": [
             "zh-airport-teach-1",
             "zh-airport-words-1",
-            "zh-airport-words-2",
-            "zh-airport-words-3",
-            "zh-airport-words-4",
-            "zh-airport-review-1",
-            "zh-airport-review-2",
             "zh-airport-listen-1",
-            "zh-airport-listen-2",
-            "zh-airport-drill-1",
             "zh-airport-practice-1",
-            "zh-airport-practice-2"
+            "zh-airport-play-1"
           ]
         },
         {
@@ -3249,16 +2362,9 @@
           "lessonIds": [
             "zh-emergency-teach-1",
             "zh-emergency-words-1",
-            "zh-emergency-words-2",
-            "zh-emergency-words-3",
-            "zh-emergency-words-4",
-            "zh-emergency-review-1",
-            "zh-emergency-review-2",
             "zh-emergency-listen-1",
-            "zh-emergency-listen-2",
-            "zh-emergency-drill-1",
             "zh-emergency-practice-1",
-            "zh-emergency-practice-2"
+            "zh-emergency-play-1"
           ]
         },
         {
@@ -3273,16 +2379,9 @@
           "lessonIds": [
             "zh-rent-teach-1",
             "zh-rent-words-1",
-            "zh-rent-words-2",
-            "zh-rent-words-3",
-            "zh-rent-words-4",
-            "zh-rent-review-1",
-            "zh-rent-review-2",
             "zh-rent-listen-1",
-            "zh-rent-listen-2",
-            "zh-rent-drill-1",
             "zh-rent-practice-1",
-            "zh-rent-practice-2"
+            "zh-rent-play-1"
           ]
         },
         {
@@ -3297,16 +2396,9 @@
           "lessonIds": [
             "zh-cinema-teach-1",
             "zh-cinema-words-1",
-            "zh-cinema-words-2",
-            "zh-cinema-words-3",
-            "zh-cinema-words-4",
-            "zh-cinema-review-1",
-            "zh-cinema-review-2",
             "zh-cinema-listen-1",
-            "zh-cinema-listen-2",
-            "zh-cinema-drill-1",
             "zh-cinema-practice-1",
-            "zh-cinema-practice-2"
+            "zh-cinema-play-1"
           ]
         },
         {
@@ -3321,16 +2413,9 @@
           "lessonIds": [
             "zh-seasons-teach-1",
             "zh-seasons-words-1",
-            "zh-seasons-words-2",
-            "zh-seasons-words-3",
-            "zh-seasons-words-4",
-            "zh-seasons-review-1",
-            "zh-seasons-review-2",
             "zh-seasons-listen-1",
-            "zh-seasons-listen-2",
-            "zh-seasons-drill-1",
             "zh-seasons-practice-1",
-            "zh-seasons-practice-2"
+            "zh-seasons-play-1"
           ]
         },
         {
@@ -3345,16 +2430,9 @@
           "lessonIds": [
             "zh-lost-teach-1",
             "zh-lost-words-1",
-            "zh-lost-words-2",
-            "zh-lost-words-3",
-            "zh-lost-words-4",
-            "zh-lost-review-1",
-            "zh-lost-review-2",
             "zh-lost-listen-1",
-            "zh-lost-listen-2",
-            "zh-lost-drill-1",
             "zh-lost-practice-1",
-            "zh-lost-practice-2"
+            "zh-lost-play-1"
           ]
         },
         {
@@ -3369,16 +2447,9 @@
           "lessonIds": [
             "zh-travel-teach-1",
             "zh-travel-words-1",
-            "zh-travel-words-2",
-            "zh-travel-words-3",
-            "zh-travel-words-4",
-            "zh-travel-review-1",
-            "zh-travel-review-2",
             "zh-travel-listen-1",
-            "zh-travel-listen-2",
-            "zh-travel-drill-1",
             "zh-travel-practice-1",
-            "zh-travel-practice-2"
+            "zh-travel-play-1"
           ]
         },
         {
@@ -3393,16 +2464,9 @@
           "lessonIds": [
             "zh-city-teach-1",
             "zh-city-words-1",
-            "zh-city-words-2",
-            "zh-city-words-3",
-            "zh-city-words-4",
-            "zh-city-review-1",
-            "zh-city-review-2",
             "zh-city-listen-1",
-            "zh-city-listen-2",
-            "zh-city-drill-1",
             "zh-city-practice-1",
-            "zh-city-practice-2"
+            "zh-city-play-1"
           ]
         },
         {
@@ -3417,16 +2481,9 @@
           "lessonIds": [
             "zh-body-teach-1",
             "zh-body-words-1",
-            "zh-body-words-2",
-            "zh-body-words-3",
-            "zh-body-words-4",
-            "zh-body-review-1",
-            "zh-body-review-2",
             "zh-body-listen-1",
-            "zh-body-listen-2",
-            "zh-body-drill-1",
             "zh-body-practice-1",
-            "zh-body-practice-2"
+            "zh-body-play-1"
           ]
         },
         {
@@ -3441,16 +2498,9 @@
           "lessonIds": [
             "zh-study-teach-1",
             "zh-study-words-1",
-            "zh-study-words-2",
-            "zh-study-words-3",
-            "zh-study-words-4",
-            "zh-study-review-1",
-            "zh-study-review-2",
             "zh-study-listen-1",
-            "zh-study-listen-2",
-            "zh-study-drill-1",
             "zh-study-practice-1",
-            "zh-study-practice-2"
+            "zh-study-play-1"
           ]
         },
         {
@@ -3465,16 +2515,9 @@
           "lessonIds": [
             "zh-complaints-teach-1",
             "zh-complaints-words-1",
-            "zh-complaints-words-2",
-            "zh-complaints-words-3",
-            "zh-complaints-words-4",
-            "zh-complaints-review-1",
-            "zh-complaints-review-2",
             "zh-complaints-listen-1",
-            "zh-complaints-listen-2",
-            "zh-complaints-drill-1",
             "zh-complaints-practice-1",
-            "zh-complaints-practice-2"
+            "zh-complaints-play-1"
           ]
         },
         {
@@ -3489,16 +2532,9 @@
           "lessonIds": [
             "zh-advice-teach-1",
             "zh-advice-words-1",
-            "zh-advice-words-2",
-            "zh-advice-words-3",
-            "zh-advice-words-4",
-            "zh-advice-review-1",
-            "zh-advice-review-2",
             "zh-advice-listen-1",
-            "zh-advice-listen-2",
-            "zh-advice-drill-1",
             "zh-advice-practice-1",
-            "zh-advice-practice-2"
+            "zh-advice-play-1"
           ]
         },
         {
@@ -3513,16 +2549,9 @@
           "lessonIds": [
             "zh-plans-teach-1",
             "zh-plans-words-1",
-            "zh-plans-words-2",
-            "zh-plans-words-3",
-            "zh-plans-words-4",
-            "zh-plans-review-1",
-            "zh-plans-review-2",
             "zh-plans-listen-1",
-            "zh-plans-listen-2",
-            "zh-plans-drill-1",
             "zh-plans-practice-1",
-            "zh-plans-practice-2"
+            "zh-plans-play-1"
           ]
         },
         {
@@ -3537,16 +2566,9 @@
           "lessonIds": [
             "zh-relationships-teach-1",
             "zh-relationships-words-1",
-            "zh-relationships-words-2",
-            "zh-relationships-words-3",
-            "zh-relationships-words-4",
-            "zh-relationships-review-1",
-            "zh-relationships-review-2",
             "zh-relationships-listen-1",
-            "zh-relationships-listen-2",
-            "zh-relationships-drill-1",
             "zh-relationships-practice-1",
-            "zh-relationships-practice-2"
+            "zh-relationships-play-1"
           ]
         },
         {
@@ -3561,16 +2583,9 @@
           "lessonIds": [
             "zh-news-teach-1",
             "zh-news-words-1",
-            "zh-news-words-2",
-            "zh-news-words-3",
-            "zh-news-words-4",
-            "zh-news-review-1",
-            "zh-news-review-2",
             "zh-news-listen-1",
-            "zh-news-listen-2",
-            "zh-news-drill-1",
             "zh-news-practice-1",
-            "zh-news-practice-2"
+            "zh-news-play-1"
           ]
         },
         {
@@ -3585,16 +2600,9 @@
           "lessonIds": [
             "zh-invitations-teach-1",
             "zh-invitations-words-1",
-            "zh-invitations-words-2",
-            "zh-invitations-words-3",
-            "zh-invitations-words-4",
-            "zh-invitations-review-1",
-            "zh-invitations-review-2",
             "zh-invitations-listen-1",
-            "zh-invitations-listen-2",
-            "zh-invitations-drill-1",
             "zh-invitations-practice-1",
-            "zh-invitations-practice-2"
+            "zh-invitations-play-1"
           ]
         },
         {
@@ -3609,16 +2617,9 @@
           "lessonIds": [
             "zh-opinion-teach-1",
             "zh-opinion-words-1",
-            "zh-opinion-words-2",
-            "zh-opinion-words-3",
-            "zh-opinion-words-4",
-            "zh-opinion-review-1",
-            "zh-opinion-review-2",
             "zh-opinion-listen-1",
-            "zh-opinion-listen-2",
-            "zh-opinion-drill-1",
             "zh-opinion-practice-1",
-            "zh-opinion-practice-2"
+            "zh-opinion-play-1"
           ]
         },
         {
@@ -3633,16 +2634,9 @@
           "lessonIds": [
             "zh-work-teach-1",
             "zh-work-words-1",
-            "zh-work-words-2",
-            "zh-work-words-3",
-            "zh-work-words-4",
-            "zh-work-review-1",
-            "zh-work-review-2",
             "zh-work-listen-1",
-            "zh-work-listen-2",
-            "zh-work-drill-1",
             "zh-work-practice-1",
-            "zh-work-practice-2"
+            "zh-work-play-1"
           ]
         },
         {
@@ -3657,16 +2651,9 @@
           "lessonIds": [
             "zh-environment-teach-1",
             "zh-environment-words-1",
-            "zh-environment-words-2",
-            "zh-environment-words-3",
-            "zh-environment-words-4",
-            "zh-environment-review-1",
-            "zh-environment-review-2",
             "zh-environment-listen-1",
-            "zh-environment-listen-2",
-            "zh-environment-drill-1",
             "zh-environment-practice-1",
-            "zh-environment-practice-2"
+            "zh-environment-play-1"
           ]
         },
         {
@@ -3681,25 +2668,35 @@
           "lessonIds": [
             "zh-education-teach-1",
             "zh-education-words-1",
-            "zh-education-words-2",
-            "zh-education-words-3",
-            "zh-education-words-4",
-            "zh-education-review-1",
-            "zh-education-review-2",
             "zh-education-listen-1",
-            "zh-education-listen-2",
-            "zh-education-drill-1",
             "zh-education-practice-1",
-            "zh-education-practice-2"
+            "zh-education-play-1"
           ]
         }
       ]
     },
     {
       "id": "th",
-      "lessonCount": 612,
-      "exerciseCount": 14454,
+      "lessonCount": 260,
+      "exerciseCount": 2298,
       "units": [
+        {
+          "id": "sounds",
+          "level": "A1",
+          "title": {
+            "vi": "Âm và cách đọc",
+            "en": "Sounds and reading",
+            "zh": "读音",
+            "th": "เสียงและการอ่าน"
+          },
+          "lessonIds": [
+            "th-sounds-teach-1",
+            "th-sounds-words-1",
+            "th-sounds-listen-1",
+            "th-sounds-practice-1",
+            "th-sounds-play-1"
+          ]
+        },
         {
           "id": "greet",
           "level": "A1",
@@ -3712,16 +2709,9 @@
           "lessonIds": [
             "th-greet-teach-1",
             "th-greet-words-1",
-            "th-greet-words-2",
-            "th-greet-words-3",
-            "th-greet-words-4",
-            "th-greet-review-1",
-            "th-greet-review-2",
             "th-greet-listen-1",
-            "th-greet-listen-2",
-            "th-greet-drill-1",
             "th-greet-practice-1",
-            "th-greet-practice-2"
+            "th-greet-play-1"
           ]
         },
         {
@@ -3736,16 +2726,9 @@
           "lessonIds": [
             "th-numbers-teach-1",
             "th-numbers-words-1",
-            "th-numbers-words-2",
-            "th-numbers-words-3",
-            "th-numbers-words-4",
-            "th-numbers-review-1",
-            "th-numbers-review-2",
             "th-numbers-listen-1",
-            "th-numbers-listen-2",
-            "th-numbers-drill-1",
             "th-numbers-practice-1",
-            "th-numbers-practice-2"
+            "th-numbers-play-1"
           ]
         },
         {
@@ -3760,16 +2743,9 @@
           "lessonIds": [
             "th-time-teach-1",
             "th-time-words-1",
-            "th-time-words-2",
-            "th-time-words-3",
-            "th-time-words-4",
-            "th-time-review-1",
-            "th-time-review-2",
             "th-time-listen-1",
-            "th-time-listen-2",
-            "th-time-drill-1",
             "th-time-practice-1",
-            "th-time-practice-2"
+            "th-time-play-1"
           ]
         },
         {
@@ -3784,16 +2760,9 @@
           "lessonIds": [
             "th-cafe-teach-1",
             "th-cafe-words-1",
-            "th-cafe-words-2",
-            "th-cafe-words-3",
-            "th-cafe-words-4",
-            "th-cafe-review-1",
-            "th-cafe-review-2",
             "th-cafe-listen-1",
-            "th-cafe-listen-2",
-            "th-cafe-drill-1",
             "th-cafe-practice-1",
-            "th-cafe-practice-2"
+            "th-cafe-play-1"
           ]
         },
         {
@@ -3808,16 +2777,9 @@
           "lessonIds": [
             "th-food-teach-1",
             "th-food-words-1",
-            "th-food-words-2",
-            "th-food-words-3",
-            "th-food-words-4",
-            "th-food-review-1",
-            "th-food-review-2",
             "th-food-listen-1",
-            "th-food-listen-2",
-            "th-food-drill-1",
             "th-food-practice-1",
-            "th-food-practice-2"
+            "th-food-play-1"
           ]
         },
         {
@@ -3832,16 +2794,9 @@
           "lessonIds": [
             "th-market-teach-1",
             "th-market-words-1",
-            "th-market-words-2",
-            "th-market-words-3",
-            "th-market-words-4",
-            "th-market-review-1",
-            "th-market-review-2",
             "th-market-listen-1",
-            "th-market-listen-2",
-            "th-market-drill-1",
             "th-market-practice-1",
-            "th-market-practice-2"
+            "th-market-play-1"
           ]
         },
         {
@@ -3856,16 +2811,9 @@
           "lessonIds": [
             "th-home-teach-1",
             "th-home-words-1",
-            "th-home-words-2",
-            "th-home-words-3",
-            "th-home-words-4",
-            "th-home-review-1",
-            "th-home-review-2",
             "th-home-listen-1",
-            "th-home-listen-2",
-            "th-home-drill-1",
             "th-home-practice-1",
-            "th-home-practice-2"
+            "th-home-play-1"
           ]
         },
         {
@@ -3880,16 +2828,9 @@
           "lessonIds": [
             "th-messages-teach-1",
             "th-messages-words-1",
-            "th-messages-words-2",
-            "th-messages-words-3",
-            "th-messages-words-4",
-            "th-messages-review-1",
-            "th-messages-review-2",
             "th-messages-listen-1",
-            "th-messages-listen-2",
-            "th-messages-drill-1",
             "th-messages-practice-1",
-            "th-messages-practice-2"
+            "th-messages-play-1"
           ]
         },
         {
@@ -3904,16 +2845,9 @@
           "lessonIds": [
             "th-family-teach-1",
             "th-family-words-1",
-            "th-family-words-2",
-            "th-family-words-3",
-            "th-family-words-4",
-            "th-family-review-1",
-            "th-family-review-2",
             "th-family-listen-1",
-            "th-family-listen-2",
-            "th-family-drill-1",
             "th-family-practice-1",
-            "th-family-practice-2"
+            "th-family-play-1"
           ]
         },
         {
@@ -3928,16 +2862,9 @@
           "lessonIds": [
             "th-clothes-teach-1",
             "th-clothes-words-1",
-            "th-clothes-words-2",
-            "th-clothes-words-3",
-            "th-clothes-words-4",
-            "th-clothes-review-1",
-            "th-clothes-review-2",
             "th-clothes-listen-1",
-            "th-clothes-listen-2",
-            "th-clothes-drill-1",
             "th-clothes-practice-1",
-            "th-clothes-practice-2"
+            "th-clothes-play-1"
           ]
         },
         {
@@ -3952,16 +2879,9 @@
           "lessonIds": [
             "th-weather-teach-1",
             "th-weather-words-1",
-            "th-weather-words-2",
-            "th-weather-words-3",
-            "th-weather-words-4",
-            "th-weather-review-1",
-            "th-weather-review-2",
             "th-weather-listen-1",
-            "th-weather-listen-2",
-            "th-weather-drill-1",
             "th-weather-practice-1",
-            "th-weather-practice-2"
+            "th-weather-play-1"
           ]
         },
         {
@@ -3976,16 +2896,9 @@
           "lessonIds": [
             "th-feelings-teach-1",
             "th-feelings-words-1",
-            "th-feelings-words-2",
-            "th-feelings-words-3",
-            "th-feelings-words-4",
-            "th-feelings-review-1",
-            "th-feelings-review-2",
             "th-feelings-listen-1",
-            "th-feelings-listen-2",
-            "th-feelings-drill-1",
             "th-feelings-practice-1",
-            "th-feelings-practice-2"
+            "th-feelings-play-1"
           ]
         },
         {
@@ -4000,16 +2913,9 @@
           "lessonIds": [
             "th-colors-teach-1",
             "th-colors-words-1",
-            "th-colors-words-2",
-            "th-colors-words-3",
-            "th-colors-words-4",
-            "th-colors-review-1",
-            "th-colors-review-2",
             "th-colors-listen-1",
-            "th-colors-listen-2",
-            "th-colors-drill-1",
             "th-colors-practice-1",
-            "th-colors-practice-2"
+            "th-colors-play-1"
           ]
         },
         {
@@ -4024,16 +2930,9 @@
           "lessonIds": [
             "th-daily-teach-1",
             "th-daily-words-1",
-            "th-daily-words-2",
-            "th-daily-words-3",
-            "th-daily-words-4",
-            "th-daily-review-1",
-            "th-daily-review-2",
             "th-daily-listen-1",
-            "th-daily-listen-2",
-            "th-daily-drill-1",
             "th-daily-practice-1",
-            "th-daily-practice-2"
+            "th-daily-play-1"
           ]
         },
         {
@@ -4048,16 +2947,9 @@
           "lessonIds": [
             "th-shopping-teach-1",
             "th-shopping-words-1",
-            "th-shopping-words-2",
-            "th-shopping-words-3",
-            "th-shopping-words-4",
-            "th-shopping-review-1",
-            "th-shopping-review-2",
             "th-shopping-listen-1",
-            "th-shopping-listen-2",
-            "th-shopping-drill-1",
             "th-shopping-practice-1",
-            "th-shopping-practice-2"
+            "th-shopping-play-1"
           ]
         },
         {
@@ -4072,16 +2964,9 @@
           "lessonIds": [
             "th-restaurant-teach-1",
             "th-restaurant-words-1",
-            "th-restaurant-words-2",
-            "th-restaurant-words-3",
-            "th-restaurant-words-4",
-            "th-restaurant-review-1",
-            "th-restaurant-review-2",
             "th-restaurant-listen-1",
-            "th-restaurant-listen-2",
-            "th-restaurant-drill-1",
             "th-restaurant-practice-1",
-            "th-restaurant-practice-2"
+            "th-restaurant-play-1"
           ]
         },
         {
@@ -4096,16 +2981,9 @@
           "lessonIds": [
             "th-hotel-teach-1",
             "th-hotel-words-1",
-            "th-hotel-words-2",
-            "th-hotel-words-3",
-            "th-hotel-words-4",
-            "th-hotel-review-1",
-            "th-hotel-review-2",
             "th-hotel-listen-1",
-            "th-hotel-listen-2",
-            "th-hotel-drill-1",
             "th-hotel-practice-1",
-            "th-hotel-practice-2"
+            "th-hotel-play-1"
           ]
         },
         {
@@ -4120,16 +2998,9 @@
           "lessonIds": [
             "th-phone-teach-1",
             "th-phone-words-1",
-            "th-phone-words-2",
-            "th-phone-words-3",
-            "th-phone-words-4",
-            "th-phone-review-1",
-            "th-phone-review-2",
             "th-phone-listen-1",
-            "th-phone-listen-2",
-            "th-phone-drill-1",
             "th-phone-practice-1",
-            "th-phone-practice-2"
+            "th-phone-play-1"
           ]
         },
         {
@@ -4144,16 +3015,9 @@
           "lessonIds": [
             "th-hobbies-teach-1",
             "th-hobbies-words-1",
-            "th-hobbies-words-2",
-            "th-hobbies-words-3",
-            "th-hobbies-words-4",
-            "th-hobbies-review-1",
-            "th-hobbies-review-2",
             "th-hobbies-listen-1",
-            "th-hobbies-listen-2",
-            "th-hobbies-drill-1",
             "th-hobbies-practice-1",
-            "th-hobbies-practice-2"
+            "th-hobbies-play-1"
           ]
         },
         {
@@ -4168,16 +3032,9 @@
           "lessonIds": [
             "th-sports-teach-1",
             "th-sports-words-1",
-            "th-sports-words-2",
-            "th-sports-words-3",
-            "th-sports-words-4",
-            "th-sports-review-1",
-            "th-sports-review-2",
             "th-sports-listen-1",
-            "th-sports-listen-2",
-            "th-sports-drill-1",
             "th-sports-practice-1",
-            "th-sports-practice-2"
+            "th-sports-play-1"
           ]
         },
         {
@@ -4192,16 +3049,9 @@
           "lessonIds": [
             "th-money-teach-1",
             "th-money-words-1",
-            "th-money-words-2",
-            "th-money-words-3",
-            "th-money-words-4",
-            "th-money-review-1",
-            "th-money-review-2",
             "th-money-listen-1",
-            "th-money-listen-2",
-            "th-money-drill-1",
             "th-money-practice-1",
-            "th-money-practice-2"
+            "th-money-play-1"
           ]
         },
         {
@@ -4216,16 +3066,9 @@
           "lessonIds": [
             "th-cooking-teach-1",
             "th-cooking-words-1",
-            "th-cooking-words-2",
-            "th-cooking-words-3",
-            "th-cooking-words-4",
-            "th-cooking-review-1",
-            "th-cooking-review-2",
             "th-cooking-listen-1",
-            "th-cooking-listen-2",
-            "th-cooking-drill-1",
             "th-cooking-practice-1",
-            "th-cooking-practice-2"
+            "th-cooking-play-1"
           ]
         },
         {
@@ -4240,16 +3083,9 @@
           "lessonIds": [
             "th-cleaning-teach-1",
             "th-cleaning-words-1",
-            "th-cleaning-words-2",
-            "th-cleaning-words-3",
-            "th-cleaning-words-4",
-            "th-cleaning-review-1",
-            "th-cleaning-review-2",
             "th-cleaning-listen-1",
-            "th-cleaning-listen-2",
-            "th-cleaning-drill-1",
             "th-cleaning-practice-1",
-            "th-cleaning-practice-2"
+            "th-cleaning-play-1"
           ]
         },
         {
@@ -4264,16 +3100,9 @@
           "lessonIds": [
             "th-pets-teach-1",
             "th-pets-words-1",
-            "th-pets-words-2",
-            "th-pets-words-3",
-            "th-pets-words-4",
-            "th-pets-review-1",
-            "th-pets-review-2",
             "th-pets-listen-1",
-            "th-pets-listen-2",
-            "th-pets-drill-1",
             "th-pets-practice-1",
-            "th-pets-practice-2"
+            "th-pets-play-1"
           ]
         },
         {
@@ -4288,16 +3117,9 @@
           "lessonIds": [
             "th-holidays-teach-1",
             "th-holidays-words-1",
-            "th-holidays-words-2",
-            "th-holidays-words-3",
-            "th-holidays-words-4",
-            "th-holidays-review-1",
-            "th-holidays-review-2",
             "th-holidays-listen-1",
-            "th-holidays-listen-2",
-            "th-holidays-drill-1",
             "th-holidays-practice-1",
-            "th-holidays-practice-2"
+            "th-holidays-play-1"
           ]
         },
         {
@@ -4312,16 +3134,9 @@
           "lessonIds": [
             "th-neighbors-teach-1",
             "th-neighbors-words-1",
-            "th-neighbors-words-2",
-            "th-neighbors-words-3",
-            "th-neighbors-words-4",
-            "th-neighbors-review-1",
-            "th-neighbors-review-2",
             "th-neighbors-listen-1",
-            "th-neighbors-listen-2",
-            "th-neighbors-drill-1",
             "th-neighbors-practice-1",
-            "th-neighbors-practice-2"
+            "th-neighbors-play-1"
           ]
         },
         {
@@ -4336,16 +3151,9 @@
           "lessonIds": [
             "th-internet-teach-1",
             "th-internet-words-1",
-            "th-internet-words-2",
-            "th-internet-words-3",
-            "th-internet-words-4",
-            "th-internet-review-1",
-            "th-internet-review-2",
             "th-internet-listen-1",
-            "th-internet-listen-2",
-            "th-internet-drill-1",
             "th-internet-practice-1",
-            "th-internet-practice-2"
+            "th-internet-play-1"
           ]
         },
         {
@@ -4360,16 +3168,9 @@
           "lessonIds": [
             "th-school-teach-1",
             "th-school-words-1",
-            "th-school-words-2",
-            "th-school-words-3",
-            "th-school-words-4",
-            "th-school-review-1",
-            "th-school-review-2",
             "th-school-listen-1",
-            "th-school-listen-2",
-            "th-school-drill-1",
             "th-school-practice-1",
-            "th-school-practice-2"
+            "th-school-play-1"
           ]
         },
         {
@@ -4384,16 +3185,9 @@
           "lessonIds": [
             "th-appearance-teach-1",
             "th-appearance-words-1",
-            "th-appearance-words-2",
-            "th-appearance-words-3",
-            "th-appearance-words-4",
-            "th-appearance-review-1",
-            "th-appearance-review-2",
             "th-appearance-listen-1",
-            "th-appearance-listen-2",
-            "th-appearance-drill-1",
             "th-appearance-practice-1",
-            "th-appearance-practice-2"
+            "th-appearance-play-1"
           ]
         },
         {
@@ -4408,16 +3202,9 @@
           "lessonIds": [
             "th-forms-teach-1",
             "th-forms-words-1",
-            "th-forms-words-2",
-            "th-forms-words-3",
-            "th-forms-words-4",
-            "th-forms-review-1",
-            "th-forms-review-2",
             "th-forms-listen-1",
-            "th-forms-listen-2",
-            "th-forms-drill-1",
             "th-forms-practice-1",
-            "th-forms-practice-2"
+            "th-forms-play-1"
           ]
         },
         {
@@ -4432,16 +3219,9 @@
           "lessonIds": [
             "th-taxi-teach-1",
             "th-taxi-words-1",
-            "th-taxi-words-2",
-            "th-taxi-words-3",
-            "th-taxi-words-4",
-            "th-taxi-review-1",
-            "th-taxi-review-2",
             "th-taxi-listen-1",
-            "th-taxi-listen-2",
-            "th-taxi-drill-1",
             "th-taxi-practice-1",
-            "th-taxi-practice-2"
+            "th-taxi-play-1"
           ]
         },
         {
@@ -4456,16 +3236,9 @@
           "lessonIds": [
             "th-airport-teach-1",
             "th-airport-words-1",
-            "th-airport-words-2",
-            "th-airport-words-3",
-            "th-airport-words-4",
-            "th-airport-review-1",
-            "th-airport-review-2",
             "th-airport-listen-1",
-            "th-airport-listen-2",
-            "th-airport-drill-1",
             "th-airport-practice-1",
-            "th-airport-practice-2"
+            "th-airport-play-1"
           ]
         },
         {
@@ -4480,16 +3253,9 @@
           "lessonIds": [
             "th-emergency-teach-1",
             "th-emergency-words-1",
-            "th-emergency-words-2",
-            "th-emergency-words-3",
-            "th-emergency-words-4",
-            "th-emergency-review-1",
-            "th-emergency-review-2",
             "th-emergency-listen-1",
-            "th-emergency-listen-2",
-            "th-emergency-drill-1",
             "th-emergency-practice-1",
-            "th-emergency-practice-2"
+            "th-emergency-play-1"
           ]
         },
         {
@@ -4504,16 +3270,9 @@
           "lessonIds": [
             "th-rent-teach-1",
             "th-rent-words-1",
-            "th-rent-words-2",
-            "th-rent-words-3",
-            "th-rent-words-4",
-            "th-rent-review-1",
-            "th-rent-review-2",
             "th-rent-listen-1",
-            "th-rent-listen-2",
-            "th-rent-drill-1",
             "th-rent-practice-1",
-            "th-rent-practice-2"
+            "th-rent-play-1"
           ]
         },
         {
@@ -4528,16 +3287,9 @@
           "lessonIds": [
             "th-cinema-teach-1",
             "th-cinema-words-1",
-            "th-cinema-words-2",
-            "th-cinema-words-3",
-            "th-cinema-words-4",
-            "th-cinema-review-1",
-            "th-cinema-review-2",
             "th-cinema-listen-1",
-            "th-cinema-listen-2",
-            "th-cinema-drill-1",
             "th-cinema-practice-1",
-            "th-cinema-practice-2"
+            "th-cinema-play-1"
           ]
         },
         {
@@ -4552,16 +3304,9 @@
           "lessonIds": [
             "th-seasons-teach-1",
             "th-seasons-words-1",
-            "th-seasons-words-2",
-            "th-seasons-words-3",
-            "th-seasons-words-4",
-            "th-seasons-review-1",
-            "th-seasons-review-2",
             "th-seasons-listen-1",
-            "th-seasons-listen-2",
-            "th-seasons-drill-1",
             "th-seasons-practice-1",
-            "th-seasons-practice-2"
+            "th-seasons-play-1"
           ]
         },
         {
@@ -4576,16 +3321,9 @@
           "lessonIds": [
             "th-lost-teach-1",
             "th-lost-words-1",
-            "th-lost-words-2",
-            "th-lost-words-3",
-            "th-lost-words-4",
-            "th-lost-review-1",
-            "th-lost-review-2",
             "th-lost-listen-1",
-            "th-lost-listen-2",
-            "th-lost-drill-1",
             "th-lost-practice-1",
-            "th-lost-practice-2"
+            "th-lost-play-1"
           ]
         },
         {
@@ -4600,16 +3338,9 @@
           "lessonIds": [
             "th-travel-teach-1",
             "th-travel-words-1",
-            "th-travel-words-2",
-            "th-travel-words-3",
-            "th-travel-words-4",
-            "th-travel-review-1",
-            "th-travel-review-2",
             "th-travel-listen-1",
-            "th-travel-listen-2",
-            "th-travel-drill-1",
             "th-travel-practice-1",
-            "th-travel-practice-2"
+            "th-travel-play-1"
           ]
         },
         {
@@ -4624,16 +3355,9 @@
           "lessonIds": [
             "th-city-teach-1",
             "th-city-words-1",
-            "th-city-words-2",
-            "th-city-words-3",
-            "th-city-words-4",
-            "th-city-review-1",
-            "th-city-review-2",
             "th-city-listen-1",
-            "th-city-listen-2",
-            "th-city-drill-1",
             "th-city-practice-1",
-            "th-city-practice-2"
+            "th-city-play-1"
           ]
         },
         {
@@ -4648,16 +3372,9 @@
           "lessonIds": [
             "th-body-teach-1",
             "th-body-words-1",
-            "th-body-words-2",
-            "th-body-words-3",
-            "th-body-words-4",
-            "th-body-review-1",
-            "th-body-review-2",
             "th-body-listen-1",
-            "th-body-listen-2",
-            "th-body-drill-1",
             "th-body-practice-1",
-            "th-body-practice-2"
+            "th-body-play-1"
           ]
         },
         {
@@ -4672,16 +3389,9 @@
           "lessonIds": [
             "th-study-teach-1",
             "th-study-words-1",
-            "th-study-words-2",
-            "th-study-words-3",
-            "th-study-words-4",
-            "th-study-review-1",
-            "th-study-review-2",
             "th-study-listen-1",
-            "th-study-listen-2",
-            "th-study-drill-1",
             "th-study-practice-1",
-            "th-study-practice-2"
+            "th-study-play-1"
           ]
         },
         {
@@ -4696,16 +3406,9 @@
           "lessonIds": [
             "th-complaints-teach-1",
             "th-complaints-words-1",
-            "th-complaints-words-2",
-            "th-complaints-words-3",
-            "th-complaints-words-4",
-            "th-complaints-review-1",
-            "th-complaints-review-2",
             "th-complaints-listen-1",
-            "th-complaints-listen-2",
-            "th-complaints-drill-1",
             "th-complaints-practice-1",
-            "th-complaints-practice-2"
+            "th-complaints-play-1"
           ]
         },
         {
@@ -4720,16 +3423,9 @@
           "lessonIds": [
             "th-advice-teach-1",
             "th-advice-words-1",
-            "th-advice-words-2",
-            "th-advice-words-3",
-            "th-advice-words-4",
-            "th-advice-review-1",
-            "th-advice-review-2",
             "th-advice-listen-1",
-            "th-advice-listen-2",
-            "th-advice-drill-1",
             "th-advice-practice-1",
-            "th-advice-practice-2"
+            "th-advice-play-1"
           ]
         },
         {
@@ -4744,16 +3440,9 @@
           "lessonIds": [
             "th-plans-teach-1",
             "th-plans-words-1",
-            "th-plans-words-2",
-            "th-plans-words-3",
-            "th-plans-words-4",
-            "th-plans-review-1",
-            "th-plans-review-2",
             "th-plans-listen-1",
-            "th-plans-listen-2",
-            "th-plans-drill-1",
             "th-plans-practice-1",
-            "th-plans-practice-2"
+            "th-plans-play-1"
           ]
         },
         {
@@ -4768,16 +3457,9 @@
           "lessonIds": [
             "th-relationships-teach-1",
             "th-relationships-words-1",
-            "th-relationships-words-2",
-            "th-relationships-words-3",
-            "th-relationships-words-4",
-            "th-relationships-review-1",
-            "th-relationships-review-2",
             "th-relationships-listen-1",
-            "th-relationships-listen-2",
-            "th-relationships-drill-1",
             "th-relationships-practice-1",
-            "th-relationships-practice-2"
+            "th-relationships-play-1"
           ]
         },
         {
@@ -4792,16 +3474,9 @@
           "lessonIds": [
             "th-news-teach-1",
             "th-news-words-1",
-            "th-news-words-2",
-            "th-news-words-3",
-            "th-news-words-4",
-            "th-news-review-1",
-            "th-news-review-2",
             "th-news-listen-1",
-            "th-news-listen-2",
-            "th-news-drill-1",
             "th-news-practice-1",
-            "th-news-practice-2"
+            "th-news-play-1"
           ]
         },
         {
@@ -4816,16 +3491,9 @@
           "lessonIds": [
             "th-invitations-teach-1",
             "th-invitations-words-1",
-            "th-invitations-words-2",
-            "th-invitations-words-3",
-            "th-invitations-words-4",
-            "th-invitations-review-1",
-            "th-invitations-review-2",
             "th-invitations-listen-1",
-            "th-invitations-listen-2",
-            "th-invitations-drill-1",
             "th-invitations-practice-1",
-            "th-invitations-practice-2"
+            "th-invitations-play-1"
           ]
         },
         {
@@ -4840,16 +3508,9 @@
           "lessonIds": [
             "th-opinion-teach-1",
             "th-opinion-words-1",
-            "th-opinion-words-2",
-            "th-opinion-words-3",
-            "th-opinion-words-4",
-            "th-opinion-review-1",
-            "th-opinion-review-2",
             "th-opinion-listen-1",
-            "th-opinion-listen-2",
-            "th-opinion-drill-1",
             "th-opinion-practice-1",
-            "th-opinion-practice-2"
+            "th-opinion-play-1"
           ]
         },
         {
@@ -4864,16 +3525,9 @@
           "lessonIds": [
             "th-work-teach-1",
             "th-work-words-1",
-            "th-work-words-2",
-            "th-work-words-3",
-            "th-work-words-4",
-            "th-work-review-1",
-            "th-work-review-2",
             "th-work-listen-1",
-            "th-work-listen-2",
-            "th-work-drill-1",
             "th-work-practice-1",
-            "th-work-practice-2"
+            "th-work-play-1"
           ]
         },
         {
@@ -4888,16 +3542,9 @@
           "lessonIds": [
             "th-environment-teach-1",
             "th-environment-words-1",
-            "th-environment-words-2",
-            "th-environment-words-3",
-            "th-environment-words-4",
-            "th-environment-review-1",
-            "th-environment-review-2",
             "th-environment-listen-1",
-            "th-environment-listen-2",
-            "th-environment-drill-1",
             "th-environment-practice-1",
-            "th-environment-practice-2"
+            "th-environment-play-1"
           ]
         },
         {
@@ -4912,16 +3559,9 @@
           "lessonIds": [
             "th-education-teach-1",
             "th-education-words-1",
-            "th-education-words-2",
-            "th-education-words-3",
-            "th-education-words-4",
-            "th-education-review-1",
-            "th-education-review-2",
             "th-education-listen-1",
-            "th-education-listen-2",
-            "th-education-drill-1",
             "th-education-practice-1",
-            "th-education-practice-2"
+            "th-education-play-1"
           ]
         }
       ]

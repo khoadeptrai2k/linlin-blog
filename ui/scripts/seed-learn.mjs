@@ -8,6 +8,8 @@ import { UNITS_C2 } from "./learn-bank-c2.mjs";
 import { UNITS_D } from "./learn-bank-d.mjs";
 import { UNITS_E } from "./learn-bank-e.mjs";
 import { theoryFor } from "./learn-theory.mjs";
+import { sayViOf } from "./learn-say-vi.mjs";
+import { SOUNDS_UNIT } from "./learn-sounds.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dirname, "../src/content/learn");
@@ -168,7 +170,7 @@ function blankFrame(track, text, dict) {
   );
 }
 
-function buildTheory(unit, track, sentences, vocab) {
+function buildTheory(unit, track, sentences, vocab, kind) {
   const dict = vocabDict(unit, track);
   const base = theoryFor(unit.id, unit.level, track);
   const seen = new Set(base.patterns.map((item) => item.example));
@@ -184,7 +186,8 @@ function buildTheory(unit, track, sentences, vocab) {
       };
     })
     .filter((item) => item.example && !seen.has(item.example));
-  const patterns = [...base.patterns, ...fromSentences.slice(0, 8)];
+  const isTeach = kind === "teach";
+  const patterns = isTeach ? [...base.patterns.slice(0, 6), ...fromSentences.slice(0, 3)] : base.patterns.slice(0, 3);
   const applyFromSentences = sentences.filter(Boolean).map((row) => ({
     prompt: base.applyPrompt,
     frame: blankFrame(track, sentenceText(row, track), dict),
@@ -202,12 +205,15 @@ function buildTheory(unit, track, sentences, vocab) {
   };
   return {
     ...base,
+    points: isTeach ? base.points.slice(0, 8) : base.points.slice(0, 3),
     patterns,
-    apply: [...applyMap.values()].slice(0, 16),
-    examples: [...new Set([...(base.examples || []), ...sentences.map((row) => sentenceText(row, track))])].filter(Boolean).slice(0, 18),
+    contrasts: isTeach ? base.contrasts : [],
+    mistakes: isTeach ? base.mistakes : [],
+    apply: [...applyMap.values()].slice(0, isTeach ? 6 : 2),
+    examples: [...new Set([...(isTeach ? base.examples || [] : []), ...sentences.map((row) => sentenceText(row, track))])].filter(Boolean).slice(0, isTeach ? 8 : 4),
     table: {
       title: tableTitle[track],
-      rows: (vocab || unit.vocab).slice(0, 18).map((row) => {
+      rows: (vocab || unit.vocab).slice(0, isTeach ? 10 : 6).map((row) => {
         const word = wordOf(row, track);
         const sample = usageOf(row, track, unit.sentences) || word;
         return `${word} → ${sample}`;
@@ -311,36 +317,45 @@ function makeSentencePick(idPrefix, track, sentences, limit) {
 function buildLesson({ track, unit, part, vocab, sentences, kind, order }) {
   const id = `${track}-${unit.id}-${kind}-${part}`;
   const dict = vocabDict(unit, track);
+  const sourceSentences = sentences.length ? sentences : unit.sentences;
   const vocabItems = vocab.map((row) => ({
     word: wordOf(row, track),
     reading: readingOf(row, track),
+    sayVi: sayViOf(row, track),
     meaning: meaningOf(row),
-    usage: usageOf(row, track, sentences.length ? sentences : unit.sentences),
+    usage: usageOf(row, track, sourceSentences),
   }));
   const sentenceItems = sentences.map((row) => ({
     text: sentenceText(row, track),
     reading: sentenceReading(row, track),
+    sayVi: sayViOf(row, track),
     meaning: meaningOf(row),
     tokens: tokenize(track, sentenceText(row, track), dict),
   }));
+  const quotes = sourceSentences.slice(0, 6).map((row) => ({
+    text: sentenceText(row, track),
+    reading: sentenceReading(row, track),
+    sayVi: sayViOf(row, track),
+    meaning: meaningOf(row),
+  }));
 
-  const gapLimit = kind === "words" ? 12 : 24;
-  const orderLimit = kind === "words" ? 8 : 16;
-  const sentLimit = kind === "words" ? 10 : 16;
-  const fitSentences = kind === "words" ? sentences : unit.sentences;
-  const exercises = [
-    ...makeGaps(id, track, sentences, gapLimit, dict),
-    ...makeOrders(id, track, sentences, orderLimit, dict),
-    ...makeWordFit(id, track, vocab, fitSentences),
-    ...makeSentencePick(id, track, sentences, sentLimit),
-  ];
+  const caps = {
+    teach: { gap: 4, order: 2, sent: 2, fit: false, listen: false, structure: 2 },
+    words: { gap: 4, order: 2, sent: 2, fit: true, listen: false, structure: 0 },
+    listen: { gap: 0, order: 0, sent: 0, fit: false, listen: true, structure: 0 },
+    practice: { gap: 6, order: 4, sent: 4, fit: true, listen: false, structure: 1 },
+    play: { gap: 0, order: 0, sent: 3, fit: false, listen: false, structure: 0 },
+  };
+  const cap = caps[kind] || caps.practice;
+  const exercises = [];
+  if (cap.gap) exercises.push(...makeGaps(id, track, sentences, cap.gap, dict));
+  if (cap.order) exercises.push(...makeOrders(id, track, sentences, cap.order, dict));
+  if (cap.fit) exercises.push(...makeWordFit(id, track, vocab, kind === "words" ? sentences : unit.sentences));
+  if (cap.sent) exercises.push(...makeSentencePick(id, track, kind === "play" ? sourceSentences.slice(0, 6) : sentences, cap.sent));
+  if (cap.listen) exercises.push(...makeListenChoice(`${id}-listen`, track, sentences));
 
-  if (kind === "listen" || kind === "drill" || kind === "practice" || kind === "teach") {
-    exercises.push(...makeListenChoice(`${id}-listen`, track, sentences));
-  }
-
-  const theory = buildTheory(unit, track, sentences.length ? sentences : unit.sentences, vocab);
-  theory.patterns.slice(0, 8).forEach((pattern, index) => {
+  const theory = buildTheory(unit, track, sourceSentences, vocab, kind);
+  theory.patterns.slice(0, cap.structure).forEach((pattern, index) => {
     const answer = pattern.form;
     const distractors = [...sentences.map((row) => sentenceText(row, track)), ...theory.patterns.map((item) => item.form)]
       .filter((item) => item && item !== answer)
@@ -363,33 +378,27 @@ function buildLesson({ track, unit, part, vocab, sentences, kind, order }) {
       zh: `${unit.title.zh} · 词`,
       th: `${unit.title.th} · คำ`,
     },
-    review: {
-      vi: `${unit.title.vi} · ôn`,
-      en: `${unit.title.en} · review`,
-      zh: `${unit.title.zh} · 复习`,
-      th: `${unit.title.th} · ทบทวน`,
-    },
     listen: {
       vi: `${unit.title.vi} · nghe`,
       en: `${unit.title.en} · listen`,
       zh: `${unit.title.zh} · 听`,
       th: `${unit.title.th} · ฟัง`,
     },
-    drill: {
-      vi: `${unit.title.vi} · luyện thêm`,
-      en: `${unit.title.en} · extra drill`,
-      zh: `${unit.title.zh} · 加练`,
-      th: `${unit.title.th} · ฝึกเพิ่ม`,
-    },
     practice: {
-      vi: `${unit.title.vi} · bài tập lớp`,
-      en: `${unit.title.en} · class practice`,
-      zh: `${unit.title.zh} · 课堂练习`,
-      th: `${unit.title.th} · แบบฝึกในห้อง`,
+      vi: `${unit.title.vi} · luyện`,
+      en: `${unit.title.en} · practice`,
+      zh: `${unit.title.zh} · 练习`,
+      th: `${unit.title.th} · ฝึก`,
+    },
+    play: {
+      vi: `${unit.title.vi} · chơi nhớ`,
+      en: `${unit.title.en} · play & remember`,
+      zh: `${unit.title.zh} · 记一记`,
+      th: `${unit.title.th} · เล่นทบทวน`,
     },
   };
 
-  const minutes = { teach: 25, words: 18, review: 18, listen: 12, drill: 22, practice: 22 };
+  const minutes = { teach: 18, words: 14, listen: 10, practice: 16, play: 10 };
 
   return {
     id,
@@ -405,6 +414,7 @@ function buildLesson({ track, unit, part, vocab, sentences, kind, order }) {
     theory,
     vocab: vocabItems,
     sentences: sentenceItems,
+    quotes,
     listening: {
       text: sentenceItems.map((item) => item.text).join(track === "zh" ? "。" : " "),
       lines: sentenceItems.map((item) => item.text),
@@ -418,113 +428,26 @@ function lessonsForTrack(track, units) {
   let order = 1;
   for (const unit of units) {
     if (unit.tracks && !unit.tracks.includes(track)) continue;
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 1,
-        vocab: unit.vocab,
-        sentences: unit.sentences,
-        kind: "teach",
-        order: order++,
-      }),
-    );
-    const vocabChunks = chunk(unit.vocab, 5);
-    vocabChunks.forEach((slice, index) => {
-      const sent = unit.sentences.slice(index * 3, index * 3 + 4);
+    const steps = [
+      { kind: "teach", vocab: unit.vocab, sentences: unit.sentences },
+      { kind: "words", vocab: unit.vocab, sentences: unit.sentences },
+      { kind: "listen", vocab: unit.vocab.slice(0, 10), sentences: unit.sentences },
+      { kind: "practice", vocab: unit.vocab, sentences: unit.sentences },
+      { kind: "play", vocab: unit.vocab.slice(0, 8), sentences: unit.sentences.slice(0, 6) },
+    ];
+    for (const step of steps) {
       lessons.push(
         buildLesson({
           track,
           unit,
-          part: index + 1,
-          vocab: slice,
-          sentences: sent.length ? sent : unit.sentences.slice(0, 4),
-          kind: "words",
+          part: 1,
+          vocab: step.vocab,
+          sentences: step.sentences,
+          kind: step.kind,
           order: order++,
         }),
       );
-    });
-    const mid = Math.ceil(unit.vocab.length / 2);
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 1,
-        vocab: unit.vocab.slice(0, mid),
-        sentences: unit.sentences.slice(0, 8),
-        kind: "review",
-        order: order++,
-      }),
-    );
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 2,
-        vocab: unit.vocab.slice(mid),
-        sentences: unit.sentences.slice(6),
-        kind: "review",
-        order: order++,
-      }),
-    );
-    const even = unit.sentences.filter((_, index) => index % 2 === 0);
-    const odd = unit.sentences.filter((_, index) => index % 2 === 1);
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 1,
-        vocab: unit.vocab.slice(0, 8),
-        sentences: even,
-        kind: "listen",
-        order: order++,
-      }),
-    );
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 2,
-        vocab: unit.vocab.slice(8, 16),
-        sentences: odd,
-        kind: "listen",
-        order: order++,
-      }),
-    );
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 1,
-        vocab: unit.vocab,
-        sentences: unit.sentences,
-        kind: "drill",
-        order: order++,
-      }),
-    );
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 1,
-        vocab: unit.vocab,
-        sentences: [...unit.sentences].reverse(),
-        kind: "practice",
-        order: order++,
-      }),
-    );
-    const half = Math.ceil(unit.sentences.length / 2);
-    lessons.push(
-      buildLesson({
-        track,
-        unit,
-        part: 2,
-        vocab: unit.vocab,
-        sentences: unit.sentences.slice(0, half),
-        kind: "practice",
-        order: order++,
-      }),
-    );
+    }
   }
   return lessons;
 }
@@ -556,14 +479,14 @@ function catalogEntry(track, lessons, sourceUnits) {
 }
 
 export function generateCurriculum() {
-  const allUnits = [...UNITS, ...UNITS_C, ...UNITS_C2, ...UNITS_E, ...UNITS_B, ...UNITS_D, ...UNITS_EN_B2];
+  const allUnits = [SOUNDS_UNIT, ...UNITS, ...UNITS_C, ...UNITS_C2, ...UNITS_E, ...UNITS_B, ...UNITS_D, ...UNITS_EN_B2];
   const byTrack = {};
   for (const track of TRACKS) {
     byTrack[track] = lessonsForTrack(track, allUnits);
   }
   const catalog = {
     generatedAt: new Date().toISOString(),
-    note: "Original Linlin path. One language per classroom. Not official exam papers.",
+    note: "Original Linlin path. Sounds first. Five steps per topic. Not official exam papers.",
     tracks: TRACKS.map((track) => catalogEntry(track, byTrack[track], allUnits)),
   };
   return { catalog, byTrack };

@@ -13,6 +13,39 @@ function pat(form, use, example, note) {
 }
 
 export const UNIT_THEORY_MORE = {
+  sounds: block(
+    lang(
+      "Trước hết nghe và đọc. Một âm một lần. Chưa vào câu đời sống.",
+      "Hear and read first. One sound at a time. Daily sentences come next.",
+      "先听再认读。一个音一次。生活句子放后面。",
+      "ฟังและอ่านก่อน หนึ่งเสียงหนึ่งครั้ง ประโยคชีวิตไว้ทีหลัง",
+    ),
+    [
+      pat(
+        lang("Nghe → lặp lại.", "Listen → repeat.", "听 → 重复。", "ฟัง → พูดซ้ำ"),
+        lang("Vào lớp âm.", "The sounds class.", "读音课。", "คาบเสียง"),
+        lang("Nghe rồi lặp lại.", "Listen, then repeat.", "先听，再重复。", "ฟังแล้วพูดซ้ำ"),
+        lang("Bấm loa nếu chưa đọc được chữ.", "Use the speaker if you cannot read yet.", "不认识字就先听。", "อ่านไม่ได้ให้กดลำโพง"),
+      ),
+      pat(
+        lang("Đọc chậm + một chữ.", "Say slowly + one unit.", "慢读 + 一个单位。", "อ่านช้า + หนึ่งหน่วย"),
+        lang("Tách âm.", "Split the sound.", "把音拆开。", "แยกเสียง"),
+        lang("Đọc chậm, một âm một lần.", "Say it slowly, one sound at a time.", "慢一点，一个音一次。", "อ่านช้า หนึ่งเสียงหนึ่งครั้ง"),
+        lang("Đừng ghép cả câu hôm nay.", "Do not join a full sentence today.", "今天不要连成整句。", "วันนี้ยังไม่ต่อทั้งประโยค"),
+      ),
+    ],
+    [
+      lang("Chữ bản địa có thể lạ. Loa và phiên âm đi cùng.", "The script may be new. Speaker and reading go together.", "字可能陌生。声音和拼音一起给。", "ตัวอักษรอาจแปลก ลำโพงกับคำอ่านไปด้วยกัน"),
+      lang("Phiên âm kiểu Việt chỉ là cầu. Tai mới là chuẩn.", "Vietnamese reading is a bridge. The ear is the model.", "越南读法只是桥。耳朵才是标准。", "คำอ่านแบบเวียดเป็นสะพาน หูคือมาตรฐาน"),
+    ],
+    [
+      {
+        prompt: lang("Nghe và lặp một âm.", "Hear and repeat one sound.", "听并重复一个音。", "ฟังแล้วพูดซ้ำหนึ่งเสียง"),
+        frame: lang("Nghe rồi ____.", "Listen, then ____.", "先听，再____。", "ฟังแล้ว ____"),
+        sample: lang("Nghe rồi lặp lại.", "Listen, then repeat.", "先听，再重复。", "ฟังแล้วพูดซ้ำ"),
+      },
+    ],
+  ),
   greet: block(
     lang(
       "Chào, xưng, cảm ơn, xin lỗi — bốn mẫu riêng, đừng dồn một câu.",

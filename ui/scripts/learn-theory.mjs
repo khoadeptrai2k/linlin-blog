@@ -683,6 +683,30 @@ function projectUnit(raw, track) {
 }
 
 export function theoryFor(unitId, level, track) {
+  if (unitId === "sounds") {
+    const more = projectUnit(UNIT_THEORY_MORE.sounds, track);
+    const titles = {
+      vi: "Âm và cách đọc",
+      en: "Sounds and reading",
+      zh: "读音",
+      th: "เสียงและการอ่าน",
+    };
+    return {
+      levelTitle: titles[track],
+      levelNote: more.structure,
+      points: more.usage,
+      contrasts: [],
+      mistakes: [],
+      examples: more.patterns.map((item) => item.example).filter(Boolean),
+      applyPrompt: more.apply[0]?.prompt || "",
+      tip: more.patterns[0]?.note || "",
+      structure: more.structure,
+      patterns: more.patterns,
+      usage: more.usage,
+      apply: more.apply,
+    };
+  }
+
   const core = CORE[level]?.[track] || CORE.A1[track];
   const extra = CORE_EXTRA[level]?.[track] || CORE_EXTRA.A1[track];
   const frames = CORE_FRAMES[level]?.[track] || CORE_FRAMES.A1[track];

@@ -9,7 +9,7 @@ import type { Catalog, LearnTrack, Lesson } from "@/lib/learn/types";
 export type { Catalog, CatalogTrack, Exercise, I18nText, LearnTrack, Lesson, SentenceItem, VocabItem } from "@/lib/learn/types";
 export { isLearnTrack } from "@/lib/learn/types";
 
-export type LessonCard = Pick<Lesson, "id" | "title" | "goal" | "minutes" | "order">;
+export type LessonCard = Pick<Lesson, "id" | "title" | "goal" | "minutes" | "order" | "kind">;
 
 const localLessons: Record<LearnTrack, Lesson[]> = {
   vi: viLessons as Lesson[],
@@ -37,17 +37,18 @@ export async function getLessonCards(track: LearnTrack): Promise<LessonCard[]> {
     const rows = await db
       ?.collection("learn_lessons")
       .find({ track })
-      .project({ id: 1, title: 1, goal: 1, minutes: 1, order: 1, _id: 0 })
+      .project({ id: 1, title: 1, goal: 1, minutes: 1, order: 1, kind: 1, _id: 0 })
       .sort({ order: 1 })
       .toArray();
     if (rows?.length) return rows as LessonCard[];
   }
-  return (localLessons[track] ?? []).map(({ id, title, goal, minutes, order }) => ({
+  return (localLessons[track] ?? []).map(({ id, title, goal, minutes, order, kind }) => ({
     id,
     title,
     goal,
     minutes,
     order,
+    kind,
   }));
 }
 

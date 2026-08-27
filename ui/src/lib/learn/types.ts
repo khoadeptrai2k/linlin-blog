@@ -7,8 +7,16 @@ export type I18nText = Record<Locale, string>;
 export type VocabItem = {
   word: string;
   reading: string;
+  sayVi: string;
   meaning: I18nText;
   usage?: string;
+};
+
+export type QuoteItem = {
+  text: string;
+  reading: string;
+  sayVi: string;
+  meaning: I18nText;
 };
 
 export type GrammarPattern = {
@@ -42,6 +50,7 @@ export type LessonTheory = {
 export type SentenceItem = {
   text: string;
   reading: string;
+  sayVi: string;
   meaning: I18nText;
   tokens: string[];
 };
@@ -64,7 +73,7 @@ export type Lesson = {
   track: LearnTrack;
   unitId: string;
   level: string;
-  kind: "teach" | "words" | "review" | "listen" | "drill" | "practice";
+  kind: "teach" | "words" | "review" | "listen" | "drill" | "practice" | "play";
   order: number;
   minutes: number;
   title: I18nText;
@@ -73,6 +82,7 @@ export type Lesson = {
   theory: LessonTheory;
   vocab: VocabItem[];
   sentences: SentenceItem[];
+  quotes: QuoteItem[];
   listening: { text: string; lines: string[] };
   exercises: Exercise[];
 };
