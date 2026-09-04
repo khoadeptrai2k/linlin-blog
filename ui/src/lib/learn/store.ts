@@ -26,7 +26,8 @@ async function loadLocalLessons(track: LearnTrack): Promise<Lesson[]> {
 export async function getCatalog(): Promise<Catalog> {
   if (isMongoEnabled()) {
     const db = await getMongo();
-    const doc = await db?.collection("learn_catalog").findOne({});
+    const mainDoc = await db?.collection("learn_catalog").findOne({ id: "main" });
+    const doc = mainDoc ?? (await db?.collection("learn_catalog").findOne({}));
     if (doc) {
       const { _id: _unused, ...rest } = doc;
       void _unused;

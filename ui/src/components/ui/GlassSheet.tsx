@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { createPortal } from "react-dom";
 
 export function GlassSheet({
@@ -18,6 +19,8 @@ export function GlassSheet({
   persistent?: boolean;
   children: ReactNode;
 }) {
+  const closeLabel = useTranslations("Common")("close");
+
   useEffect(() => {
     if (!open || persistent) return;
     function onKey(event: KeyboardEvent) {
@@ -45,7 +48,7 @@ export function GlassSheet({
     >
       {isDrawer ? <div className="drawer-handle" aria-hidden /> : <div className="sheet-handle" />}
       {isDrawer ? (
-        <button type="button" className="drawer-close" aria-label="Close" onClick={onClose}>
+        <button type="button" className="drawer-close" aria-label={closeLabel} onClick={onClose}>
           ×
         </button>
       ) : null}
@@ -60,7 +63,7 @@ export function GlassSheet({
 
   return createPortal(
     <div className={`sheet-root${isDrawer ? " drawer-root" : ""}${persistent ? " is-docked" : ""}`}>
-      {persistent ? null : <button type="button" className="sheet-scrim" aria-label="Close" onClick={onClose} />}
+      {persistent ? null : <button type="button" className="sheet-scrim" aria-label={closeLabel} onClick={onClose} />}
       {panel}
     </div>,
     document.body,

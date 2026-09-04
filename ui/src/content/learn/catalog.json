@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-08-27T03:40:46.927Z",
-  "note": "Original Linlin path. Sounds first. Five steps per topic. Not official exam papers.",
+  "generatedAt": "2026-09-04T03:13:10.043Z",
+  "note": "Linlin practice path. Short Duolingo-style steps: learn, answer, retry, keep going.",
   "tracks": [
     {
       "id": "vi",
       "lessonCount": 260,
-      "exerciseCount": 2976,
+      "exerciseCount": 2092,
       "units": [
         {
           "id": "sounds",
@@ -1208,7 +1208,7 @@
     {
       "id": "en",
       "lessonCount": 260,
-      "exerciseCount": 2950,
+      "exerciseCount": 2066,
       "units": [
         {
           "id": "sounds",
@@ -2411,7 +2411,7 @@
     {
       "id": "zh",
       "lessonCount": 260,
-      "exerciseCount": 3222,
+      "exerciseCount": 2338,
       "units": [
         {
           "id": "sounds",
@@ -3614,7 +3614,7 @@
     {
       "id": "th",
       "lessonCount": 260,
-      "exerciseCount": 3256,
+      "exerciseCount": 2372,
       "units": [
         {
           "id": "sounds",

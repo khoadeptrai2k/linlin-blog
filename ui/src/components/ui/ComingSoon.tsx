@@ -16,7 +16,7 @@ export async function ComingSoonPage({
     <section className="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center">
       <div className="glass-tile pebble-a px-8 py-12">
         <p className="text-sm font-medium text-sky-700">Linlin</p>
-        <h1 className="font-display mt-3 text-4xl text-sky-700">
+        <h1 className="mt-3 text-4xl font-bold tracking-[-0.03em] text-sky-700">
           {kind === "blogs" ? t("blogsTitle") : t("learnTitle")}
         </h1>
         <p className="mt-4 leading-7 text-ink-soft">

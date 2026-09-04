@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
@@ -10,20 +10,16 @@ import { AskFab } from "@/components/learn/AskFab";
 import { TapHistory } from "@/components/learn/TapHistory";
 import { getAiAssist, getAiAssistServer, subscribeAiAssist } from "@/lib/learn/aiAssist";
 import { buildAskPrompt, explainFromLessonClick, getTapHistory, getTapHistoryServer, isLessonSpeech, lookupTap, pushTapRecord, saveTapHistory, subscribeTapHistory, textFromLessonClick } from "@/lib/learn/history";
+import { markLessonDone } from "@/lib/learn/progress";
 import type { Exercise, GrammarPattern, I18nText, Lesson, LessonTheory, VocabItem } from "@/lib/learn/types";
 
-function loadDone(track: string) {
-  try {
-    const raw = localStorage.getItem(`linlin-learn:${track}`);
-    return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
-  } catch {
-    return {};
-  }
-}
-
 function saveDone(track: string, id: string) {
-  const next = { ...loadDone(track), [id]: true };
-  localStorage.setItem(`linlin-learn:${track}`, JSON.stringify(next));
+  markLessonDone(track, id);
+  void fetch("/api/progress", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ track, lessonId: id }),
+  }).catch(() => undefined);
 }
 
 function sameTokens(a: string[], b: string[]) {
@@ -103,11 +99,22 @@ function stepsFor(kind: Lesson["kind"]) {
   if (kind === "play") return ["quotes", "game", "quiz"] as const;
   if (kind === "practice") return ["apply", "quiz"] as const;
   if (kind === "listen") return ["listen", "quiz"] as const;
-  if (kind === "words") return ["words", "quiz"] as const;
+  if (kind === "words") return ["words", "recognize", "write", "quiz"] as const;
   if (kind === "teach") return ["theory", "quiz"] as const;
   if (kind === "drill") return ["theory", "quiz"] as const;
-  if (kind === "review") return ["words", "lines", "quiz"] as const;
-  return ["theory", "words", "lines", "apply", "quiz"] as const;
+  if (kind === "review") return ["words", "recognize", "write", "lines", "quiz"] as const;
+  return ["theory", "words", "recognize", "write", "lines", "apply", "quiz"] as const;
+}
+
+function stepToken(stepName: string) {
+  if (stepName === "theory") return "1";
+  if (stepName === "words") return "2";
+  if (stepName === "recognize") return "3";
+  if (stepName === "write") return "4";
+  if (stepName === "listen") return "3";
+  if (stepName === "lines" || stepName === "apply" || stepName === "quiz") return "5";
+  if (stepName === "game" || stepName === "quotes") return "5";
+  return "•";
 }
 
 type TheorySlide =
@@ -226,6 +233,19 @@ function drillFor(
       answer: word.word,
     };
   }
+  if (current === "recognize") {
+    const word = lesson.vocab[index];
+    if (!word) return null;
+    const words = lesson.vocab.map((item) => item.word);
+    const gloss = support ? word.meaning[support] : word.reading || word.meaning[lesson.track];
+    return makeMcq(
+      `${lesson.id}-recognize-${index}`,
+      `${t("recognizePrompt")} · ${gloss}`,
+      word.word,
+      words,
+      `${lesson.id}-recognize-${index}`,
+    );
+  }
   if (current === "lines" || current === "quotes") {
     const rows = current === "quotes" ? (lesson.quotes?.length ? lesson.quotes : lesson.sentences).slice(0, 6) : lesson.sentences;
     const row = rows[index];
@@ -282,6 +302,9 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const [slow, setSlow] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [thinking, setThinking] = useState(false);
+  const [hearts, setHearts] = useState(5);
+  const [writingMap, setWritingMap] = useState<Record<string, boolean>>({});
+  const [shadowRepeats, setShadowRepeats] = useState(0);
   const lastAsk = useRef({ text: "", at: 0 });
   const thinkTimer = useRef<number>(0);
   const history = useSyncExternalStore(subscribeTapHistory, getTapHistory, getTapHistoryServer);
@@ -304,6 +327,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   const totalItems = (() => {
     if (current === "theory") return Math.max(1, slides.length);
     if (current === "words") return Math.max(1, lesson.vocab.length);
+    if (current === "recognize") return Math.max(1, Math.min(6, lesson.vocab.length));
+    if (current === "write") return Math.max(1, Math.min(6, lesson.vocab.length));
     if (current === "lines") return Math.max(1, lesson.sentences.length);
     if (current === "apply") return Math.max(1, lesson.theory.apply.length);
     if (current === "quotes") return Math.max(1, quotes.length);
@@ -337,6 +362,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
   function railLabel(stepName: string, i: number) {
     if (stepName === "words") return lesson.vocab[i]?.word ?? t("quizItem", { n: i + 1 });
+    if (stepName === "recognize") return lesson.vocab[i]?.word ?? t("quizItem", { n: i + 1 });
+    if (stepName === "write") return lesson.vocab[i]?.word ?? t("quizItem", { n: i + 1 });
     if (stepName === "lines") return lesson.sentences[i]?.text ?? t("quizItem", { n: i + 1 });
     if (stepName === "quotes") return quotes[i]?.text ?? t("quizItem", { n: i + 1 });
     if (stepName === "apply") return lesson.theory.apply[i]?.prompt ?? t("quizItem", { n: i + 1 });
@@ -360,6 +387,8 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
   function countFor(stepName: string) {
     if (stepName === "theory") return Math.max(1, slides.length);
     if (stepName === "words") return Math.max(1, lesson.vocab.length);
+    if (stepName === "recognize") return Math.max(1, Math.min(6, lesson.vocab.length));
+    if (stepName === "write") return Math.max(1, Math.min(6, lesson.vocab.length));
     if (stepName === "lines") return Math.max(1, lesson.sentences.length);
     if (stepName === "apply") return Math.max(1, lesson.theory.apply.length);
     if (stepName === "quotes") return Math.max(1, quotes.length);
@@ -431,13 +460,16 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
   function checkNow() {
     if (!drill || !hasAnswer(drill, given)) return;
+    const rightNow = isRight(drill, given);
     setCheckedMap((prev) => ({ ...prev, [drill.id]: true }));
-    if (isRight(drill, given)) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
+    if (rightNow) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
+    else setHearts((value) => Math.max(0, value - 1));
   }
 
   function goNext() {
     if (drill && !checked) return;
-    if (drill && checked) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
+    if (current === "write" && !writingMap[keyOf(step, index)]) return;
+    if (!drill || (checked && correct)) setPassed((prev) => ({ ...prev, [keyOf(step, index)]: true }));
     if (index < totalItems - 1) {
       setItem(index + 1);
       return;
@@ -459,14 +491,13 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
 
   const quizDone = current === "quiz" && done;
   const canCheck = Boolean(drill && !checked && hasAnswer(drill, given));
-  const canNext = !drill || checked;
+  const canNext = current === "write" ? Boolean(writingMap[keyOf(step, index)]) : !drill || (checked && correct);
   const word = lesson.vocab[index];
   const line = lesson.sentences[index];
   const apply = lesson.theory.apply[index];
   const quote = quotes[index];
   const slide = slides[index];
   const reveal = !drill || checked;
-
   const score = useMemo(() => {
     let ok = 0;
     for (const exercise of quiz) {
@@ -474,15 +505,35 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
     }
     return { ok, total: quiz.length };
   }, [answers, quiz]);
+  const lessonItemsTotal = steps.reduce((sum, stepName) => sum + countFor(stepName), 0);
+  const currentItemNumber = steps.slice(0, step).reduce((sum, stepName) => sum + countFor(stepName), 0) + index + 1;
+  const progress = lessonItemsTotal ? (currentItemNumber / lessonItemsTotal) * 100 : 0;
+  const xpEarned = Object.keys(passed).length * 5 + score.ok * 2;
 
   return (
-    <div className={`learn-desk mx-auto grid gap-6 ${drawerOpen ? "is-ask-open" : ""}`}>
-      <aside className="learn-rail">
-        <p className="px-1 text-[0.68rem] font-semibold tracking-[0.14em] text-gold-500 uppercase">{t("lessonMap")}</p>
-        <ol className="mt-3 grid gap-4">
+    <div className={`learn-desk duo-lesson-shell mx-auto grid gap-4 ${drawerOpen ? "is-ask-open" : ""}`}>
+      <div className="duo-lesson-top" data-ask-skip>
+        <Link href={`/learn/${lesson.track}`} className="duo-back-link">
+          ← {t("backTrack")}
+        </Link>
+        <div className="duo-progress">
+          <span style={{ width: `${Math.min(100, Math.max(4, progress))}%` }} />
+        </div>
+        <div className="duo-hud">
+          <span>{t("heartsLabel", { hearts })}</span>
+          <span>{t("xpShort", { xp: xpEarned })}</span>
+        </div>
+      </div>
+
+      <aside className="learn-rail duo-rail">
+        <p className="px-1 text-xs font-extrabold uppercase text-ink-soft">{t("lessonMap")}</p>
+        <ol className="mt-3 grid gap-3">
           {steps.map((stepName, stepIndex) => (
             <li key={stepName}>
-              <p className="text-xs font-semibold tracking-[0.12em] text-sky-700 uppercase">{t(stepName)}</p>
+              <p className="flex items-center gap-2 text-xs font-extrabold uppercase text-ink">
+                <span className="duo-step-dot">{stepToken(stepName)}</span>
+                {t(stepName)}
+              </p>
               <ul className="mt-1.5 grid gap-1">
                 {Array.from({ length: countFor(stepName) }, (_, i) => {
                   const key = keyOf(stepIndex, i);
@@ -507,10 +558,10 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
         </ol>
       </aside>
 
-      <article className="learn-card glass-tile min-w-0 p-0" onClickCapture={askFromPointer}>
+      <article className="learn-card duo-lesson-card min-w-0 p-0" onClickCapture={askFromPointer}>
         <div className="learn-card-head">
           <div className="flex items-start justify-between gap-3">
-            <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase" data-ask-skip>
+            <p className="text-xs font-extrabold uppercase text-sky-700" data-ask-skip>
               {targetName} · {t(current)} · {t("ofItems", { n: index + 1, total: totalItems })}
             </p>
             <div className="flex items-center gap-2" data-ask-skip>
@@ -520,7 +571,7 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
             </div>
           </div>
           <h1
-            className="learn-ask-target font-display mt-2 text-xl leading-tight text-sky-700 sm:text-2xl"
+            className="learn-ask-target mt-2 text-xl font-extrabold leading-tight text-ink sm:text-2xl"
             data-ask={lesson.title[lesson.track]}
             data-explain={lesson.theory.levelNote || lesson.goal[locale] || lesson.goal[lesson.track]}
           >
@@ -569,6 +620,19 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               slow={slow}
               onTap={say}
               onHeard={recordTap}
+            />
+          ) : null}
+
+          {current === "write" && word ? (
+            <WritingPractice
+              word={word}
+              support={support}
+              t={t}
+              lang={lesson.speechLang}
+              slow={slow}
+              done={Boolean(writingMap[keyOf(step, index)])}
+              onSay={say}
+              onDone={() => setWritingMap((prev) => ({ ...prev, [keyOf(step, index)]: true }))}
             />
           ) : null}
 
@@ -637,6 +701,27 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                   </button>
                 ) : null}
               </div>
+              <div className="duo-shadow mt-5">
+                <strong>{t("shadowTitle")}</strong>
+                <p>{t("shadowBody")}</p>
+                <div className="mt-3 grid gap-2">
+                  {lesson.listening.lines.slice(0, 3).map((textLine) => (
+                    <button
+                      key={textLine}
+                      type="button"
+                      className="duo-shadow-line"
+                      onClick={() => {
+                        say(textLine);
+                        setShadowRepeats((value) => value + 1);
+                      }}
+                    >
+                      <span>{textLine}</span>
+                      <b>{t("repeatNow")}</b>
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs font-bold">{t("shadowCount", { n: shadowRepeats })}</p>
+              </div>
               {showScript && checked ? (
                 <ul className="mt-5 grid gap-2">
                   {lesson.listening.lines.slice(0, 6).map((textLine) => (
@@ -689,9 +774,9 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           ) : null}
 
           {drill ? (
-            <div className="mt-5">
+            <div className="duo-drill mt-5">
               <p
-                className="learn-ask-target font-semibold leading-7"
+                className="learn-ask-target text-lg font-extrabold leading-7 text-ink"
                 data-ask={promptOf(drill)}
                 data-explain={drillPromptHint(drill, lesson, locale)}
               >
@@ -709,25 +794,17 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
                   else recordTap(value);
                 }}
               />
-              <p
-                className={`learn-feedback mt-3 text-sm font-semibold ${
-                  checked ? (correct ? "text-sky-700" : "text-ink-soft") : "text-ink-soft"
-                }`}
-                data-ask-skip
-              >
-                {checked
-                  ? correct
-                    ? t("right")
-                    : t("wrong", { answer: Array.isArray(drill.answer) ? drill.answer.join(" ") : drill.answer })
-                  : t("needAnswer")}
-              </p>
+              {!checked ? <p className="learn-feedback mt-3 text-sm font-semibold text-ink-soft" data-ask-skip>{t("needAnswer")}</p> : null}
             </div>
           ) : null}
         </div>
 
         {quizDone ? (
-            <div className="learn-actions" data-ask-skip>
-              <p className="text-sm font-semibold text-sky-700">{t("score", { ok: score.ok, total: score.total })}</p>
+            <div className="learn-actions duo-finish-actions" data-ask-skip>
+              <div>
+                <p className="text-lg font-extrabold text-ink">{t("sessionDone")}</p>
+                <p className="text-sm font-bold text-sky-700">{t("score", { ok: score.ok, total: score.total })} · {t("xpLabel", { xp: xpEarned })}</p>
+              </div>
               <div className="learn-actions-right is-end">
                 <Link href={`/learn/${lesson.track}`} className="btn-ghost">
                   {t("backTrack")}
@@ -744,7 +821,24 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
               </div>
             </div>
           ) : (
-            <div className="learn-actions" data-ask-skip>
+            <div className={`learn-actions duo-answer-bar ${checked ? (correct ? "is-right" : "is-wrong") : ""}`} data-ask-skip>
+              <div className="duo-answer-copy">
+                {checked ? (
+                  correct ? (
+                    <>
+                      <strong>{t("right")}</strong>
+                      <span>{t("great")}</span>
+                    </>
+                  ) : drill ? (
+                    <>
+                      <strong>{t("almost")}</strong>
+                      <span>{t("wrong", { answer: Array.isArray(drill.answer) ? drill.answer.join(" ") : drill.answer })}</span>
+                    </>
+                  ) : null
+                ) : (
+                  <span>{t("lessonProgress", { n: currentItemNumber, total: lessonItemsTotal })}</span>
+                )}
+              </div>
               <button type="button" className="btn-ghost" disabled={step === 0 && index === 0} onClick={goBack}>
                 {t("back")}
               </button>
@@ -811,6 +905,126 @@ export function LessonPlayer({ lesson, locale, nextId }: { lesson: Lesson; local
           onToggle={() => setHistoryOpen(true)}
         />
       ) : null}
+    </div>
+  );
+}
+
+function WritingPractice({
+  word,
+  support,
+  t,
+  lang,
+  slow,
+  done,
+  onSay,
+  onDone,
+}: {
+  word: VocabItem;
+  support: Locale | null;
+  t: ReturnType<typeof useTranslations<"Learn">>;
+  lang: string;
+  slow: boolean;
+  done: boolean;
+  onSay: (text: string) => void;
+  onDone: () => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const drawing = useRef(false);
+
+  function resetCanvas() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(rect.width * ratio));
+    canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.scale(ratio, ratio);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "#23313f";
+  }, [word.word]);
+
+  function point(event: PointerEvent<HTMLCanvasElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+  }
+
+  function start(event: PointerEvent<HTMLCanvasElement>) {
+    const ctx = event.currentTarget.getContext("2d");
+    if (!ctx) return;
+    drawing.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    const p = point(event);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+
+  function move(event: PointerEvent<HTMLCanvasElement>) {
+    if (!drawing.current) return;
+    const ctx = event.currentTarget.getContext("2d");
+    if (!ctx) return;
+    const p = point(event);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+
+  function stop() {
+    drawing.current = false;
+  }
+
+  return (
+    <div className="learn-board">
+      <p className="learn-kicker">{t("write")}</p>
+      <div className="duo-write-card">
+        <div>
+          <button type="button" className="learn-ask-target text-left text-5xl font-black leading-none text-ink" onClick={() => onSay(word.word)}>
+            {word.word}
+          </button>
+          <Phonetic
+            reading={word.reading}
+            sayVi={word.sayVi}
+            locale="vi"
+            phoneticLabel={t("phonetic")}
+            sayViLabel={t("sayViLabel")}
+          />
+          {support ? <p className="mt-2 text-sm font-bold text-ink-soft">{word.meaning[support]}</p> : null}
+          <div className="mt-4">
+            <SpeakButton text={word.word} lang={lang} slow={slow} label={t("hear")} />
+          </div>
+        </div>
+        <div>
+          <p className="mb-2 text-sm font-bold text-ink-soft">{t("drawHint")}</p>
+          <canvas
+            ref={canvasRef}
+            className="duo-writing-canvas"
+            aria-label={t("drawHint")}
+            onPointerDown={start}
+            onPointerMove={move}
+            onPointerUp={stop}
+            onPointerCancel={stop}
+            onPointerLeave={stop}
+          />
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="button" className="duo-secondary-cta" onClick={resetCanvas}>
+              {t("clearWriting")}
+            </button>
+            <button type="button" className="duo-unit-cta" onClick={onDone}>
+              {done ? t("done") : t("doneWriting")}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1120,9 +1334,7 @@ function ExerciseField({
               type="button"
               disabled={disabled}
               onClick={() => onChange(option)}
-              className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold ${
-                right ? "bg-sky-700 text-white" : wrong ? "bg-cream-200" : selected ? "bg-white" : "bg-white/40"
-              }`}
+              className={`learn-option ${right ? "is-right" : ""} ${wrong ? "is-wrong" : ""} ${selected ? "is-selected" : ""}`}
             >
               {option}
             </button>
@@ -1139,7 +1351,7 @@ function ExerciseField({
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
         placeholder="…"
-        className="mt-3 w-full rounded-2xl border border-white/70 bg-white/70 px-4 py-3 text-sm"
+        className="learn-input"
       />
     );
   }
@@ -1153,14 +1365,14 @@ function ExerciseField({
 
   return (
     <div className="mt-3">
-      <div className="flex min-h-12 flex-wrap gap-2 rounded-2xl bg-white/50 p-3">
+      <div className="learn-token-answer">
         {chosen.length ? (
           chosen.map((token, i) => (
             <button
               key={`${token}-${i}`}
               type="button"
               disabled={disabled}
-              className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700"
+              className="learn-token is-picked"
               onClick={() => onChange(chosen.filter((_, j) => j !== i))}
             >
               {token}
@@ -1176,7 +1388,7 @@ function ExerciseField({
             key={`${token}-left-${i}`}
             type="button"
             disabled={disabled}
-            className="rounded-full bg-white px-3 py-1 text-sm font-semibold"
+            className="learn-token"
             onClick={() => {
               onChange([...chosen, token]);
               onAsk?.(token);

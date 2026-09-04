@@ -1,4 +1,7 @@
+"use client";
+
 import { useId } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 function LogoMark({ gid }: { gid: string }) {
@@ -54,11 +57,12 @@ export function Logo({
 }) {
   const gid = useId().replace(/:/g, "");
   const onDark = tone === "dark";
+  const t = useTranslations("Meta");
 
   return (
     <Link
       href="/"
-      aria-label="Học cùng Linlin"
+      aria-label={t("title")}
       className="flex items-center gap-2.5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
     >
       <span className="grid h-8 w-8 shrink-0 overflow-hidden rounded-[0.8rem]">
@@ -66,7 +70,7 @@ export function Logo({
       </span>
       {!compact && (
         <span
-          className={`font-display text-[1.15rem] leading-none ${
+          className={`logo-wordmark text-[1.15rem] leading-none ${
             onDark ? "text-white" : "text-sky-700"
           }`}
         >

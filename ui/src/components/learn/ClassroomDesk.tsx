@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
+import { readDone, readStudyAccount, type StudyAccount } from "@/lib/learn/progress";
 import type { CatalogTrack, LearnTrack, Lesson } from "@/lib/learn/types";
 
 const STEP_KEY = {
@@ -19,15 +20,6 @@ const KINDS: Lesson["kind"][] = ["teach", "words", "listen", "practice", "play",
 function kindFromId(id: string): Lesson["kind"] {
   const part = id.split("-").at(-2);
   return KINDS.includes(part as Lesson["kind"]) ? (part as Lesson["kind"]) : "teach";
-}
-
-function loadDone(track: string) {
-  try {
-    const raw = localStorage.getItem(`linlin-learn:${track}`);
-    return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
-  } catch {
-    return {};
-  }
 }
 
 export function ClassroomDesk({
@@ -47,13 +39,41 @@ export function ClassroomDesk({
 
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [focusId, setFocusId] = useState(meta.units[0]?.id ?? "");
+  const [account, setAccount] = useState<StudyAccount | null>(null);
 
   useEffect(() => {
-    const map = loadDone(track);
-    setDone(map);
-    const next = allIds.find((id) => !map[id]) ?? allIds[0];
-    const unit = meta.units.find((item) => item.lessonIds.includes(next));
-    if (unit) setFocusId(unit.id);
+    let active = true;
+    const frame = window.requestAnimationFrame(async () => {
+      const currentAccount = readStudyAccount();
+      let map = readDone(track, currentAccount.id);
+      let nextAccount = currentAccount;
+      try {
+        const [progressResponse, userResponse] = await Promise.all([
+          fetch(`/api/progress?track=${track}`),
+          fetch("/api/auth/me"),
+        ]);
+        if (progressResponse.ok) {
+          const result = (await progressResponse.json()) as { done?: Record<string, boolean> };
+          map = result.done ?? map;
+        }
+        if (userResponse.ok) {
+          const result = (await userResponse.json()) as { user?: { id: string; name: string } };
+          if (result.user) nextAccount = { id: result.user.id, name: result.user.name };
+        }
+      } catch {
+        // Keep the local study path usable offline.
+      }
+      if (!active) return;
+      setAccount(nextAccount);
+      setDone(map);
+      const next = allIds.find((id) => !map[id]) ?? allIds[0];
+      const unit = meta.units.find((item) => item.lessonIds.includes(next));
+      if (unit) setFocusId(unit.id);
+    });
+    return () => {
+      active = false;
+      window.cancelAnimationFrame(frame);
+    };
   }, [track, allIds, meta.units]);
 
   const nextId = allIds.find((id) => !done[id]) ?? allIds[0];
@@ -61,110 +81,153 @@ export function ClassroomDesk({
   const doneCount = allIds.filter((id) => done[id]).length;
   const finished = doneCount === allIds.length && allIds.length > 0;
   const nextIndex = nextUnit ? meta.units.findIndex((unit) => unit.id === nextUnit.id) + 1 : 1;
+  const xp = doneCount * 10;
+  const progress = allIds.length ? Math.round((doneCount / allIds.length) * 100) : 0;
 
   return (
-    <section className="px-4 pb-16 pt-8 sm:px-6 sm:pt-10">
-      <div className="mx-auto max-w-2xl">
-        <Link href="/learn" className="text-sm font-semibold text-sky-700">
+    <section className="duo-shell px-4 pb-16 pt-6 sm:px-6 sm:pt-8">
+      <div className="mx-auto max-w-6xl">
+        <Link href="/learn" className="text-sm font-bold text-sky-700">
           ← {t("allTracks")}
         </Link>
 
-        <article className="glass-tile mt-6 p-6 sm:p-7">
-          <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-gold-500 uppercase">{native}</p>
-          <h1 className="font-display mt-2 text-3xl leading-tight text-sky-700 sm:text-4xl">{t("classTitle")}</h1>
-          <p className="mt-3 leading-7 text-ink-soft">{t("pathSpine")}</p>
-          <ol className="mt-4 flex flex-wrap gap-2 text-[0.7rem] font-semibold tracking-[0.08em] text-sky-700 uppercase">
+        <article className="duo-path-head mt-5">
+          <div className="min-w-0">
+            <p className="duo-kicker">{native}</p>
+            <h1 className="mt-2 text-3xl font-bold leading-tight text-ink sm:text-4xl">{t("classTitle")}</h1>
+            <p className="mt-3 max-w-2xl leading-7 text-ink-soft">{t("pathSpine")}</p>
+            {account ? (
+              <Link href="/account" className="mt-3 inline-flex text-sm font-bold text-sky-700">
+                {t("profileLink", { name: account.name })}
+              </Link>
+            ) : null}
+          </div>
+          <div className="duo-path-score">
+            <span>{t("xpLabel", { xp })}</span>
+            <strong>{progress}%</strong>
+            <small>{t("doneCount", { done: doneCount, total: allIds.length })}</small>
+          </div>
+        </article>
+
+        <div className="duo-path-layout">
+          <aside className="duo-path-aside">
+        <div className="duo-continue">
+          <div className="min-w-0">
+            <ol className="duo-mini-steps">
             {(["stepTeach", "stepWords", "stepListen", "stepPractice", "stepPlay"] as const).map((key, i) => (
-              <li key={key} className="rounded-full bg-white/70 px-2.5 py-1">
+              <li key={key}>
                 {i + 1}. {t(key)}
               </li>
             ))}
-          </ol>
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/70">
-            <div
-              className="h-full rounded-full bg-sky-700"
-              style={{ width: `${allIds.length ? (doneCount / allIds.length) * 100 : 0}%` }}
-            />
-          </div>
-          <p className="mt-2 text-sm font-semibold text-sky-700">
-            {t("doneCount", { done: doneCount, total: allIds.length })}
-            {nextUnit ? ` · ${t("chapterN", { n: nextIndex, total: meta.units.length })}` : ""}
-          </p>
-          {nextUnit && nextId ? (
-            <div className="mt-5">
-              <p className="text-sm text-ink-soft">
+            </ol>
+            {nextUnit && nextId ? (
+              <>
+                <p className="mt-3 text-sm font-bold text-ink">
+                  {nextUnit ? t("chapterN", { n: nextIndex, total: meta.units.length }) : ""}
+                </p>
+                <p className="mt-1 text-sm text-ink-soft">
                 {finished ? t("allDone") : t("continueFrom", { chapter: nextUnit.title[track] })}
-              </p>
-              {support && !finished ? <p className="text-xs text-ink-soft">{nextUnit.title[support]}</p> : null}
-              {nextUnit.goal?.[track] && !finished ? (
-                <p className="mt-1 text-sm leading-6 text-ink-soft">{nextUnit.goal[track]}</p>
-              ) : null}
-              <Link href={`/learn/${track}/${nextId}`} className="btn-primary mt-4 inline-flex">
-                {finished ? t("reviewClass") : doneCount ? t("resume") : t("enterClass")}
-              </Link>
-            </div>
+                </p>
+              </>
+            ) : null}
+          </div>
+          {nextUnit && nextId ? (
+            <Link href={`/learn/${track}/${nextId}`} className="duo-main-cta">
+              {finished ? t("reviewClass") : doneCount ? t("resume") : t("enterClass")}
+            </Link>
           ) : null}
-        </article>
+        </div>
+            <div className="duo-path-guide">
+              <p className="duo-kicker">{t("rhythmEyebrow")}</p>
+              <h2>{t("rhythmTitle")}</h2>
+              <ol>
+                {(["stepTeach", "stepWords", "stepListen", "stepPractice", "stepPlay"] as const).map((key, i) => (
+                  <li key={key}>
+                    <span>{i + 1}</span>
+                    <b>{t(key)}</b>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </aside>
 
-        <p className="mt-8 text-sm font-semibold text-sky-700">{t("pickChapter")}</p>
-        <ol className="mt-3 grid gap-6">
+          <div className="duo-path-main">
+        <div className="duo-track-heading">
+          <div>
+            <p className="duo-kicker">{t("pathTitle")}</p>
+            <h2>{t("pickChapter")}</h2>
+          </div>
+          <p>{t("stage", { level: levels[0] ?? "A1" })}</p>
+        </div>
+        <ol className="duo-skill-path">
           {levels.map((level) => {
             const units = meta.units.filter((unit) => unit.level === level);
             const start = meta.units.findIndex((unit) => unit.level === level) + 1;
             return (
               <li key={level}>
-                <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-sky-700 uppercase">
+                <p className="duo-level-label">
                   {t("stage", { level })} · {t("chapterRange", { from: start, to: start + units.length - 1 })}
                 </p>
-                <ol className="grid gap-1.5">
+                <ol className="duo-unit-list">
                   {units.map((unit) => {
                     const n = meta.units.findIndex((item) => item.id === unit.id) + 1;
                     const unitDone = unit.lessonIds.filter((id) => done[id]).length;
                     const allDone = unitDone === unit.lessonIds.length && unit.lessonIds.length > 0;
                     const now = unit.id === focusId;
                     const here = nextUnit?.id === unit.id && !finished;
+                    const previous = n <= 1 ? null : meta.units[n - 2];
+                    const locked = !finished && !here && !allDone && previous ? !previous.lessonIds.every((id) => done[id]) : false;
+                    const lessonId = unit.lessonIds.find((id) => !done[id]) ?? unit.lessonIds[0];
                     return (
-                      <li key={unit.id} className={`learn-chapter ${now ? "is-open" : ""} ${here ? "is-here" : ""}`}>
+                      <li
+                        key={unit.id}
+                        className={`duo-unit ${now ? "is-open" : ""} ${here ? "is-here" : ""} ${allDone ? "is-done" : ""} ${locked ? "is-locked" : ""}`}
+                      >
                         <button
                           type="button"
-                          className="learn-chapter-btn"
+                          className="duo-unit-btn"
                           onClick={() => setFocusId(unit.id)}
                           aria-expanded={now}
                         >
-                          <span className={`learn-chapter-n ${allDone ? "is-done" : ""} ${here ? "is-now" : ""}`}>
-                            {allDone ? "✓" : n}
+                          <span className="duo-unit-node">
+                            {allDone ? "✓" : locked ? "•" : n}
                           </span>
                           <span className="min-w-0 flex-1 text-left">
-                            <span className="block font-semibold text-sky-700">{unit.title[track]}</span>
+                            <span className="block font-bold text-ink">{unit.title[track]}</span>
                             {support ? (
                               <span className="mt-0.5 block truncate text-xs text-ink-soft">{unit.title[support]}</span>
                             ) : null}
                           </span>
-                          <span className="shrink-0 text-xs font-semibold text-sky-700">
-                            {here ? t("youAreHere") : `${unitDone}/5`}
+                          <span className="duo-unit-state">
+                            {locked ? t("locked") : here ? t("youAreHere") : allDone ? t("done") : `${unitDone}/5`}
                           </span>
                         </button>
                         {now ? (
-                          <div className="learn-chapter-body">
+                          <div className="duo-unit-body">
                             {unit.goal?.[track] ? (
                               <p className="text-sm leading-6 text-ink-soft">{unit.goal[track]}</p>
                             ) : null}
-                            <p className="mt-3 text-[0.68rem] font-semibold tracking-[0.12em] text-sky-700 uppercase">
+                            <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
+                              <div className="h-full rounded-full bg-sky-500" style={{ width: `${(unitDone / unit.lessonIds.length) * 100}%` }} />
+                            </div>
+                            <p className="mt-3 text-xs font-bold uppercase text-ink-soft">
                               {t("fiveSteps")}
                             </p>
-                            <ol className="mt-2 grid grid-cols-5 gap-1">
+                            <ol className="duo-step-grid mt-2">
                               {unit.lessonIds.map((id, i) => {
                                 const key = STEP_KEY[kindFromId(id) as keyof typeof STEP_KEY];
                                 return (
                                   <li key={id}>
                                     <Link
                                       href={`/learn/${track}/${id}`}
-                                      className={`block rounded-xl px-1 py-2.5 text-center text-[0.62rem] font-semibold tracking-[0.06em] uppercase ${
+                                      className={`duo-step-tile ${
                                         done[id]
-                                          ? "bg-sky-700 text-white"
+                                          ? "is-done"
                                           : id === nextId
-                                            ? "bg-gold-500 text-white"
-                                            : "bg-white text-sky-700"
+                                            ? "is-now"
+                                            : locked
+                                              ? "is-locked"
+                                              : ""
                                       }`}
                                     >
                                       {i + 1}. {key ? t(key) : "·"}
@@ -173,6 +236,11 @@ export function ClassroomDesk({
                                 );
                               })}
                             </ol>
+                            {lessonId ? (
+                              <Link href={`/learn/${track}/${lessonId}`} className="duo-unit-cta mt-3 inline-flex">
+                                {allDone ? t("practiceAgain") : locked ? t("preview") : t("startLesson")}
+                              </Link>
+                            ) : null}
                           </div>
                         ) : null}
                       </li>
@@ -183,6 +251,8 @@ export function ClassroomDesk({
             );
           })}
         </ol>
+          </div>
+        </div>
       </div>
     </section>
   );

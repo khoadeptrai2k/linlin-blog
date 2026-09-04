@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { AiAssistSwitch } from "@/components/layout/AiAssistSwitch";
@@ -71,8 +71,22 @@ function LearnIcon() {
   );
 }
 
+function AccountIcon() {
+  return (
+    <svg {...iconProps()}>
+      <circle cx="12" cy="8.5" r="3.1" />
+      <path d="M5.8 19c1-3 3.1-4.5 6.2-4.5s5.2 1.5 6.2 4.5" />
+    </svg>
+  );
+}
+
+type HeaderUser = {
+  name: string;
+  role: "student" | "admin";
+};
+
 const links = [
-  { href: "/#about" as const, key: "about" as const, icon: AboutIcon },
+  { href: "/#classroom" as const, key: "classroom" as const, icon: AboutIcon },
   { href: "/#method" as const, key: "method" as const, icon: MethodIcon },
   { href: "/#scenes" as const, key: "scenes" as const, icon: ScenesIcon },
   { href: "/blogs" as const, key: "blogs" as const, icon: BlogsIcon },
@@ -81,58 +95,46 @@ const links = [
 
 export function SiteHeader() {
   const t = useTranslations("Nav");
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-
-  const expanded = !scrolled || hovered || langOpen;
+  const pathname = usePathname();
+  const [user, setUser] = useState<HeaderUser | null>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 18);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!scrolled) return;
-
-    function onPointerDown(event: PointerEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setHovered(false);
-      }
-    }
-
-    window.addEventListener("pointerdown", onPointerDown);
-    return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, [scrolled]);
+    let active = true;
+    fetch("/api/auth/me")
+      .then((response) => response.ok ? response.json() : null)
+      .then((result: { user?: HeaderUser } | null) => {
+        if (active) setUser(result?.user ?? null);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [pathname]);
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3">
       <div
-        ref={rootRef}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocusCapture={() => setHovered(true)}
-        className={`island pointer-events-auto rounded-full ${
-          expanded ? "is-open" : "is-closed"
-        }`}
+        className="island is-open pointer-events-auto rounded-full"
       >
         <Logo compact />
-        <span className="island-name font-display whitespace-nowrap text-[1.05rem] leading-none text-[var(--deep)]">
+        <span className="island-name logo-wordmark whitespace-nowrap text-[1.05rem] leading-none text-[var(--deep)]">
           Linlin
         </span>
-        <span className="mx-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[linear-gradient(180deg,#9bbfd6,#2f6f8f)]" />
+        <span className="island-separator mx-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[linear-gradient(180deg,#9bbfd6,#2f6f8f)]" />
         <nav className="island-nav" aria-label={t("home")}>
           {links.map((link) => {
             const Icon = link.icon;
+            const active = link.href === "/learn"
+              ? pathname.startsWith("/learn")
+              : link.href === "/blogs"
+                ? pathname.startsWith("/blogs")
+                : false;
             return (
               <Link
                 key={link.key}
                 href={link.href}
                 aria-label={t(link.key)}
-                className="island-link"
+                className={`island-link ${active ? "is-active" : ""}`}
               >
                 <Icon />
                 <span className="island-label" aria-hidden="true">
@@ -144,7 +146,20 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-1.5">
           <AiAssistSwitch />
-          <LanguageSwitcher onOpenChange={setLangOpen} />
+          <LanguageSwitcher />
+          <Link
+            href="/account"
+            className={`header-account ${pathname.startsWith("/account") || pathname.startsWith("/admin") ? "is-active" : ""}`}
+            aria-label={user ? t("accountOf", { name: user.name }) : t("signIn")}
+            title={user ? user.name : t("account")}
+          >
+            {user ? (
+              <span className="header-account-letter">{user.name.slice(0, 1).toUpperCase()}</span>
+            ) : (
+              <AccountIcon />
+            )}
+            <span className="header-account-label">{user ? user.name : t("account")}</span>
+          </Link>
         </div>
       </div>
     </header>

@@ -140,12 +140,6 @@ function makeMcq(id, prompt, answer, distractors, promptKey, promptI18n) {
   return exercise;
 }
 
-function chunk(arr, size) {
-  const out = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-}
-
 function joinLine(track, tokens) {
   return tokens.join(track === "zh" ? "" : " ");
 }
@@ -346,11 +340,11 @@ function buildLesson({ track, unit, part, vocab, sentences, kind, order }) {
   }));
 
   const caps = {
-    teach: { gap: 4, order: 2, sent: 2, fit: false, listen: false, structure: 2 },
-    words: { gap: 4, order: 2, sent: 2, fit: true, listen: false, structure: 0 },
+    teach: { gap: 2, order: 1, sent: 1, fit: false, listen: false, structure: 1 },
+    words: { gap: 2, order: 1, sent: 1, fit: true, listen: false, structure: 0 },
     listen: { gap: 0, order: 0, sent: 0, fit: false, listen: true, structure: 0 },
-    practice: { gap: 6, order: 4, sent: 4, fit: true, listen: false, structure: 1 },
-    play: { gap: 0, order: 0, sent: 3, fit: false, listen: false, structure: 0 },
+    practice: { gap: 3, order: 2, sent: 2, fit: true, listen: false, structure: 1 },
+    play: { gap: 0, order: 0, sent: 2, fit: false, listen: false, structure: 0 },
   };
   const cap = caps[kind] || caps.practice;
   const exercises = [];
@@ -404,7 +398,7 @@ function buildLesson({ track, unit, part, vocab, sentences, kind, order }) {
     },
   };
 
-  const minutes = { teach: 18, words: 14, listen: 10, practice: 16, play: 10 };
+  const minutes = { teach: 8, words: 6, listen: 5, practice: 7, play: 5 };
 
   return {
     id,
@@ -495,7 +489,7 @@ export function generateCurriculum() {
   }
   const catalog = {
     generatedAt: new Date().toISOString(),
-    note: "Original Linlin path. Sounds first. Five steps per topic. Not official exam papers.",
+    note: "Linlin practice path. Short Duolingo-style steps: learn, answer, retry, keep going.",
     tracks: TRACKS.map((track) => catalogEntry(track, byTrack[track], allUnits)),
   };
   return { catalog, byTrack };
@@ -514,6 +508,10 @@ export function writeCurriculumFiles() {
 }
 
 async function seedMongo(catalog, byTrack) {
+  if (process.env.LEARN_SKIP_MONGO === "1") {
+    console.log("LEARN_SKIP_MONGO=1 — skipped Mongo. JSON is ready in src/content/learn/");
+    return;
+  }
   const uri = process.env.MONGODB_URI;
   if (!uri) {
     console.log("No MONGODB_URI — skipped Mongo. JSON is ready in src/content/learn/");
@@ -524,17 +522,23 @@ async function seedMongo(catalog, byTrack) {
   const client = new MongoClient(uri);
   await client.connect();
   const db = client.db(dbName);
-  await db.collection("learn_catalog").deleteMany({});
-  await db.collection("learn_lessons").deleteMany({});
-  await db.collection("learn_catalog").insertOne(catalog);
+  await db.collection("learn_catalog").replaceOne({ id: "main" }, { id: "main", ...catalog }, { upsert: true });
   const docs = TRACKS.flatMap((track) => byTrack[track]);
   for (let i = 0; i < docs.length; i += 400) {
-    await db.collection("learn_lessons").insertMany(docs.slice(i, i + 400));
+    await db.collection("learn_lessons").bulkWrite(
+      docs.slice(i, i + 400).map((doc) => ({
+        replaceOne: {
+          filter: { id: doc.id },
+          replacement: doc,
+          upsert: true,
+        },
+      })),
+    );
   }
   await db.collection("learn_lessons").createIndex({ track: 1, order: 1 });
   await db.collection("learn_lessons").createIndex({ id: 1 }, { unique: true });
   await client.close();
-  console.log(`Mongo seeded: ${docs.length} lessons → ${dbName}.learn_lessons`);
+  console.log(`Mongo synced safely: ${docs.length} lessons → ${dbName}.learn_lessons`);
 }
 
 const isMain = Boolean(process.argv[1]) && import.meta.url === pathToFileURL(process.argv[1]).href;

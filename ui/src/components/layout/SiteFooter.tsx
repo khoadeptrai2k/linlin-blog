@@ -9,15 +9,15 @@ export async function SiteFooter() {
 
   return (
     <footer className="px-4 pb-8 sm:px-6">
-      <div className="glass-tile pebble-d mx-auto max-w-6xl px-5 py-8 sm:px-8">
+      <div className="site-footer-card glass-tile pebble-d mx-auto max-w-6xl px-5 py-8 sm:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <Logo />
             <p className="mt-3 max-w-sm text-sm text-ink-soft">{t("tagline")}</p>
           </div>
           <div className="flex flex-wrap gap-5 text-sm text-ink-soft">
-            <Link href="/#about" className="hover:text-sky-700">
-              {nav("about")}
+            <Link href="/#classroom" className="hover:text-sky-700">
+              {nav("classroom")}
             </Link>
             <Link href="/#method" className="hover:text-sky-700">
               {nav("method")}

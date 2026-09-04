@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -17,10 +17,10 @@ export function LanguageSwitcher({ onOpenChange }: { compact?: boolean; onOpenCh
   const [box, setBox] = useState({ top: 0, right: 16 });
   const btnRef = useRef<HTMLButtonElement>(null);
 
-  function close() {
+  const close = useCallback(() => {
     setOpen(false);
     onOpenChange?.(false);
-  }
+  }, [onOpenChange]);
 
   useLayoutEffect(() => {
     if (!open || !btnRef.current) return;
@@ -42,7 +42,7 @@ export function LanguageSwitcher({ onOpenChange }: { compact?: boolean; onOpenCh
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", close);
     };
-  }, [open]);
+  }, [open, close]);
 
   function toggle() {
     const next = !open;
