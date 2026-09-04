@@ -186,19 +186,13 @@ export function isLessonSpeech(lesson: Lesson, text: string) {
   const needle = norm(text);
   if (!needle) return false;
   if (norm(lesson.title[lesson.track]) === needle) return true;
-  if (norm(lesson.theory.levelTitle) === needle) return true;
   if (lesson.vocab.some((item) => norm(item.word) === needle)) return true;
   if (lesson.sentences.some((item) => norm(item.text) === needle)) return true;
   if ((lesson.quotes || []).some((item) => norm(item.text) === needle)) return true;
-  if (lesson.theory.points.some((item) => norm(item) === needle)) return true;
-  if (norm(lesson.theory.structure) === needle) return true;
-  if (norm(lesson.theory.tip) === needle) return true;
-  if (lesson.theory.examples.some((item) => norm(item) === needle)) return true;
-  if (lesson.theory.patterns.some((item) => norm(item.example) === needle || norm(item.form) === needle)) return true;
+  if (lesson.theory.patterns.some((item) => norm(item.example) === needle)) return true;
   if (lesson.theory.apply.some((item) => norm(item.sample) === needle)) return true;
   if (lesson.theory.table.rows.some((row) => row.split(" → ").some((cell) => cell && norm(cell) === needle))) return true;
   if (lesson.listening.lines.some((item) => norm(item) === needle)) return true;
-  if (norm(lesson.listening.text) === needle) return true;
   return false;
 }
 

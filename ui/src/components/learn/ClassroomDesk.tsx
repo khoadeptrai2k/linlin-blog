@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { readDone, readStudyAccount, type StudyAccount } from "@/lib/learn/progress";
+import { startUnitForLevel, type PlacementLevel } from "@/lib/learn/placement";
 import type { CatalogTrack, LearnTrack, Lesson } from "@/lib/learn/types";
 
 const STEP_KEY = {
@@ -33,13 +34,14 @@ export function ClassroomDesk({
 }) {
   const t = useTranslations("Learn");
   const native = localeMeta[track].native;
-  const support = locale === track ? null : locale;
   const levels = useMemo(() => [...new Set(meta.units.map((unit) => unit.level))], [meta.units]);
   const allIds = useMemo(() => meta.units.flatMap((unit) => unit.lessonIds), [meta.units]);
 
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [focusId, setFocusId] = useState(meta.units[0]?.id ?? "");
   const [account, setAccount] = useState<StudyAccount | null>(null);
+  const [signedIn, setSignedIn] = useState(false);
+  const [placement, setPlacement] = useState<{ done: boolean; level: PlacementLevel } | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -47,10 +49,13 @@ export function ClassroomDesk({
       const currentAccount = readStudyAccount();
       let map = readDone(track, currentAccount.id);
       let nextAccount = currentAccount;
+      let signed = false;
+      let placed: { done: boolean; level: PlacementLevel } | null = null;
       try {
-        const [progressResponse, userResponse] = await Promise.all([
+        const [progressResponse, userResponse, profileResponse] = await Promise.all([
           fetch(`/api/progress?track=${track}`),
           fetch("/api/auth/me"),
+          fetch("/api/profile"),
         ]);
         if (progressResponse.ok) {
           const result = (await progressResponse.json()) as { done?: Record<string, boolean> };
@@ -58,15 +63,36 @@ export function ClassroomDesk({
         }
         if (userResponse.ok) {
           const result = (await userResponse.json()) as { user?: { id: string; name: string } };
-          if (result.user) nextAccount = { id: result.user.id, name: result.user.name };
+          if (result.user) {
+            nextAccount = { id: result.user.id, name: result.user.name };
+            signed = true;
+          }
+        }
+        if (profileResponse.ok) {
+          const result = (await profileResponse.json()) as {
+            profile?: { placementDone?: boolean; level?: PlacementLevel };
+          };
+          if (result.profile) {
+            placed = {
+              done: Boolean(result.profile.placementDone),
+              level: result.profile.level || "new",
+            };
+          }
         }
       } catch {
         // Keep the local study path usable offline.
       }
       if (!active) return;
       setAccount(nextAccount);
+      setSignedIn(signed);
+      setPlacement(placed);
       setDone(map);
-      const next = allIds.find((id) => !map[id]) ?? allIds[0];
+      const anyDone = allIds.some((id) => map[id]);
+      let next = allIds.find((id) => !map[id]) ?? allIds[0];
+      if (!anyDone && placed?.done) {
+        const unitId = startUnitForLevel(meta.units, placed.level);
+        next = meta.units.find((item) => item.id === unitId)?.lessonIds[0] ?? next;
+      }
       const unit = meta.units.find((item) => item.lessonIds.includes(next));
       if (unit) setFocusId(unit.id);
     });
@@ -76,7 +102,13 @@ export function ClassroomDesk({
     };
   }, [track, allIds, meta.units]);
 
-  const nextId = allIds.find((id) => !done[id]) ?? allIds[0];
+  const anyDone = allIds.some((id) => done[id]);
+  const placedUnitId = placement?.done ? startUnitForLevel(meta.units, placement.level) : meta.units[0]?.id;
+  const placedIndex = meta.units.findIndex((item) => item.id === placedUnitId);
+  const nextId =
+    !anyDone && placement?.done
+      ? (meta.units.find((item) => item.id === placedUnitId)?.lessonIds[0] ?? allIds[0])
+      : (allIds.find((id) => !done[id]) ?? allIds[0]);
   const nextUnit = meta.units.find((unit) => unit.lessonIds.includes(nextId));
   const doneCount = allIds.filter((id) => done[id]).length;
   const finished = doneCount === allIds.length && allIds.length > 0;
@@ -109,6 +141,15 @@ export function ClassroomDesk({
           </div>
         </article>
 
+        {!placement?.done ? (
+          <Link href={signedIn ? "/learn/placement" : "/account?next=/learn/placement"} className="placement-banner">
+            <strong>{t("placementBannerTitle")}</strong>
+            <span>{signedIn ? t("placementBannerBody") : t("placementNeedLoginCta")}</span>
+          </Link>
+        ) : (
+          <p className="placement-banner is-done">{t("placementOnPath", { level: placement.level.toUpperCase() })}</p>
+        )}
+
         <div className="duo-path-layout">
           <aside className="duo-path-aside">
         <div className="duo-continue">
@@ -126,7 +167,7 @@ export function ClassroomDesk({
                   {nextUnit ? t("chapterN", { n: nextIndex, total: meta.units.length }) : ""}
                 </p>
                 <p className="mt-1 text-sm text-ink-soft">
-                {finished ? t("allDone") : t("continueFrom", { chapter: nextUnit.title[track] })}
+                {finished ? t("allDone") : t("continueFrom", { chapter: nextUnit.title[locale] || nextUnit.title[track] })}
                 </p>
               </>
             ) : null}
@@ -176,7 +217,13 @@ export function ClassroomDesk({
                     const now = unit.id === focusId;
                     const here = nextUnit?.id === unit.id && !finished;
                     const previous = n <= 1 ? null : meta.units[n - 2];
-                    const locked = !finished && !here && !allDone && previous ? !previous.lessonIds.every((id) => done[id]) : false;
+                    const beforePlacement = !anyDone && placement?.done && n - 1 < placedIndex;
+                    const locked =
+                      beforePlacement
+                        ? false
+                        : !finished && !here && !allDone && previous
+                          ? !previous.lessonIds.every((id) => done[id])
+                          : false;
                     const lessonId = unit.lessonIds.find((id) => !done[id]) ?? unit.lessonIds[0];
                     return (
                       <li
@@ -193,9 +240,9 @@ export function ClassroomDesk({
                             {allDone ? "✓" : locked ? "•" : n}
                           </span>
                           <span className="min-w-0 flex-1 text-left">
-                            <span className="block font-bold text-ink">{unit.title[track]}</span>
-                            {support ? (
-                              <span className="mt-0.5 block truncate text-xs text-ink-soft">{unit.title[support]}</span>
+                            <span className="block font-bold text-ink">{unit.title[locale]}</span>
+                            {locale !== track ? (
+                              <span className="mt-0.5 block truncate text-xs text-ink-soft">{unit.title[track]}</span>
                             ) : null}
                           </span>
                           <span className="duo-unit-state">
@@ -204,8 +251,8 @@ export function ClassroomDesk({
                         </button>
                         {now ? (
                           <div className="duo-unit-body">
-                            {unit.goal?.[track] ? (
-                              <p className="text-sm leading-6 text-ink-soft">{unit.goal[track]}</p>
+                            {unit.goal?.[locale] || unit.goal?.[track] ? (
+                              <p className="text-sm leading-6 text-ink-soft">{unit.goal?.[locale] || unit.goal?.[track]}</p>
                             ) : null}
                             <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
                               <div className="h-full rounded-full bg-sky-500" style={{ width: `${(unitDone / unit.lessonIds.length) * 100}%` }} />

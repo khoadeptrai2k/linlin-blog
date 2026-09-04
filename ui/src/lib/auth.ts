@@ -16,8 +16,8 @@ type UserDocument = {
   _id: ObjectId;
   name: string;
   email: string;
-  passwordHash: string;
-  passwordSalt: string;
+  passwordHash?: string;
+  passwordSalt?: string;
   role: UserRole;
   status: "active" | "disabled";
   createdAt: Date;
@@ -30,6 +30,17 @@ type SessionDocument = {
   userId: ObjectId;
   createdAt: Date;
   expiresAt: Date;
+};
+
+type LoginTokenDocument = {
+  _id: ObjectId;
+  tokenHash: string;
+  userId: ObjectId;
+  locale: string;
+  nextPath: string;
+  createdAt: Date;
+  expiresAt: Date;
+  usedAt?: Date;
 };
 
 export type AuthUser = {
@@ -70,6 +81,8 @@ async function authDb() {
       db.collection<UserDocument>("users").createIndex({ email: 1 }, { unique: true }),
       db.collection<SessionDocument>("sessions").createIndex({ tokenHash: 1 }, { unique: true }),
       db.collection<SessionDocument>("sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
+      db.collection<LoginTokenDocument>("login_tokens").createIndex({ tokenHash: 1 }, { unique: true }),
+      db.collection<LoginTokenDocument>("login_tokens").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
       db.collection("learner_profiles").createIndex({ userId: 1 }, { unique: true }),
       db.collection("learning_progress").createIndex({ userId: 1, track: 1 }, { unique: true }),
     ]).then(() => undefined);
@@ -143,26 +156,24 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   return publicUser(user);
 }
 
-export async function registerUser(input: { name: string; email: string; password: string }) {
+export async function registerUser(input: { name: string; email: string; password?: string }) {
   const db = await authDb();
   if (!db) throw new Error("DATABASE_UNAVAILABLE");
   const email = normalizeEmail(input.email);
   if (await db.collection<UserDocument>("users").findOne({ email })) {
     throw new Error("EMAIL_EXISTS");
   }
-  const password = await hashPassword(input.password);
+  const password = input.password ? await hashPassword(input.password) : null;
   const now = new Date();
   const adminEmail = normalizeEmail(process.env.ADMIN_EMAIL || "");
   const result = await db.collection<UserDocument>("users").insertOne({
     _id: new ObjectId(),
     name: input.name.trim(),
     email,
-    passwordHash: password.hash,
-    passwordSalt: password.salt,
+    ...(password ? { passwordHash: password.hash, passwordSalt: password.salt } : {}),
     role: email === adminEmail ? "admin" : "student",
     status: "active",
     createdAt: now,
-    lastLoginAt: now,
   });
   await db.collection("learner_profiles").updateOne(
     { userId: result.insertedId },
@@ -192,13 +203,67 @@ export async function authenticateUser(emailValue: string, password: string) {
   if (!db) throw new Error("DATABASE_UNAVAILABLE");
   const email = normalizeEmail(emailValue);
   const user = await db.collection<UserDocument>("users").findOne({ email });
-  if (!user || user.status !== "active") return null;
+  if (!user || user.status !== "active" || !user.passwordHash || !user.passwordSalt) return null;
   if (!(await verifyPassword(password, user.passwordSalt, user.passwordHash))) return null;
   await db.collection<UserDocument>("users").updateOne(
     { _id: user._id },
     { $set: { lastLoginAt: new Date() } },
   );
   return user;
+}
+
+export async function findUserByEmail(emailValue: string) {
+  const db = await authDb();
+  if (!db) throw new Error("DATABASE_UNAVAILABLE");
+  const user = await db.collection<UserDocument>("users").findOne({
+    email: normalizeEmail(emailValue),
+    status: "active",
+  });
+  return user;
+}
+
+export async function createLoginLink(input: { userId: ObjectId; locale: string; nextPath: string }) {
+  const db = await authDb();
+  if (!db) throw new Error("DATABASE_UNAVAILABLE");
+  const token = randomBytes(32).toString("base64url");
+  const now = new Date();
+  await db.collection<LoginTokenDocument>("login_tokens").insertOne({
+    _id: new ObjectId(),
+    tokenHash: tokenHash(token),
+    userId: input.userId,
+    locale: input.locale,
+    nextPath: input.nextPath,
+    createdAt: now,
+    expiresAt: new Date(now.getTime() + 30 * 60 * 1000),
+  });
+  return token;
+}
+
+export async function consumeLoginToken(token: string) {
+  const db = await authDb();
+  if (!db) throw new Error("DATABASE_UNAVAILABLE");
+  const row = await db.collection<LoginTokenDocument>("login_tokens").findOne({
+    tokenHash: tokenHash(token),
+    expiresAt: { $gt: new Date() },
+    usedAt: { $exists: false },
+  });
+  if (!row) return null;
+  await db.collection<LoginTokenDocument>("login_tokens").updateOne(
+    { _id: row._id },
+    { $set: { usedAt: new Date() } },
+  );
+  const user = await db.collection<UserDocument>("users").findOne({ _id: row.userId });
+  if (!user || user.status !== "active") return null;
+  await db.collection<UserDocument>("users").updateOne(
+    { _id: user._id },
+    { $set: { lastLoginAt: new Date() } },
+  );
+  return { user, locale: row.locale, nextPath: row.nextPath };
+}
+
+export function safeNextPath(value: string | undefined, fallback = "/learn/placement") {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("://")) return fallback;
+  return value;
 }
 
 export async function getAuthDb(): Promise<Db | null> {

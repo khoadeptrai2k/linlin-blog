@@ -24,8 +24,10 @@ export async function PUT(request: Request) {
   const userId = toObjectId(user.id);
   if (!db || !userId) return Response.json({ error: "DATABASE_UNAVAILABLE" }, { status: 503 });
   const body = (await request.json()) as Record<string, unknown>;
+  const existing = await db.collection("learner_profiles").findOne({ userId });
+  const requestedLevel = levels.has(String(body.level)) ? String(body.level) : "new";
   const next = {
-    level: levels.has(String(body.level)) ? String(body.level) : "new",
+    level: existing?.placementDone ? existing.level : requestedLevel,
     track: tracks.has(String(body.track)) ? String(body.track) : "zh",
     goal: goals.has(String(body.goal)) ? String(body.goal) : "communicate",
     xp: Math.max(0, Number(body.xp) || 0),

@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Phonetic, SpeakButton } from "@/components/learn/LearnAudio";
+import { WordPicture } from "@/components/learn/LessonArt";
+import { pictureFor, pictureForVocab } from "@/lib/learn/picture";
 import type { QuoteItem, VocabItem } from "@/lib/learn/types";
 import type { Locale } from "@/i18n/routing";
 
@@ -65,24 +67,28 @@ export function MatchGame({
   vocab,
   support,
   locale,
+  unitId,
   matchedLabel,
   doneLabel,
   lang,
   onTap,
+  onComplete,
 }: {
   vocab: VocabItem[];
   support: Locale | null;
   locale: Locale;
+  unitId?: string;
   matchedLabel: string;
   doneLabel?: string;
   lang?: string;
   onTap?: (text: string) => void;
+  onComplete?: () => void;
 }) {
   const cards = useMemo(() => {
     const picked = vocab.filter((item) => item.word).slice(0, 6);
     const raw: Card[] = [];
     picked.forEach((item, index) => {
-      const back = item.sayVi || (support ? item.meaning[support] : item.meaning[locale]) || item.reading || item.word;
+      const back = (support ? item.meaning[support] : item.meaning[locale]) || item.reading || item.word;
       raw.push({ id: `a-${index}`, pair: item.word, face: item.word });
       raw.push({ id: `b-${index}`, pair: item.word, face: back });
     });
@@ -92,6 +98,11 @@ export function MatchGame({
   const [open, setOpen] = useState<string[]>([]);
   const [matched, setMatched] = useState<string[]>([]);
   const total = Math.min(6, vocab.filter((item) => item.word).length);
+  const finished = total > 0 && matched.length >= total;
+
+  useEffect(() => {
+    if (finished) onComplete?.();
+  }, [finished, onComplete]);
 
   function tap(card: Card) {
     if (matched.includes(card.pair) || open.includes(card.id) || open.length === 2) return;
@@ -120,12 +131,27 @@ export function MatchGame({
             <li key={card.id}>
               <button
                 type="button"
-                className={`control-tile min-h-24 w-full items-center justify-center text-center ${
+                className={`control-tile learn-match-tile min-h-24 w-full items-center justify-center text-center ${
                   shown ? "is-active" : ""
                 }`}
                 onClick={() => tap(card)}
               >
-                {shown ? card.face : "?"}
+                {shown ? (
+                  <span className="grid justify-items-center gap-1">
+                    <WordPicture
+                      emoji={
+                        vocab.find((item) => item.word === card.pair)
+                          ? pictureForVocab(vocab.find((item) => item.word === card.pair)!, unitId || "")
+                          : pictureFor(card.face, unitId || "")
+                      }
+                      size="sm"
+                      label={card.face}
+                    />
+                    <span>{card.face}</span>
+                  </span>
+                ) : (
+                  "?"
+                )}
               </button>
             </li>
           );

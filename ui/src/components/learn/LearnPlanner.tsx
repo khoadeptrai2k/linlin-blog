@@ -18,13 +18,9 @@ type Profile = {
   water: number;
   streak: number;
   missions: Record<string, boolean>;
-};
-
-const levelScore: Record<Level, number> = {
-  new: 0,
-  a1: 1,
-  a2: 2,
-  b1: 3,
+  placementDone?: boolean;
+  placementScore?: number;
+  placementTotal?: number;
 };
 
 const pinyinRows = {
@@ -72,46 +68,11 @@ export function LearnPlanner({ catalog, locale }: { catalog: Catalog; locale: Lo
   const [account, setAccount] = useState<StudyAccount>({ id: "guest", name: "" });
   const [signedIn, setSignedIn] = useState(false);
   const [profile, setProfile] = useState<Profile>(() => baseProfile(locale));
-  const [answers, setAnswers] = useState<Record<string, Level>>({});
   const [loaded, setLoaded] = useState(false);
   const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
   const track = catalog.tracks.find((item) => item.id === profile.track) ?? catalog.tracks[0];
   const today = todayKey();
   const displayName = account.name.trim() || t("guestName");
-
-  const placementQuestions = useMemo(
-    () =>
-      [
-        {
-          id: "sound",
-          text: t("qSound"),
-          answers: [
-            { label: t("aSound0"), score: "new" as const },
-            { label: t("aSound1"), score: "a1" as const },
-            { label: t("aSound2"), score: "a2" as const },
-          ],
-        },
-        {
-          id: "words",
-          text: t("qWords"),
-          answers: [
-            { label: t("aWords0"), score: "new" as const },
-            { label: t("aWords1"), score: "a1" as const },
-            { label: t("aWords2"), score: "a2" as const },
-          ],
-        },
-        {
-          id: "speak",
-          text: t("qSpeak"),
-          answers: [
-            { label: t("aSpeak0"), score: "new" as const },
-            { label: t("aSpeak1"), score: "a1" as const },
-            { label: t("aSpeak2"), score: "b1" as const },
-          ],
-        },
-      ] as const,
-    [t],
-  );
 
   const pinyinGroups = useMemo(
     () => [
@@ -195,16 +156,6 @@ export function LearnPlanner({ catalog, locale }: { catalog: Catalog; locale: Lo
     return () => window.clearTimeout(timer);
   }, [account.id, loaded, profile, signedIn]);
 
-  const estimatedLevel = useMemo(() => {
-    const values = Object.values(answers);
-    if (!values.length) return profile.level;
-    const avg = values.reduce((sum, item) => sum + levelScore[item], 0) / values.length;
-    if (avg >= 2.7) return "b1";
-    if (avg >= 1.7) return "a2";
-    if (avg >= 0.7) return "a1";
-    return "new";
-  }, [answers, profile.level]);
-
   function update(next: Partial<Profile>) {
     setProfile((prev) => ({ ...prev, ...next }));
   }
@@ -282,28 +233,20 @@ export function LearnPlanner({ catalog, locale }: { catalog: Catalog; locale: Lo
               <div className="duo-panel duo-panel-focus">
                 <p className="duo-panel-step">{t("stepN", { n: 1 })}</p>
                 <h3>{t("assessTitle")}</h3>
-                <p className="duo-panel-lead">{t("assessLead")}</p>
-                <div className="mt-5 grid gap-4">
-                  {placementQuestions.map((question) => (
-                    <fieldset key={question.id} className="duo-fieldset">
-                      <legend>{question.text}</legend>
-                      <div className="duo-choice-row">
-                        {question.answers.map((answer) => (
-                          <button
-                            key={answer.label}
-                            type="button"
-                            className={answers[question.id] === answer.score ? "is-on" : ""}
-                            onClick={() => setAnswers((prev) => ({ ...prev, [question.id]: answer.score }))}
-                          >
-                            {answer.label}
-                          </button>
-                        ))}
-                      </div>
-                    </fieldset>
-                  ))}
-                </div>
-                <button type="button" className="duo-unit-cta mt-5" onClick={() => { update({ level: estimatedLevel }); setActiveStep(2); }}>
-                  {t("saveLevelContinue", { level: estimatedLevel.toUpperCase() })}
+                <p className="duo-panel-lead">{t("placementLead")}</p>
+                {profile.placementDone ? (
+                  <p className="mt-4 text-sm font-semibold text-sky-700">
+                    {t("placementSaved", { level: profile.level.toUpperCase(), score: profile.placementScore || 0, total: profile.placementTotal || 12 })}
+                  </p>
+                ) : null}
+                <Link
+                  href={signedIn ? "/learn/placement" : "/account?next=/learn/placement"}
+                  className="duo-unit-cta mt-5"
+                >
+                  {signedIn ? (profile.placementDone ? t("placementRetake") : t("placementStartCta")) : t("placementNeedLoginCta")}
+                </Link>
+                <button type="button" className="btn-ghost mt-3" onClick={() => setActiveStep(2)}>
+                  {t("saveLevelContinue", { level: profile.level.toUpperCase() })}
                 </button>
               </div>
             ) : null}

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { AuthUser } from "@/lib/auth";
 
@@ -23,16 +23,28 @@ function CheckIcon() {
   );
 }
 
-export function AccountClient({ initialUser }: { initialUser: AuthUser | null }) {
+export function AccountClient({
+  initialUser,
+  nextPath = "/learn/placement",
+  startError = "",
+}: {
+  initialUser: AuthUser | null;
+  nextPath?: string;
+  startError?: string;
+}) {
   const t = useTranslations("Account");
+  const locale = useLocale();
   const router = useRouter();
   const [user, setUser] = useState(initialUser);
-  const [mode, setMode] = useState<Mode>("login");
+  const [mode, setMode] = useState<Mode>("register");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    startError === "LINK_EXPIRED" ? t("linkExpired") : startError === "LOGIN_FAILED" ? t("genericError") : "",
+  );
   const [busy, setBusy] = useState(false);
+  const [inbox, setInbox] = useState<{ email: string; devLink?: string } | null>(null);
 
   function errorMessage(code?: string) {
     if (code === "EMAIL_EXISTS") return t("emailExists");
@@ -44,26 +56,60 @@ export function AccountClient({ initialUser }: { initialUser: AuthUser | null })
     return t("genericError");
   }
 
+  async function sendMagic() {
+    const response = await fetch("/api/auth/magic", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email, locale, next: nextPath }),
+    });
+    const result = (await response.json()) as { error?: string; devLink?: string };
+    if (!response.ok) {
+      setMessage(errorMessage(result.error));
+      return false;
+    }
+    setInbox({ email, devLink: result.devLink });
+    return true;
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setBusy(true);
     setMessage("");
 
     try {
-      const response = await fetch(`/api/auth/${mode}`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const result = (await response.json()) as { user?: AuthUser; error?: string };
-      if (!response.ok || !result.user) {
-        setMessage(errorMessage(result.error));
+      if (mode === "register") {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name, email, password: password || undefined, locale, next: nextPath }),
+        });
+        const result = (await response.json()) as { error?: string; devLink?: string };
+        if (!response.ok) {
+          setMessage(errorMessage(result.error));
+          return;
+        }
+        setInbox({ email, devLink: result.devLink });
         return;
       }
 
-      setUser(result.user);
-      router.push("/learn");
-      router.refresh();
+      if (password) {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const result = (await response.json()) as { user?: AuthUser; error?: string };
+        if (!response.ok || !result.user) {
+          setMessage(errorMessage(result.error));
+          return;
+        }
+        setUser(result.user);
+        router.push(nextPath);
+        router.refresh();
+        return;
+      }
+
+      await sendMagic();
     } catch {
       setMessage(t("offline"));
     } finally {
@@ -98,7 +144,7 @@ export function AccountClient({ initialUser }: { initialUser: AuthUser | null })
             </div>
           </dl>
           <div className="account-actions">
-            <Link href="/learn" className="account-primary">
+            <Link href={nextPath} className="account-primary">
               {t("continueLearn")} <ArrowIcon />
             </Link>
             {user.role === "admin" ? (
@@ -108,6 +154,29 @@ export function AccountClient({ initialUser }: { initialUser: AuthUser | null })
             ) : null}
             <button type="button" className="account-quiet" onClick={logout} disabled={busy}>
               {t("logout")}
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (inbox) {
+    return (
+      <section className="account-shell">
+        <div className="account-signed">
+          <span className="account-signed-mark">✉</span>
+          <p className="account-eyebrow">{t("checkEmailEyebrow")}</p>
+          <h1>{t("checkEmailTitle")}</h1>
+          <p>{t("checkEmailLead", { email: inbox.email })}</p>
+          {inbox.devLink ? (
+            <p className="account-dev-link">
+              <a href={inbox.devLink}>{t("devLoginLink")}</a>
+            </p>
+          ) : null}
+          <div className="account-actions">
+            <button type="button" className="account-primary" onClick={() => { setInbox(null); setMode("login"); }}>
+              {t("backToLogin")}
             </button>
           </div>
         </div>
@@ -159,6 +228,7 @@ export function AccountClient({ initialUser }: { initialUser: AuthUser | null })
           <div className="account-form-copy">
             <span>{mode === "login" ? t("welcomeBack") : t("startFree")}</span>
             <h2>{mode === "login" ? t("loginTitle") : t("registerTitle")}</h2>
+            <p className="account-form-hint">{mode === "register" ? t("registerEmailHint") : t("loginEmailHint")}</p>
           </div>
 
           <form className="account-form" onSubmit={submit}>
@@ -187,20 +257,19 @@ export function AccountClient({ initialUser }: { initialUser: AuthUser | null })
               />
             </label>
             <label>
-              <span>{t("password")}</span>
+              <span>{t("passwordOptional")}</span>
               <input
                 type="password"
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                placeholder={t("passwordPlaceholder")}
-                minLength={8}
-                required
+                placeholder={t("passwordOptionalPlaceholder")}
+                minLength={password ? 8 : undefined}
               />
             </label>
             {message ? <p className="account-error" role="alert">{message}</p> : null}
             <button type="submit" className="account-submit" disabled={busy}>
-              {busy ? t("busy") : mode === "login" ? t("login") : t("createAccount")}
+              {busy ? t("busy") : mode === "login" ? (password ? t("login") : t("sendLoginEmail")) : t("createAccount")}
               {!busy ? <ArrowIcon /> : null}
             </button>
           </form>

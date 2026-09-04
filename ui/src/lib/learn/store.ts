@@ -1,5 +1,6 @@
 import catalogJson from "@/content/learn/catalog.json";
 import { getMongo, isMongoEnabled } from "@/lib/mongo";
+import type { Locale } from "@/i18n/routing";
 import type { Catalog, LearnTrack, Lesson } from "@/lib/learn/types";
 
 export type { Catalog, CatalogTrack, Exercise, I18nText, LearnTrack, Lesson, SentenceItem, VocabItem } from "@/lib/learn/types";
@@ -69,6 +70,25 @@ export async function getLesson(track: LearnTrack, id: string): Promise<Lesson |
     }
   }
   return (await loadLocalLessons(track)).find((lesson) => lesson.id === id) ?? null;
+}
+
+export async function getGuideLesson(locale: Locale, lesson: Lesson): Promise<Lesson | null> {
+  if (locale === lesson.track) return null;
+  if (isMongoEnabled()) {
+    const db = await getMongo();
+    const row = await db?.collection("learn_lessons").findOne({
+      track: locale,
+      unitId: lesson.unitId,
+      kind: lesson.kind,
+    });
+    if (row) {
+      const { _id: _unused, ...guide } = row;
+      void _unused;
+      return guide as Lesson;
+    }
+  }
+  const rows = await loadLocalLessons(locale);
+  return rows.find((item) => item.unitId === lesson.unitId && item.kind === lesson.kind) ?? null;
 }
 
 export async function getNextLessonId(track: LearnTrack, id: string): Promise<string | undefined> {

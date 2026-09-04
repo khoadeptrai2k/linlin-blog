@@ -37,7 +37,7 @@ export async function LearnHub({ locale }: { locale: Locale }) {
             <h1 className="mt-2 text-3xl font-bold leading-tight sm:text-5xl">{t("title")}</h1>
             <p className="mt-3 max-w-2xl text-base leading-7 text-ink-soft">{t("subtitle")}</p>
             <div className="duo-hero-tags" aria-label={t("pathTitle")}>
-              <span>{t("tagPlacement")}</span>
+              <Link href="/learn/placement">{t("tagPlacement")}</Link>
               <span>{t("tagGoal")}</span>
               <span>{t("tagDaily")}</span>
             </div>
