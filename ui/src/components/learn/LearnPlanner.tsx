@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { profileStorageKey, readStudyAccount, type StudyAccount } from "@/lib/learn/progress";
+import { speakText } from "@/components/learn/LearnAudio";
 import type { Catalog } from "@/lib/learn/types";
 
 type Goal = "communicate" | "hsk";
@@ -297,7 +298,7 @@ export function LearnPlanner({ catalog, locale }: { catalog: Catalog; locale: Lo
                       <div key={group.title}>
                         <strong>{group.title}</strong>
                         {group.rows.map((row) => (
-                          <button key={row} type="button" onClick={() => window.speechSynthesis?.speak(new SpeechSynthesisUtterance(row.replace(/\d/g, "")))}>
+                          <button key={row} type="button" onClick={() => speakText(row.replace(/\d/g, ""), "zh-CN")}>
                             {row} <span>{t("playAudio")}</span>
                           </button>
                         ))}

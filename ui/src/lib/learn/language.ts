@@ -8,6 +8,31 @@ export const UI_SPEECH: Record<Locale, string> = {
   th: "th-TH",
 };
 
+const LANG_ALIAS: Record<string, string> = {
+  vi: "vi-VN",
+  en: "en-US",
+  zh: "zh-CN",
+  th: "th-TH",
+  "zh-cn": "zh-CN",
+  "zh-tw": "zh-TW",
+  "zh-hk": "zh-HK",
+  "en-us": "en-US",
+  "en-gb": "en-GB",
+  "vi-vn": "vi-VN",
+  "th-th": "th-TH",
+};
+
+export function resolveSpeechLang(lang?: string, track?: string) {
+  const raw = (lang || "").replace("_", "-").trim();
+  if (raw) {
+    const mapped = LANG_ALIAS[raw.toLowerCase()];
+    if (mapped) return mapped;
+    if (/^[a-z]{2}(-[a-z]{2,})?$/i.test(raw)) return raw;
+  }
+  const fromTrack = LANG_ALIAS[(track || "").toLowerCase()];
+  return fromTrack || UI_SPEECH.en;
+}
+
 export function pickI18n(text: I18nText | undefined, locale: Locale, track: Locale) {
   if (!text) return "";
   return (text[locale] || text[track] || Object.values(text).find(Boolean) || "").trim();

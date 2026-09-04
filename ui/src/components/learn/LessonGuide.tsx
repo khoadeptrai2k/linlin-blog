@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { SpeakButton, speakQueue, type SpeakChunk } from "@/components/learn/LearnAudio";
+import { SpeakButton, speakPair, speakQueue, type SpeakChunk } from "@/components/learn/LearnAudio";
 import { ExampleShot, UnitScene, VocabStrip, WordPicture } from "@/components/learn/LessonArt";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { CHAPTER_SPINE, KIND_CRITERIA, KIND_STEP_KEY, STEP_COACH, isCoachCopy, lectureChunks, lineExplain, podcastLines, podcastSpeech, relatedSentences, spineIndex, teacherTheory } from "@/lib/learn/guide";
@@ -89,11 +89,7 @@ export function TargetPhrase({
 
   function play(event?: { stopPropagation: () => void }) {
     event?.stopPropagation();
-    if (hasMeaning && uiLang) {
-      speakQueue([{ text: meaning, lang: uiLang }, { text, lang }], lang, slow);
-    } else {
-      speakQueue([{ text, lang }], lang, slow);
-    }
+    speakPair(text, lang, hasMeaning ? meaning : undefined, uiLang, slow);
     onSay(text);
   }
 
@@ -282,11 +278,7 @@ export function LessonPodcast({
 
   function playLine(line: string) {
     const explain = lineExplain(lesson, locale, line, guide);
-    if (explain && explain !== line) {
-      speakQueue([{ text: explain, lang: uiLang }, { text: line, lang: lesson.speechLang }], lesson.speechLang, slow);
-    } else {
-      speakQueue([{ text: line, lang: lesson.speechLang }], lesson.speechLang, slow);
-    }
+    speakPair(line, lesson.speechLang, explain, uiLang, slow);
     onSay(line);
     if (!heard) onHeard();
   }

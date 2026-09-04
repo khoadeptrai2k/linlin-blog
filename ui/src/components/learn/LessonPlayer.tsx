@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseE
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { localeMeta, type Locale } from "@/i18n/routing";
-import { Phonetic, SpeakButton, speakQueue, speakText } from "@/components/learn/LearnAudio";
+import { Phonetic, SpeakButton, speakPair, speakText } from "@/components/learn/LearnAudio";
 import { MatchGame } from "@/components/learn/LearnGame";
 import { LectureButton, LessonBrief, LessonCoach, LessonPodcast, LessonSpine, LinlinTeacher, TargetPhrase, ExampleBank, GlossLine } from "@/components/learn/LessonGuide";
 import { UnitScene, VocabStrip, WordPicture, optionPicture } from "@/components/learn/LessonArt";
@@ -806,11 +806,7 @@ export function LessonPlayer({ lesson, locale, nextId, guide }: { lesson: Lesson
                 data-ask={apply.frame}
                 onClick={() => {
                   const explain = lineExplain(lesson, locale, apply.sample, guide);
-                  if (explain && explain !== apply.sample) {
-                    speakQueue([{ text: explain, lang: UI_SPEECH[locale] }, { text: apply.sample, lang: lesson.speechLang }], lesson.speechLang, slow);
-                  } else {
-                    speakText(apply.sample, lesson.speechLang, slow);
-                  }
+                  speakPair(apply.sample, lesson.speechLang, explain, UI_SPEECH[locale], slow);
                   recordTap(apply.sample);
                 }}
               >
@@ -1069,6 +1065,7 @@ function WritingPractice({
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drawing = useRef(false);
+  const gloss = support ? word.meaning[support] : undefined;
 
   function resetCanvas() {
     const canvas = canvasRef.current;
@@ -1134,10 +1131,7 @@ function WritingPractice({
             type="button"
             className="learn-ask-target text-left text-5xl font-black leading-none text-ink"
             onClick={() => {
-              const gloss = support ? word.meaning[support] : undefined;
-              if (gloss && gloss !== word.word) {
-                speakQueue([{ text: gloss, lang: UI_SPEECH[locale] }, { text: word.word, lang }], lang, slow);
-              }
+              speakPair(word.word, lang, gloss, UI_SPEECH[locale], slow);
               onSay(word.word);
             }}
           >
@@ -1227,11 +1221,7 @@ function FocusCard({
   const hasMeaning = Boolean(meaning && meaning.trim() && meaning.trim() !== speak.trim());
 
   function play() {
-    if (hasMeaning) {
-      speakQueue([{ text: meaning!, lang: uiLang }, { text: speak, lang }], lang, slow);
-    } else {
-      speakText(speak, lang, slow);
-    }
+    speakPair(speak, lang, hasMeaning ? meaning : undefined, uiLang, slow);
     onTap?.(speak);
     onHeard?.(speak);
   }
@@ -1333,11 +1323,7 @@ function TheorySlideView({
   const vocab = lesson.vocab.slice(0, 8);
 
   function playPair(explain: string | undefined, target: string) {
-    if (explain && explain.trim() && explain.trim() !== target.trim()) {
-      speakQueue([{ text: explain, lang: uiLang }, { text: target, lang: lesson.speechLang }], lesson.speechLang, slow);
-    } else {
-      speakText(target, lesson.speechLang, slow);
-    }
+    speakPair(target, lesson.speechLang, explain, uiLang, slow);
     onSay(target);
   }
 

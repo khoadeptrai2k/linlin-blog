@@ -1,6 +1,6 @@
 "use client";
 
-import { SpeakButton, speakQueue, speakText } from "@/components/learn/LearnAudio";
+import { SpeakButton, speakPair } from "@/components/learn/LearnAudio";
 import { localeMeta, type Locale } from "@/i18n/routing";
 import { UI_SPEECH } from "@/lib/learn/language";
 import { pictureFor, pictureForSentence, pictureForVocab, unitArt } from "@/lib/learn/picture";
@@ -70,17 +70,7 @@ export function VocabStrip({
               type="button"
               className="learn-pic-card"
               onClick={() => {
-                if (gloss) {
-                  speakQueue(
-                    [
-                      { text: gloss, lang: UI_SPEECH[locale] },
-                      { text: item.word, lang: lesson.speechLang },
-                    ],
-                    lesson.speechLang,
-                  );
-                } else {
-                  speakText(item.word, lesson.speechLang);
-                }
+                speakPair(item.word, lesson.speechLang, gloss, UI_SPEECH[locale]);
                 onSay?.(item.word);
               }}
             >

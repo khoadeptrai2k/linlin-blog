@@ -1073,7 +1073,8 @@ details[open] .faq-body {
   border: 1px solid rgb(255 255 255 / 0.95);
 }
 
-.learn-speak:hover {
+.learn-speak:hover,
+.learn-speak.is-on {
   color: #fff;
   background: linear-gradient(180deg, var(--sky), var(--ocean));
   border-color: transparent;

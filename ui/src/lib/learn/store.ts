@@ -1,6 +1,7 @@
 import catalogJson from "@/content/learn/catalog.json";
 import { getMongo, isMongoEnabled } from "@/lib/mongo";
 import type { Locale } from "@/i18n/routing";
+import { UI_SPEECH } from "@/lib/learn/language";
 import type { Catalog, LearnTrack, Lesson } from "@/lib/learn/types";
 
 export type { Catalog, CatalogTrack, Exercise, I18nText, LearnTrack, Lesson, SentenceItem, VocabItem } from "@/lib/learn/types";
@@ -9,6 +10,11 @@ export { isLearnTrack } from "@/lib/learn/types";
 export type LessonCard = Pick<Lesson, "id" | "title" | "goal" | "minutes" | "order" | "kind">;
 
 const localCache: Partial<Record<LearnTrack, Lesson[]>> = {};
+
+function withSpeechLang(lesson: Lesson): Lesson {
+  if (lesson.speechLang?.trim()) return lesson;
+  return { ...lesson, speechLang: UI_SPEECH[lesson.track] || "en-US" };
+}
 
 async function loadLocalLessons(track: LearnTrack): Promise<Lesson[]> {
   if (localCache[track]) return localCache[track]!;
@@ -19,7 +25,7 @@ async function loadLocalLessons(track: LearnTrack): Promise<Lesson[]> {
     th: () => import("@/content/learn/th.json"),
   };
   const mod = await loaders[track]();
-  const rows = mod.default as Lesson[];
+  const rows = (mod.default as Lesson[]).map(withSpeechLang);
   localCache[track] = rows;
   return rows;
 }
@@ -66,7 +72,7 @@ export async function getLesson(track: LearnTrack, id: string): Promise<Lesson |
     if (row) {
       const { _id: _unused, ...lesson } = row;
       void _unused;
-      return lesson as Lesson;
+      return withSpeechLang(lesson as Lesson);
     }
   }
   return (await loadLocalLessons(track)).find((lesson) => lesson.id === id) ?? null;
@@ -84,7 +90,7 @@ export async function getGuideLesson(locale: Locale, lesson: Lesson): Promise<Le
     if (row) {
       const { _id: _unused, ...guide } = row;
       void _unused;
-      return guide as Lesson;
+      return withSpeechLang(guide as Lesson);
     }
   }
   const rows = await loadLocalLessons(locale);

@@ -74,10 +74,10 @@ export function dualChunks(explain: string | undefined, target: string, uiLang: 
   const parts: SpeechPart[] = [];
   const cleanExplain = explain?.replace(/。{2,}/g, "。").trim();
   const cleanTarget = target.replace(/。{2,}/g, "。").trim();
+  if (cleanTarget && !isCoachCopy(cleanTarget)) parts.push({ text: cleanTarget, lang: speechLang });
   if (cleanExplain && cleanExplain !== cleanTarget && !isCoachCopy(cleanExplain)) {
     parts.push({ text: cleanExplain, lang: uiLang });
   }
-  if (cleanTarget && !isCoachCopy(cleanTarget)) parts.push({ text: cleanTarget, lang: speechLang });
   return parts;
 }
 

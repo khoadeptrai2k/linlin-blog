@@ -1,36 +1,43 @@
 "use client";
 
+import { useId, useSyncExternalStore } from "react";
+import { resolveSpeechLang } from "@/lib/learn/language";
+
 export type SpeakChunk = string | { text: string; lang?: string };
 
 let playToken = 0;
 let watchdog: number | undefined;
+let audioEl: HTMLAudioElement | undefined;
+let activeKey = "";
+const liveSubs = new Set<() => void>();
 
-function synth() {
+function emit() {
+  liveSubs.forEach((fn) => fn());
+}
+
+function setActive(key: string) {
+  if (activeKey === key) return;
+  activeKey = key;
+  emit();
+}
+
+function subscribeLive(fn: () => void) {
+  liveSubs.add(fn);
+  return () => liveSubs.delete(fn);
+}
+
+function engine() {
   if (typeof window === "undefined") return undefined;
   return window.speechSynthesis;
 }
 
-function loadVoices(): SpeechSynthesisVoice[] {
-  return synth()?.getVoices() ?? [];
-}
-
-function pickVoice(lang: string): SpeechSynthesisVoice | undefined {
-  const voices = loadVoices();
-  const want = lang.replace("_", "-").toLowerCase();
-  const prefix = want.slice(0, 2);
-  return (
-    voices.find((voice) => voice.lang.replace("_", "-").toLowerCase() === want) ||
-    voices.find((voice) => voice.lang.replace("_", "-").toLowerCase().startsWith(`${prefix}-`)) ||
-    voices.find((voice) => voice.lang.toLowerCase().startsWith(prefix))
-  );
-}
-
-function startWatchdog() {
-  const engine = synth();
-  if (!engine || watchdog) return;
-  watchdog = window.setInterval(() => {
-    if (engine.speaking) engine.resume();
-  }, 4000);
+function stopAudio() {
+  if (!audioEl) return;
+  audioEl.onended = null;
+  audioEl.onerror = null;
+  audioEl.pause();
+  audioEl.removeAttribute("src");
+  audioEl = undefined;
 }
 
 function stopWatchdog() {
@@ -38,27 +45,31 @@ function stopWatchdog() {
   watchdog = undefined;
 }
 
+function startWatchdog() {
+  const synth = engine();
+  if (!synth) return;
+  stopWatchdog();
+  watchdog = window.setInterval(() => {
+    if (synth.paused) synth.resume();
+  }, 160);
+}
+
 if (typeof window !== "undefined" && window.speechSynthesis) {
   window.speechSynthesis.getVoices();
   window.speechSynthesis.addEventListener("voiceschanged", () => window.speechSynthesis.getVoices());
 }
 
-function speakUtterance(text: string, lang: string, slow: boolean, token: number, onDone: () => void) {
-  const engine = synth();
-  if (!engine || token !== playToken) {
+function nativeSpeak(text: string, lang: string, slow: boolean, token: number, onDone: () => void) {
+  const synth = engine();
+  if (!synth) {
     onDone();
     return;
   }
-
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = lang;
-  utter.rate = slow ? 0.62 : 0.92;
-  const voice = pickVoice(lang);
-  if (voice) {
-    utter.voice = voice;
-    utter.lang = voice.lang;
-  }
-
+  utter.lang = resolveSpeechLang(lang);
+  utter.rate = slow ? 0.85 : 1;
+  utter.volume = 1;
+  (globalThis as unknown as { __linlinUtter?: SpeechSynthesisUtterance }).__linlinUtter = utter;
   let settled = false;
   const finish = () => {
     if (settled || token !== playToken) return;
@@ -67,30 +78,51 @@ function speakUtterance(text: string, lang: string, slow: boolean, token: number
   };
   utter.onend = finish;
   utter.onerror = finish;
-
-  const kick = () => {
-    if (token !== playToken) return;
-    engine.speak(utter);
-    if (engine.paused) engine.resume();
-  };
-
-  if (engine.speaking || engine.pending) {
-    window.setTimeout(kick, 50);
-    return;
-  }
-  kick();
+  synth.speak(utter);
+  if (synth.paused) synth.resume();
 }
 
-export function speakText(text: string, lang: string, slow = false) {
-  const engine = synth();
+function speakOne(text: string, lang: string, slow: boolean, token: number, onDone: () => void) {
+  const code = resolveSpeechLang(lang);
+  if (token !== playToken) {
+    onDone();
+    return;
+  }
+
+  stopAudio();
+  const el = new Audio(`/api/tts?${new URLSearchParams({ q: text.slice(0, 180), lang: code })}`);
+  audioEl = el;
+  let settled = false;
+  const finish = () => {
+    if (settled || token !== playToken) return;
+    settled = true;
+    window.clearTimeout(timer);
+    if (audioEl === el) audioEl = undefined;
+    onDone();
+  };
+  const timer = window.setTimeout(finish, 8000);
+  el.onended = finish;
+  el.onerror = () => {
+    if (settled) return;
+    nativeSpeak(text, code, slow, token, finish);
+  };
+  void el.play().catch(() => {
+    if (settled) return;
+    nativeSpeak(text, code, slow, token, finish);
+  });
+}
+
+export function speakText(text: string, lang: string, slow = false, sourceKey = "") {
   const clean = text.replace(/。{2,}/g, "。").trim();
-  if (!engine || !clean) return;
+  if (!clean) return;
   playToken += 1;
   const token = playToken;
-  engine.cancel();
+  setActive(sourceKey);
   startWatchdog();
-  speakUtterance(clean, lang, slow, token, () => {
-    if (token === playToken) stopWatchdog();
+  speakOne(clean, lang, slow, token, () => {
+    if (token !== playToken) return;
+    stopWatchdog();
+    setActive("");
   });
 }
 
@@ -99,8 +131,8 @@ export function speakQueue(
   lang: string,
   slow = false,
   onIndex?: (index: number) => void,
+  sourceKey = "",
 ): () => void {
-  const engine = synth();
   const parts = chunks
     .map((item) => (typeof item === "string" ? { text: item, lang } : { text: item.text, lang: item.lang || lang }))
     .map((item) => ({ ...item, text: item.text.replace(/。{2,}/g, "。").trim() }))
@@ -108,42 +140,72 @@ export function speakQueue(
 
   playToken += 1;
   const token = playToken;
-  engine?.cancel();
+  setActive(sourceKey);
+  startWatchdog();
 
-  if (!engine || !parts.length) {
+  if (!parts.length) {
+    setActive("");
     onIndex?.(-1);
     return () => undefined;
   }
 
   let cancelled = false;
   let index = 0;
-  startWatchdog();
 
   const play = () => {
     if (cancelled || token !== playToken) return;
     if (index >= parts.length) {
       stopWatchdog();
+      setActive("");
       onIndex?.(-1);
       return;
     }
     onIndex?.(index);
     const part = parts[index];
-    speakUtterance(part.text, part.lang, slow, token, () => {
+    speakOne(part.text, part.lang, slow, token, () => {
       if (cancelled || token !== playToken) return;
       index += 1;
-      window.setTimeout(play, 160);
+      window.setTimeout(play, 80);
     });
   };
 
   play();
+
   return () => {
     cancelled = true;
-    if (token === playToken) {
-      playToken += 1;
-      stopWatchdog();
-      engine.cancel();
-    }
+    if (token !== playToken) return;
+    playToken += 1;
+    stopWatchdog();
+    stopAudio();
+    engine()?.cancel();
+    setActive("");
   };
+}
+
+export function speakPair(
+  target: string,
+  targetLang: string,
+  meaning?: string,
+  meaningLang?: string,
+  slow = false,
+  sourceKey = "",
+) {
+  const line = target.replace(/。{2,}/g, "。").trim();
+  const gloss = meaning?.replace(/。{2,}/g, "。").trim();
+  if (gloss && meaningLang && gloss !== line) {
+    speakQueue(
+      [
+        { text: line, lang: targetLang },
+        { text: gloss, lang: meaningLang },
+      ],
+      targetLang,
+      slow,
+      undefined,
+      sourceKey,
+    );
+    return;
+  }
+  speakText(line, targetLang, slow, sourceKey);
 }
 
 export function SpeakButton({
@@ -163,20 +225,18 @@ export function SpeakButton({
   explain?: string;
   uiLang?: string;
 }) {
+  const id = useId();
+  const on = useSyncExternalStore(subscribeLive, () => activeKey === id, () => false);
   return (
     <button
       type="button"
-      className="learn-speak"
+      className={on ? "learn-speak is-on" : "learn-speak"}
       aria-label={label}
+      aria-pressed={on}
       data-ask-skip
       onClick={(event) => {
         event.stopPropagation();
-        const meaning = explain?.trim();
-        if (meaning && uiLang && meaning !== text.trim()) {
-          speakQueue([{ text: meaning, lang: uiLang }, { text, lang }], lang, slow);
-        } else {
-          speakText(text, lang, slow);
-        }
+        speakPair(text, lang, explain, uiLang, slow, id);
         onHeard?.(text);
       }}
     >
