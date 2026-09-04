@@ -24,7 +24,8 @@ export async function POST(request: Request) {
   if (!db || !userId) return Response.json({ error: "DATABASE_UNAVAILABLE" }, { status: 503 });
 
   const body = (await request.json()) as { track?: string; answers?: Record<string, string> };
-  const track = isLearnTrack(body.track || "") ? body.track! : "zh";
+  const requested = body.track || "";
+  const track = isLearnTrack(requested) ? requested : "zh";
   const answers = body.answers && typeof body.answers === "object" ? body.answers : {};
   const questions = placementQuestions(track);
   if (questions.some((item) => !answers[item.id])) {
