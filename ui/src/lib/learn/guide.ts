@@ -70,15 +70,10 @@ export function pairByValue(target: string[] | undefined, guide: string[] | unde
   return text;
 }
 
-export function dualChunks(explain: string | undefined, target: string, uiLang: string, speechLang: string): SpeechPart[] {
-  const parts: SpeechPart[] = [];
-  const cleanExplain = explain?.replace(/。{2,}/g, "。").trim();
+export function dualChunks(_explain: string | undefined, target: string, _uiLang: string, speechLang: string): SpeechPart[] {
   const cleanTarget = target.replace(/。{2,}/g, "。").trim();
-  if (cleanTarget && !isCoachCopy(cleanTarget)) parts.push({ text: cleanTarget, lang: speechLang });
-  if (cleanExplain && cleanExplain !== cleanTarget && !isCoachCopy(cleanExplain)) {
-    parts.push({ text: cleanExplain, lang: uiLang });
-  }
-  return parts;
+  if (!cleanTarget || isCoachCopy(cleanTarget)) return [];
+  return [{ text: cleanTarget, lang: speechLang }];
 }
 
 export function teacherTheory(lesson: Lesson, guide?: Lesson | null) {

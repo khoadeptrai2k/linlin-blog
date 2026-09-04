@@ -185,27 +185,12 @@ export function speakQueue(
 export function speakPair(
   target: string,
   targetLang: string,
-  meaning?: string,
-  meaningLang?: string,
+  _meaning?: string,
+  _meaningLang?: string,
   slow = false,
   sourceKey = "",
 ) {
-  const line = target.replace(/。{2,}/g, "。").trim();
-  const gloss = meaning?.replace(/。{2,}/g, "。").trim();
-  if (gloss && meaningLang && gloss !== line) {
-    speakQueue(
-      [
-        { text: line, lang: targetLang },
-        { text: gloss, lang: meaningLang },
-      ],
-      targetLang,
-      slow,
-      undefined,
-      sourceKey,
-    );
-    return;
-  }
-  speakText(line, targetLang, slow, sourceKey);
+  speakText(target.replace(/。{2,}/g, "。").trim(), targetLang, slow, sourceKey);
 }
 
 export function SpeakButton({
@@ -214,8 +199,6 @@ export function SpeakButton({
   slow,
   label,
   onHeard,
-  explain,
-  uiLang,
 }: {
   text: string;
   lang: string;
@@ -236,7 +219,7 @@ export function SpeakButton({
       data-ask-skip
       onClick={(event) => {
         event.stopPropagation();
-        speakPair(text, lang, explain, uiLang, slow, id);
+        speakText(text, lang, slow, id);
         onHeard?.(text);
       }}
     >
